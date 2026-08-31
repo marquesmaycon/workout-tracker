@@ -1,25 +1,17 @@
-import { ORPCError, os } from '@orpc/server'
+import { ORPCError } from '@orpc/server'
 import { z } from 'zod'
 
-import { CreateGymSchema, GymSchema, UpdateGymSchema } from '#/orpc/schema'
-import { auth } from '#/lib/auth'
+import { authProcedure } from '#/orpc/procedures'
 import { prisma } from '#/lib/db'
+import {
+  createGymSchema,
+  gymSchema,
+  updateGymSchema,
+} from '#/features/gyms/validation/schemas'
 
-const IdSchema = GymSchema.pick({ id: true })
+const id = gymSchema.pick({ id: true })
 
-const authed = os
-  .$context<{ headers: Headers }>()
-  .use(async ({ context: { headers }, next }) => {
-    const session = await auth.api.getSession({ headers })
-
-    if (!session) {
-      throw new ORPCError('UNAUTHORIZED')
-    }
-
-    return next({ context: { userId: session.user.id } })
-  })
-
-const listGyms = authed
+const listGyms = authProcedure
   .route({
     method: 'GET',
     path: '/gyms',
@@ -27,31 +19,31 @@ const listGyms = authed
     summary: 'List gyms',
   })
   .input(z.object({ favorite: z.boolean().optional() }).optional())
-  .output(z.array(GymSchema))
+  .output(z.array(gymSchema))
   .handler(({ input, context }) => {
     return prisma.gym.findMany({
       where: {
-        userId: context.userId,
+        userId: context.user.id,
         favorite: input?.favorite,
       },
       orderBy: [{ favorite: 'desc' }, { name: 'asc' }],
     })
   })
 
-const getGym = authed
+const getGym = authProcedure
   .route({
     method: 'GET',
     path: '/gyms/{id}',
     tags: ['Gyms'],
     summary: 'Get gym',
   })
-  .input(IdSchema)
-  .output(GymSchema)
+  .input(id)
+  .output(gymSchema)
   .handler(async ({ input, context }) => {
     const gym = await prisma.gym.findFirst({
       where: {
         id: input.id,
-        userId: context.userId,
+        userId: context.user.id,
       },
     })
 
@@ -62,7 +54,7 @@ const getGym = authed
     return gym
   })
 
-const createGym = authed
+const createGym = authProcedure
   .route({
     method: 'POST',
     path: '/gyms',
@@ -70,32 +62,32 @@ const createGym = authed
     summary: 'Create gym',
     successStatus: 201,
   })
-  .input(CreateGymSchema)
-  .output(GymSchema)
+  .input(createGymSchema)
+  .output(gymSchema)
   .handler(({ input, context }) => {
     return prisma.gym.create({
       data: {
         name: input.name,
         favorite: input.favorite ?? false,
-        userId: context.userId,
+        userId: context.user.id,
       },
     })
   })
 
-const updateGym = authed
+const updateGym = authProcedure
   .route({
     method: 'PATCH',
     path: '/gyms/{id}',
     tags: ['Gyms'],
     summary: 'Update gym',
   })
-  .input(UpdateGymSchema)
-  .output(GymSchema)
+  .input(updateGymSchema)
+  .output(gymSchema)
   .handler(async ({ input, context }) => {
     const gym = await prisma.gym.findFirst({
       where: {
         id: input.id,
-        userId: context.userId,
+        userId: context.user.id,
       },
       select: { id: true },
     })
@@ -113,20 +105,20 @@ const updateGym = authed
     })
   })
 
-const deleteGym = authed
+const deleteGym = authProcedure
   .route({
     method: 'DELETE',
     path: '/gyms/{id}',
     tags: ['Gyms'],
     summary: 'Delete gym',
   })
-  .input(IdSchema)
-  .output(IdSchema)
+  .input(id)
+  .output(id)
   .handler(async ({ input, context }) => {
     const gym = await prisma.gym.findFirst({
       where: {
         id: input.id,
-        userId: context.userId,
+        userId: context.user.id,
       },
       select: { id: true },
     })
