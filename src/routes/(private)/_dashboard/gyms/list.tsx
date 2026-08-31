@@ -2,11 +2,11 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { Dumbbell, Star } from 'lucide-react'
 
-import { orpc } from '#/orpc/client'
+import { orpc } from '@/orpc/client'
 
 const gymsQueryOptions = orpc.gyms.list.queryOptions({})
 
-export const Route = createFileRoute('/(private)/_dashboard/gyms')({
+export const Route = createFileRoute('/(private)/_dashboard/gyms/list')({
   loader: ({ context }) =>
     context.queryClient.query({ ...gymsQueryOptions, staleTime: 'static' }),
   component: GymsPage,

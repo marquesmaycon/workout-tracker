@@ -14,11 +14,13 @@ import { Route as publicIndexRouteImport } from './routes/(public)/index'
 import { Route as publicAuthRouteRouteImport } from './routes/(public)/_auth/route'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as privateDashboardDashboardRouteImport } from './routes/(private)/_dashboard/dashboard'
-import { Route as privateDashboardGymsRouteImport } from './routes/(private)/_dashboard/gyms'
 import { Route as publicAuthSigninRouteImport } from './routes/(public)/_auth/signin'
 import { Route as publicAuthSignupRouteImport } from './routes/(public)/_auth/signup'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
+import { Route as privateDashboardGymsGymIdRouteImport } from './routes/(private)/_dashboard/gyms/$gymId'
+import { Route as privateDashboardGymsCreateRouteImport } from './routes/(private)/_dashboard/gyms/create'
+import { Route as privateDashboardGymsListRouteImport } from './routes/(private)/_dashboard/gyms/list'
 
 const privateDashboardRouteRoute = privateDashboardRouteRouteImport.update({
   id: '/(private)/_dashboard',
@@ -44,11 +46,6 @@ const privateDashboardDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => privateDashboardRouteRoute,
   } as any)
-const privateDashboardGymsRoute = privateDashboardGymsRouteImport.update({
-  id: '/gyms',
-  path: '/gyms',
-  getParentRoute: () => privateDashboardRouteRoute,
-} as any)
 const publicAuthSigninRoute = publicAuthSigninRouteImport.update({
   id: '/signin',
   path: '/signin',
@@ -69,26 +66,48 @@ const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   path: '/api/rpc/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const privateDashboardGymsGymIdRoute =
+  privateDashboardGymsGymIdRouteImport.update({
+    id: '/gyms/$gymId',
+    path: '/gyms/$gymId',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardGymsCreateRoute =
+  privateDashboardGymsCreateRouteImport.update({
+    id: '/gyms/create',
+    path: '/gyms/create',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardGymsListRoute =
+  privateDashboardGymsListRouteImport.update({
+    id: '/gyms/list',
+    path: '/gyms/list',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/api/$': typeof ApiSplatRoute
   '/': typeof publicIndexRoute
   '/dashboard': typeof privateDashboardDashboardRoute
-  '/gyms': typeof privateDashboardGymsRoute
   '/signin': typeof publicAuthSigninRoute
   '/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/gyms/$gymId': typeof privateDashboardGymsGymIdRoute
+  '/gyms/create': typeof privateDashboardGymsCreateRoute
+  '/gyms/list': typeof privateDashboardGymsListRoute
 }
 export interface FileRoutesByTo {
   '/api/$': typeof ApiSplatRoute
   '/': typeof publicIndexRoute
   '/dashboard': typeof privateDashboardDashboardRoute
-  '/gyms': typeof privateDashboardGymsRoute
   '/signin': typeof publicAuthSigninRoute
   '/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/gyms/$gymId': typeof privateDashboardGymsGymIdRoute
+  '/gyms/create': typeof privateDashboardGymsCreateRoute
+  '/gyms/list': typeof privateDashboardGymsListRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -97,11 +116,13 @@ export interface FileRoutesById {
   '/api/$': typeof ApiSplatRoute
   '/(public)/': typeof publicIndexRoute
   '/(private)/_dashboard/dashboard': typeof privateDashboardDashboardRoute
-  '/(private)/_dashboard/gyms': typeof privateDashboardGymsRoute
   '/(public)/_auth/signin': typeof publicAuthSigninRoute
   '/(public)/_auth/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/(private)/_dashboard/gyms/$gymId': typeof privateDashboardGymsGymIdRoute
+  '/(private)/_dashboard/gyms/create': typeof privateDashboardGymsCreateRoute
+  '/(private)/_dashboard/gyms/list': typeof privateDashboardGymsListRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -109,21 +130,25 @@ export interface FileRouteTypes {
     | '/api/$'
     | '/'
     | '/dashboard'
-    | '/gyms'
     | '/signin'
     | '/signup'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/gyms/$gymId'
+    | '/gyms/create'
+    | '/gyms/list'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/api/$'
     | '/'
     | '/dashboard'
-    | '/gyms'
     | '/signin'
     | '/signup'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/gyms/$gymId'
+    | '/gyms/create'
+    | '/gyms/list'
   id:
     | '__root__'
     | '/(private)/_dashboard'
@@ -131,11 +156,13 @@ export interface FileRouteTypes {
     | '/api/$'
     | '/(public)/'
     | '/(private)/_dashboard/dashboard'
-    | '/(private)/_dashboard/gyms'
     | '/(public)/_auth/signin'
     | '/(public)/_auth/signup'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/(private)/_dashboard/gyms/$gymId'
+    | '/(private)/_dashboard/gyms/create'
+    | '/(private)/_dashboard/gyms/list'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -184,13 +211,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof privateDashboardDashboardRouteImport
       parentRoute: typeof privateDashboardRouteRoute
     }
-    '/(private)/_dashboard/gyms': {
-      id: '/(private)/_dashboard/gyms'
-      path: '/gyms'
-      fullPath: '/gyms'
-      preLoaderRoute: typeof privateDashboardGymsRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
-    }
     '/(public)/_auth/signin': {
       id: '/(public)/_auth/signin'
       path: '/signin'
@@ -219,17 +239,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRpcSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(private)/_dashboard/gyms/$gymId': {
+      id: '/(private)/_dashboard/gyms/$gymId'
+      path: '/gyms/$gymId'
+      fullPath: '/gyms/$gymId'
+      preLoaderRoute: typeof privateDashboardGymsGymIdRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/gyms/create': {
+      id: '/(private)/_dashboard/gyms/create'
+      path: '/gyms/create'
+      fullPath: '/gyms/create'
+      preLoaderRoute: typeof privateDashboardGymsCreateRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/gyms/list': {
+      id: '/(private)/_dashboard/gyms/list'
+      path: '/gyms/list'
+      fullPath: '/gyms/list'
+      preLoaderRoute: typeof privateDashboardGymsListRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
   }
 }
 
 interface privateDashboardRouteRouteChildren {
   privateDashboardDashboardRoute: typeof privateDashboardDashboardRoute
-  privateDashboardGymsRoute: typeof privateDashboardGymsRoute
+  privateDashboardGymsGymIdRoute: typeof privateDashboardGymsGymIdRoute
+  privateDashboardGymsCreateRoute: typeof privateDashboardGymsCreateRoute
+  privateDashboardGymsListRoute: typeof privateDashboardGymsListRoute
 }
 
 const privateDashboardRouteRouteChildren: privateDashboardRouteRouteChildren = {
   privateDashboardDashboardRoute: privateDashboardDashboardRoute,
-  privateDashboardGymsRoute: privateDashboardGymsRoute,
+  privateDashboardGymsGymIdRoute: privateDashboardGymsGymIdRoute,
+  privateDashboardGymsCreateRoute: privateDashboardGymsCreateRoute,
+  privateDashboardGymsListRoute: privateDashboardGymsListRoute,
 }
 
 const privateDashboardRouteRouteWithChildren =
