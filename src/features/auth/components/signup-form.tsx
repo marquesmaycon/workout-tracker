@@ -1,16 +1,16 @@
 import { toast } from 'sonner'
 
-import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldSeparator,
-} from '#/components/ui/field'
-import { useAppForm } from '#/hooks/form'
+} from '@/components/ui/field'
+import { useAppForm } from '@/hooks/form'
 import { Link, useRouter } from '@tanstack/react-router'
 import { signupFormOptions } from '../validation/signup.schema'
-import { authClient } from '#/lib/auth-client'
+import { authClient } from '@/lib/auth-client'
 
 export function SignupForm() {
   const router = useRouter()

@@ -1,4 +1,4 @@
-import '#/polyfill'
+import '@/polyfill'
 
 import { SmartCoercionPlugin } from '@orpc/json-schema'
 import { OpenAPIHandler } from '@orpc/openapi/fetch'
@@ -7,8 +7,8 @@ import { onError } from '@orpc/server'
 import { ZodToJsonSchemaConverter } from '@orpc/zod/zod4'
 import { createFileRoute } from '@tanstack/react-router'
 
-import router from '#/orpc/router'
-import { gymSchema } from '#/features/gyms/validation/schemas'
+import router from '@/orpc/router'
+import { gymSchema } from '@/features/gyms/validation/schemas'
 
 const handler = new OpenAPIHandler(router, {
   interceptors: [

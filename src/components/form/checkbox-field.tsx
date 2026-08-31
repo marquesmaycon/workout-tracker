@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react'
 
-import { useFieldContext } from '#/hooks/form-context'
+import { useFieldContext } from '@/hooks/form-context'
 
 import { Checkbox } from '../ui/checkbox'
 import { Field, FieldDescription, FieldError, FieldLabel } from '../ui/field'

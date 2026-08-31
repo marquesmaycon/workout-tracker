@@ -1,3 +1,4 @@
+import { ThemeToggler } from '@/components/theme-toggler'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/(public)/')({ component: Home })
@@ -9,6 +10,7 @@ function Home() {
       <p className="mt-4 text-lg">
         Edit <code>src/routes/index.tsx</code> to get started.
       </p>
+      <ThemeToggler />
     </div>
   )
 }

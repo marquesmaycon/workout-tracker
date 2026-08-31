@@ -1,13 +1,13 @@
 import { ORPCError } from '@orpc/server'
 import { z } from 'zod'
 
-import { authProcedure } from '#/orpc/procedures'
-import { prisma } from '#/lib/db'
+import { authProcedure } from '@/orpc/procedures'
+import { prisma } from '@/lib/db'
 import {
   createGymSchema,
   gymSchema,
   updateGymSchema,
-} from '#/features/gyms/validation/schemas'
+} from '@/features/gyms/validation/schemas'
 
 const id = gymSchema.pick({ id: true })
 

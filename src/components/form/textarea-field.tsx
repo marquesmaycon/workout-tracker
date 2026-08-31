@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react'
 
-import { useFieldContext } from '#/hooks/form-context'
-import { cn } from '#/lib/utils'
+import { useFieldContext } from '@/hooks/form-context'
+import { cn } from '@/lib/utils'
 
 import { Field, FieldError, FieldLabel } from '../ui/field'
 import { Textarea } from '../ui/textarea'

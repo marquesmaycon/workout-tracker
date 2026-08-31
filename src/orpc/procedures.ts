@@ -1,6 +1,6 @@
 import { ORPCError, os } from '@orpc/server'
 
-import { auth } from '#/lib/auth'
+import { auth } from '@/lib/auth'
 
 type ORPCContext = {
   headers: Headers

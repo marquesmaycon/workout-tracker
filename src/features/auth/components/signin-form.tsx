@@ -4,12 +4,12 @@ import {
   FieldDescription,
   FieldGroup,
   FieldSeparator,
-} from '#/components/ui/field'
-import { useAppForm } from '#/hooks/form'
+} from '@/components/ui/field'
+import { useAppForm } from '@/hooks/form'
 
 import { Link, useRouter } from '@tanstack/react-router'
 import { signinFormOptions } from '../validation/signin.validation'
-import { authClient } from '#/lib/auth-client'
+import { authClient } from '@/lib/auth-client'
 
 export function SigninForm() {
   const router = useRouter()
@@ -24,7 +24,7 @@ export function SigninForm() {
         return
       }
 
-      await router.navigate({ to: '/gyms' })
+      await router.navigate({ to: '/dashboard' })
     },
   })
 
