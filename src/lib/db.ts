@@ -1,8 +1,8 @@
 import { PrismaClient } from '../../prisma/generated/client.js'
 
-import { getDatabaseUrl } from '../database-url.js'
 
 import { PrismaPg } from '@prisma/adapter-pg'
+import { getDatabaseUrl } from './utils.js'
 
 const adapter = new PrismaPg({
   connectionString: getDatabaseUrl(),
