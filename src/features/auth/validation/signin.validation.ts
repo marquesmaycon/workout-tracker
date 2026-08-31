@@ -1,8 +1,8 @@
 import { formOptions } from '@tanstack/react-form'
 import type z from 'zod'
-import { signupSchema } from './signup.schema'
+import { signupBaseSchema } from './signup.schema'
 
-export const signinSchema = signupSchema.pick({ email: true, password: true })
+export const signinSchema = signupBaseSchema.pick({ email: true, password: true })
 
 export type SigninSchema = z.infer<typeof signinSchema>
 
