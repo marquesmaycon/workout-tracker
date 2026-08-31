@@ -1,251 +1,151 @@
-Welcome to your new TanStack Start app!
+# Workout Tracker
 
-# Getting Started
+Aplicacao web para acompanhamento de treinos, academias e evolucao corporal. O projeto esta sendo desenvolvido como um produto full-stack em TypeScript, seguindo a mesma linha dos meus repositorios mais recentes: interfaces modernas, organizacao por dominio, APIs tipadas, autenticacao e persistencia real em banco relacional.
 
-To run this application:
+## Contexto
+
+O `workout-tracker` nasce como mais um projeto de produto no meu portfolio, ao lado de aplicacoes como [`habit-tracker`](https://github.com/marquesmaycon/habit-tracker), [`brew-monitor`](https://github.com/marquesmaycon/brew-monitor), [`stock-forge`](https://github.com/marquesmaycon/stock-forge), [`prompt-manager`](https://github.com/marquesmaycon/prompt-manager), [`ask-room`](https://github.com/marquesmaycon/ask-room) e [`next-saas-rbac`](https://github.com/marquesmaycon/next-saas-rbac).
+
+A ideia aqui e evoluir um tracker de fitness com a mesma abordagem desses projetos: experiencia de uso bem cuidada, stack atual, regras de negocio separadas por modulo e uma base preparada para crescer.
+
+## Funcionalidades
+
+- Autenticacao com e-mail e senha usando Better Auth.
+- Area privada protegida por sessao.
+- Cadastro e listagem de academias por usuario.
+- Marcacao de academias favoritas.
+- Modelo de dados preparado para treinos, exercicios, grupos musculares, sessoes de treino e historico de peso corporal.
+- API tipada com oRPC para integracao entre frontend e backend.
+- Banco PostgreSQL com Prisma ORM.
+
+> Algumas telas ainda estao em desenvolvimento. Hoje a area de academias ja usa dados reais; dashboard, treinos, sessoes e logs de peso estao modelados no banco e prontos para evolucao de interface e fluxo.
+
+## Stack
+
+- [TanStack Start](https://tanstack.com/start) com React 19
+- [TanStack Router](https://tanstack.com/router)
+- [TanStack Query](https://tanstack.com/query)
+- [TanStack Form](https://tanstack.com/form)
+- [oRPC](https://orpc.unnoq.com/)
+- [Better Auth](https://www.better-auth.com/)
+- [Prisma](https://www.prisma.io/) + PostgreSQL
+- [Tailwind CSS](https://tailwindcss.com/)
+- [shadcn/ui](https://ui.shadcn.com/) e Base UI
+- [Vite](https://vite.dev/) + Nitro
+- ESLint e Prettier
+
+## Requisitos
+
+- Node.js
+- npm
+- Docker e Docker Compose
+
+## Ambiente
+
+Crie um arquivo `.env.local` na raiz do projeto com a URL do banco:
+
+```env
+DATABASE_URL="postgresql://workout:workout@localhost:5432/workout_tracker"
+```
+
+Mantenha arquivos `.env*` fora do versionamento e use apenas placeholders em exemplos publicos.
+
+## Como Rodar
+
+Instale as dependencias:
 
 ```bash
 npm install
+```
+
+Suba o PostgreSQL:
+
+```bash
+docker compose up -d
+```
+
+Gere o Prisma Client:
+
+```bash
+npm run db:generate
+```
+
+Aplique o schema no banco:
+
+```bash
+npm run db:push
+```
+
+Inicie o ambiente de desenvolvimento:
+
+```bash
 npm run dev
 ```
 
-# Building For Production
+A aplicacao roda em:
 
-To build this application for production:
+```bash
+http://localhost:3000
+```
+
+## Scripts
+
+```bash
+npm run dev          # inicia o servidor de desenvolvimento
+npm run build        # gera o build de producao
+npm run preview      # executa o preview do build
+npm run lint         # executa o ESLint
+npm run format       # formata e aplica fixes de lint
+npm run check        # verifica formatacao com Prettier
+npm run db:generate  # gera o Prisma Client
+npm run db:push      # sincroniza o schema com o banco
+npm run db:migrate   # cria/aplica migrations em desenvolvimento
+npm run db:studio    # abre o Prisma Studio
+npm run db:seed      # executa o seed
+```
+
+## Estrutura
+
+```txt
+src/
+  components/        # componentes reutilizaveis de UI e formulario
+  features/          # dominios da aplicacao
+    auth/            # formularios, validacoes e sessao
+    gyms/            # schemas e regras do modulo de academias
+  hooks/             # hooks compartilhados
+  lib/               # auth, banco, query client e utilitarios
+  orpc/              # procedimentos e rotas tipadas da API
+  routes/            # rotas file-based do TanStack Router
+
+prisma/
+  schema.prisma      # modelos de usuario, treino, exercicio, academia e sessoes
+  migrations/        # historico de migrations
+  seed.ts            # seed local
+```
+
+## Modelo de Dados
+
+O schema atual cobre:
+
+- usuarios, sessoes, contas e verificacoes de autenticacao;
+- academias vinculadas ao usuario;
+- grupos musculares e exercicios;
+- treinos planejados com ordem, series, repeticoes, carga, descanso e notas;
+- sessoes de treino com status, academia, exercicios executados, RPE e conclusao;
+- registros de peso corporal por data.
+
+## Build e Deploy
+
+Gere o build:
 
 ```bash
 npm run build
 ```
 
-## Styling
-
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-### Removing Tailwind CSS
-
-If you prefer not to use Tailwind CSS:
-
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Remove `@tailwindcss/vite` and `tailwindcss` from `package.json`
-
-## Linting & Formatting
-
-
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+Execute o servidor gerado pelo Nitro:
 
 ```bash
-npm run lint
-npm run format
-npm run check
-```
-
-
-## Deploy with Nitro
-
-This project uses Nitro as a generic server adapter, so it can run on any Node-compatible host.
-
-```bash
-npm run build
 node dist/server/index.mjs
 ```
 
-The build output is a self-contained Node server. To deploy, push the `dist/` directory to your host (Render, Fly.io, your own VPS, etc.) and run the server command above.
-
-For host-specific presets (Vercel, Netlify, Cloudflare, AWS Lambda, etc.) and tuning, see https://v3.nitro.build/deploy.
-
-
-## Shadcn
-
-Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
-
-```bash
-pnpm dlx shadcn@latest add button
-```
-
-
-## Setting up Better Auth
-
-1. Generate and set the `BETTER_AUTH_SECRET` environment variable in your `.env.local`:
-
-   ```bash
-   npx -y @better-auth/cli secret
-   ```
-
-2. Visit the [Better Auth documentation](https://www.better-auth.com) to unlock the full potential of authentication in your app.
-
-### Adding a Database (Optional)
-
-Better Auth can work in stateless mode, but to persist user data, add a database:
-
-```typescript
-// src/lib/auth.ts
-import { betterAuth } from "better-auth";
-import { Pool } from "pg";
-
-export const auth = betterAuth({
-  database: new Pool({
-    connectionString: process.env.DATABASE_URL,
-  }),
-  // ... rest of config
-});
-```
-
-Then run migrations:
-
-```bash
-npx -y @better-auth/cli migrate
-```
-
-
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-  
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-  
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+O build produz um servidor Node self-contained, adequado para hosts compativeis com Node.js, como VPS, Render, Fly.io ou outros provedores com suporte a processos Node.
