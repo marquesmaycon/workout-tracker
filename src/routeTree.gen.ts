@@ -9,22 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as GymsRouteImport } from './routes/gyms'
-import { Route as ApiSplatRouteImport } from './routes/api.$'
-import { Route as AuthSigninRouteImport } from './routes/auth/signin'
-import { Route as AuthSignupRouteImport } from './routes/auth/signup'
+import { Route as privateDashboardRouteRouteImport } from './routes/(private)/_dashboard/route'
+import { Route as publicIndexRouteImport } from './routes/(public)/index'
+import { Route as publicAuthRouteRouteImport } from './routes/(public)/_auth/route'
+import { Route as ApiSplatRouteImport } from './routes/api/$'
+import { Route as privateDashboardDashboardRouteImport } from './routes/(private)/_dashboard/dashboard'
+import { Route as privateDashboardGymsRouteImport } from './routes/(private)/_dashboard/gyms'
+import { Route as publicAuthSigninRouteImport } from './routes/(public)/_auth/signin'
+import { Route as publicAuthSignupRouteImport } from './routes/(public)/_auth/signup'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
+import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
+const privateDashboardRouteRoute = privateDashboardRouteRouteImport.update({
+  id: '/(private)/_dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const publicIndexRoute = publicIndexRouteImport.update({
+  id: '/(public)/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GymsRoute = GymsRouteImport.update({
-  id: '/gyms',
-  path: '/gyms',
+const publicAuthRouteRoute = publicAuthRouteRouteImport.update({
+  id: '/(public)/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
@@ -32,15 +38,26 @@ const ApiSplatRoute = ApiSplatRouteImport.update({
   path: '/api/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthSigninRoute = AuthSigninRouteImport.update({
-  id: '/auth/signin',
-  path: '/auth/signin',
-  getParentRoute: () => rootRouteImport,
+const privateDashboardDashboardRoute =
+  privateDashboardDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardGymsRoute = privateDashboardGymsRouteImport.update({
+  id: '/gyms',
+  path: '/gyms',
+  getParentRoute: () => privateDashboardRouteRoute,
 } as any)
-const AuthSignupRoute = AuthSignupRouteImport.update({
-  id: '/auth/signup',
-  path: '/auth/signup',
-  getParentRoute: () => rootRouteImport,
+const publicAuthSigninRoute = publicAuthSigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => publicAuthRouteRoute,
+} as any)
+const publicAuthSignupRoute = publicAuthSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => publicAuthRouteRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -54,87 +71,103 @@ const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/gyms': typeof GymsRoute
   '/api/$': typeof ApiSplatRoute
-  '/auth/signin': typeof AuthSigninRoute
-  '/auth/signup': typeof AuthSignupRoute
+  '/': typeof publicIndexRoute
+  '/dashboard': typeof privateDashboardDashboardRoute
+  '/gyms': typeof privateDashboardGymsRoute
+  '/signin': typeof publicAuthSigninRoute
+  '/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/gyms': typeof GymsRoute
   '/api/$': typeof ApiSplatRoute
-  '/auth/signin': typeof AuthSigninRoute
-  '/auth/signup': typeof AuthSignupRoute
+  '/': typeof publicIndexRoute
+  '/dashboard': typeof privateDashboardDashboardRoute
+  '/gyms': typeof privateDashboardGymsRoute
+  '/signin': typeof publicAuthSigninRoute
+  '/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/gyms': typeof GymsRoute
+  '/(private)/_dashboard': typeof privateDashboardRouteRouteWithChildren
+  '/(public)/_auth': typeof publicAuthRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
-  '/auth/signin': typeof AuthSigninRoute
-  '/auth/signup': typeof AuthSignupRoute
+  '/(public)/': typeof publicIndexRoute
+  '/(private)/_dashboard/dashboard': typeof privateDashboardDashboardRoute
+  '/(private)/_dashboard/gyms': typeof privateDashboardGymsRoute
+  '/(public)/_auth/signin': typeof publicAuthSigninRoute
+  '/(public)/_auth/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/gyms'
     | '/api/$'
-    | '/auth/signin'
-    | '/auth/signup'
+    | '/'
+    | '/dashboard'
+    | '/gyms'
+    | '/signin'
+    | '/signup'
     | '/api/auth/$'
     | '/api/rpc/$'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/gyms'
     | '/api/$'
-    | '/auth/signin'
-    | '/auth/signup'
+    | '/'
+    | '/dashboard'
+    | '/gyms'
+    | '/signin'
+    | '/signup'
     | '/api/auth/$'
     | '/api/rpc/$'
   id:
     | '__root__'
-    | '/'
-    | '/gyms'
+    | '/(private)/_dashboard'
+    | '/(public)/_auth'
     | '/api/$'
-    | '/auth/signin'
-    | '/auth/signup'
+    | '/(public)/'
+    | '/(private)/_dashboard/dashboard'
+    | '/(private)/_dashboard/gyms'
+    | '/(public)/_auth/signin'
+    | '/(public)/_auth/signup'
     | '/api/auth/$'
     | '/api/rpc/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  GymsRoute: typeof GymsRoute
+  privateDashboardRouteRoute: typeof privateDashboardRouteRouteWithChildren
+  publicAuthRouteRoute: typeof publicAuthRouteRouteWithChildren
   ApiSplatRoute: typeof ApiSplatRoute
-  AuthSigninRoute: typeof AuthSigninRoute
-  AuthSignupRoute: typeof AuthSignupRoute
+  publicIndexRoute: typeof publicIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/(private)/_dashboard': {
+      id: '/(private)/_dashboard'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof privateDashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/gyms': {
-      id: '/gyms'
-      path: '/gyms'
-      fullPath: '/gyms'
-      preLoaderRoute: typeof GymsRouteImport
+    '/(public)/': {
+      id: '/(public)/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof publicIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(public)/_auth': {
+      id: '/(public)/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof publicAuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/$': {
@@ -144,19 +177,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/signin': {
-      id: '/auth/signin'
-      path: '/auth/signin'
-      fullPath: '/auth/signin'
-      preLoaderRoute: typeof AuthSigninRouteImport
-      parentRoute: typeof rootRouteImport
+    '/(private)/_dashboard/dashboard': {
+      id: '/(private)/_dashboard/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof privateDashboardDashboardRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
     }
-    '/auth/signup': {
-      id: '/auth/signup'
-      path: '/auth/signup'
-      fullPath: '/auth/signup'
-      preLoaderRoute: typeof AuthSignupRouteImport
-      parentRoute: typeof rootRouteImport
+    '/(private)/_dashboard/gyms': {
+      id: '/(private)/_dashboard/gyms'
+      path: '/gyms'
+      fullPath: '/gyms'
+      preLoaderRoute: typeof privateDashboardGymsRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(public)/_auth/signin': {
+      id: '/(public)/_auth/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof publicAuthSigninRouteImport
+      parentRoute: typeof publicAuthRouteRoute
+    }
+    '/(public)/_auth/signup': {
+      id: '/(public)/_auth/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof publicAuthSignupRouteImport
+      parentRoute: typeof publicAuthRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -175,12 +222,40 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface privateDashboardRouteRouteChildren {
+  privateDashboardDashboardRoute: typeof privateDashboardDashboardRoute
+  privateDashboardGymsRoute: typeof privateDashboardGymsRoute
+}
+
+const privateDashboardRouteRouteChildren: privateDashboardRouteRouteChildren = {
+  privateDashboardDashboardRoute: privateDashboardDashboardRoute,
+  privateDashboardGymsRoute: privateDashboardGymsRoute,
+}
+
+const privateDashboardRouteRouteWithChildren =
+  privateDashboardRouteRoute._addFileChildren(
+    privateDashboardRouteRouteChildren,
+  )
+
+interface publicAuthRouteRouteChildren {
+  publicAuthSigninRoute: typeof publicAuthSigninRoute
+  publicAuthSignupRoute: typeof publicAuthSignupRoute
+}
+
+const publicAuthRouteRouteChildren: publicAuthRouteRouteChildren = {
+  publicAuthSigninRoute: publicAuthSigninRoute,
+  publicAuthSignupRoute: publicAuthSignupRoute,
+}
+
+const publicAuthRouteRouteWithChildren = publicAuthRouteRoute._addFileChildren(
+  publicAuthRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  GymsRoute: GymsRoute,
+  privateDashboardRouteRoute: privateDashboardRouteRouteWithChildren,
+  publicAuthRouteRoute: publicAuthRouteRouteWithChildren,
   ApiSplatRoute: ApiSplatRoute,
-  AuthSigninRoute: AuthSigninRoute,
-  AuthSignupRoute: AuthSignupRoute,
+  publicIndexRoute: publicIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }

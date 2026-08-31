@@ -6,7 +6,7 @@ import { orpc } from '#/orpc/client'
 
 const gymsQueryOptions = orpc.gyms.list.queryOptions({})
 
-export const Route = createFileRoute('/gyms')({
+export const Route = createFileRoute('/(private)/_dashboard/gyms')({
   loader: ({ context }) =>
     context.queryClient.query({ ...gymsQueryOptions, staleTime: 'static' }),
   component: GymsPage,

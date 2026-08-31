@@ -67,8 +67,7 @@ export function SigninForm() {
                 <form.SubmitButton label="Login" />
               </form.AppForm>
               <FieldDescription className="text-center">
-                Don&apos;t have an account?{' '}
-                <Link to="/auth/signup">Sign up</Link>
+                Don&apos;t have an account? <Link to="/signup">Sign up</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>
