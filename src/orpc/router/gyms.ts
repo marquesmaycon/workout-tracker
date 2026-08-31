@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 import { CreateGymSchema, GymSchema, UpdateGymSchema } from '#/orpc/schema'
 import { auth } from '#/lib/auth'
-import { prisma } from '#/lib/prisma'
+import { prisma } from '#/lib/db'
 
 const IdSchema = GymSchema.pick({ id: true })
 
