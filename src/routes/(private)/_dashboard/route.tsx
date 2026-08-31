@@ -16,5 +16,11 @@ export const Route = createFileRoute('/(private)/_dashboard')({
 })
 
 function RouteComponent() {
-  return <Outlet />
+  return (
+    <div className="flex flex-1 flex-col p-4 pt-0 md:p-6 md:pt-0">
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6">
+        <Outlet />
+      </main>
+    </div>
+  )
 }

@@ -67,7 +67,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="flex min-h-full flex-col">
         <Providers>{children}</Providers>
       </body>
     </html>
