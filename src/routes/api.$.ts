@@ -7,7 +7,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { onError } from '@orpc/server'
 import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins'
 
-import { TodoSchema } from '#/orpc/schema'
+import { GymSchema, TodoSchema } from '#/orpc/schema'
 import router from '#/orpc/router'
 
 const handler = new OpenAPIHandler(router, {
@@ -29,6 +29,7 @@ const handler = new OpenAPIHandler(router, {
         },
         commonSchemas: {
           Todo: { schema: TodoSchema },
+          Gym: { schema: GymSchema },
           UndefinedError: { error: 'UndefinedError' },
         },
         security: [{ bearerAuth: [] }],
@@ -57,7 +58,9 @@ const handler = new OpenAPIHandler(router, {
 async function handle({ request }: { request: Request }) {
   const { response } = await handler.handle(request, {
     prefix: '/api',
-    context: {},
+    context: {
+      headers: request.headers,
+    },
   })
 
   return response ?? new Response('Not Found', { status: 404 })

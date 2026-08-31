@@ -18,9 +18,23 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  gyms          Gym[]
 
   @@unique([email])
   @@map("user")
+}
+
+model Gym {
+  id        String   @id @default(cuid())
+  name      String
+  favorite  Boolean  @default(false)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("gym")
 }
 
 model Session {

@@ -1,6 +1,5 @@
-import { addTodo, listTodos } from './todos'
+import gymsRoutes from './gyms'
 
 export default {
-  listTodos,
-  addTodo,
+  gyms: gymsRoutes,
 }
