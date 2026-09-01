@@ -6,7 +6,7 @@ import { orpc } from '@/orpc/client'
 
 const gymsQueryOptions = orpc.gyms.list.queryOptions({})
 
-export const Route = createFileRoute('/(private)/_dashboard/gyms/list')({
+export const Route = createFileRoute('/(private)/_dashboard/gyms/')({
   loader: ({ context }) =>
     context.queryClient.query({ ...gymsQueryOptions, staleTime: 'static' }),
   component: GymsPage,
@@ -17,7 +17,7 @@ function GymsPage() {
   const favoriteGyms = gyms.filter((gym) => gym.favorite)
 
   return (
-    <main className="page-wrap py-8 sm:py-12">
+    <div className="page-wrap py-8 sm:py-12">
       <section className="island-shell rounded-lg p-5 sm:p-7">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -91,7 +91,7 @@ function GymsPage() {
           </div>
         )}
       </section>
-    </main>
+    </div>
   )
 }
 
