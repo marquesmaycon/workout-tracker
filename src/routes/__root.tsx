@@ -1,14 +1,13 @@
+import type { QueryClient } from '@tanstack/react-query'
 import {
+  createRootRouteWithContext,
   HeadContent,
   Link,
-  createRootRouteWithContext,
 } from '@tanstack/react-router'
 
+import { Providers } from '@/components/providers'
 
 import appCss from '../styles.css?url'
-
-import { Providers } from '@/components/providers'
-import type { QueryClient } from '@tanstack/react-query'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -52,7 +51,7 @@ function NotFound() {
         </p>
         <Link
           to="/"
-          className="mt-6 inline-flex h-10 items-center justify-center rounded-md bg-[var(--lagoon-deep)] px-4 text-sm font-medium text-white"
+          className="mt-6 inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium text-white"
         >
           Go home
         </Link>
@@ -67,7 +66,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-svh flex-col">
         <Providers>{children}</Providers>
       </body>
     </html>

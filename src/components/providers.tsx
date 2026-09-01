@@ -1,9 +1,11 @@
-import { Scripts } from '@tanstack/react-router'
-import { Toaster } from './ui/sonner'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { Scripts } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+
 import { devtools } from '@/lib/tanstack-query'
+
 import { ThemeProvider } from './theme-provider'
+import { Toaster } from './ui/sonner'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
