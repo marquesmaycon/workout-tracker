@@ -3,10 +3,11 @@ import { Toaster } from './ui/sonner'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { devtools } from '@/lib/tanstack-query'
+import { ThemeProvider } from './theme-provider'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <ThemeProvider>
       {children}
       <Toaster richColors />
       <TanStackDevtools
@@ -20,6 +21,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
         ]}
       />
       <Scripts />
-    </>
+    </ThemeProvider>
   )
 }
