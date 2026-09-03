@@ -18,9 +18,21 @@ import { Route as publicAuthSigninRouteImport } from './routes/(public)/_auth/si
 import { Route as publicAuthSignupRouteImport } from './routes/(public)/_auth/signup'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
+import { Route as privateDashboardBodyWeightIndexRouteImport } from './routes/(private)/_dashboard/body-weight/index'
+import { Route as privateDashboardBodyWeightBodyWeightIdRouteImport } from './routes/(private)/_dashboard/body-weight/$bodyWeightId'
+import { Route as privateDashboardBodyWeightCreateRouteImport } from './routes/(private)/_dashboard/body-weight/create'
+import { Route as privateDashboardExercisesIndexRouteImport } from './routes/(private)/_dashboard/exercises/index'
+import { Route as privateDashboardExercisesExerciseIdRouteImport } from './routes/(private)/_dashboard/exercises/$exerciseId'
+import { Route as privateDashboardExercisesCreateRouteImport } from './routes/(private)/_dashboard/exercises/create'
 import { Route as privateDashboardGymsIndexRouteImport } from './routes/(private)/_dashboard/gyms/index'
 import { Route as privateDashboardGymsGymIdRouteImport } from './routes/(private)/_dashboard/gyms/$gymId'
 import { Route as privateDashboardGymsCreateRouteImport } from './routes/(private)/_dashboard/gyms/create'
+import { Route as privateDashboardMuscleGroupsIndexRouteImport } from './routes/(private)/_dashboard/muscle-groups/index'
+import { Route as privateDashboardMuscleGroupsMuscleGroupIdRouteImport } from './routes/(private)/_dashboard/muscle-groups/$muscleGroupId'
+import { Route as privateDashboardMuscleGroupsCreateRouteImport } from './routes/(private)/_dashboard/muscle-groups/create'
+import { Route as privateDashboardWorkoutsIndexRouteImport } from './routes/(private)/_dashboard/workouts/index'
+import { Route as privateDashboardWorkoutsWorkoutIdRouteImport } from './routes/(private)/_dashboard/workouts/$workoutId'
+import { Route as privateDashboardWorkoutsCreateRouteImport } from './routes/(private)/_dashboard/workouts/create'
 
 const privateDashboardRouteRoute = privateDashboardRouteRouteImport.update({
   id: '/(private)/_dashboard',
@@ -66,6 +78,42 @@ const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   path: '/api/rpc/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const privateDashboardBodyWeightIndexRoute =
+  privateDashboardBodyWeightIndexRouteImport.update({
+    id: '/body-weight/',
+    path: '/body-weight/',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardBodyWeightBodyWeightIdRoute =
+  privateDashboardBodyWeightBodyWeightIdRouteImport.update({
+    id: '/body-weight/$bodyWeightId',
+    path: '/body-weight/$bodyWeightId',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardBodyWeightCreateRoute =
+  privateDashboardBodyWeightCreateRouteImport.update({
+    id: '/body-weight/create',
+    path: '/body-weight/create',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardExercisesIndexRoute =
+  privateDashboardExercisesIndexRouteImport.update({
+    id: '/exercises/',
+    path: '/exercises/',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardExercisesExerciseIdRoute =
+  privateDashboardExercisesExerciseIdRouteImport.update({
+    id: '/exercises/$exerciseId',
+    path: '/exercises/$exerciseId',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardExercisesCreateRoute =
+  privateDashboardExercisesCreateRouteImport.update({
+    id: '/exercises/create',
+    path: '/exercises/create',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
 const privateDashboardGymsIndexRoute =
   privateDashboardGymsIndexRouteImport.update({
     id: '/gyms/',
@@ -84,6 +132,42 @@ const privateDashboardGymsCreateRoute =
     path: '/gyms/create',
     getParentRoute: () => privateDashboardRouteRoute,
   } as any)
+const privateDashboardMuscleGroupsIndexRoute =
+  privateDashboardMuscleGroupsIndexRouteImport.update({
+    id: '/muscle-groups/',
+    path: '/muscle-groups/',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardMuscleGroupsMuscleGroupIdRoute =
+  privateDashboardMuscleGroupsMuscleGroupIdRouteImport.update({
+    id: '/muscle-groups/$muscleGroupId',
+    path: '/muscle-groups/$muscleGroupId',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardMuscleGroupsCreateRoute =
+  privateDashboardMuscleGroupsCreateRouteImport.update({
+    id: '/muscle-groups/create',
+    path: '/muscle-groups/create',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardWorkoutsIndexRoute =
+  privateDashboardWorkoutsIndexRouteImport.update({
+    id: '/workouts/',
+    path: '/workouts/',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardWorkoutsWorkoutIdRoute =
+  privateDashboardWorkoutsWorkoutIdRouteImport.update({
+    id: '/workouts/$workoutId',
+    path: '/workouts/$workoutId',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardWorkoutsCreateRoute =
+  privateDashboardWorkoutsCreateRouteImport.update({
+    id: '/workouts/create',
+    path: '/workouts/create',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/api/$': typeof ApiSplatRoute
@@ -93,9 +177,21 @@ export interface FileRoutesByFullPath {
   '/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/body-weight/$bodyWeightId': typeof privateDashboardBodyWeightBodyWeightIdRoute
+  '/body-weight/create': typeof privateDashboardBodyWeightCreateRoute
+  '/exercises/$exerciseId': typeof privateDashboardExercisesExerciseIdRoute
+  '/exercises/create': typeof privateDashboardExercisesCreateRoute
   '/gyms/$gymId': typeof privateDashboardGymsGymIdRoute
   '/gyms/create': typeof privateDashboardGymsCreateRoute
+  '/muscle-groups/$muscleGroupId': typeof privateDashboardMuscleGroupsMuscleGroupIdRoute
+  '/muscle-groups/create': typeof privateDashboardMuscleGroupsCreateRoute
+  '/workouts/$workoutId': typeof privateDashboardWorkoutsWorkoutIdRoute
+  '/workouts/create': typeof privateDashboardWorkoutsCreateRoute
+  '/body-weight/': typeof privateDashboardBodyWeightIndexRoute
+  '/exercises/': typeof privateDashboardExercisesIndexRoute
   '/gyms/': typeof privateDashboardGymsIndexRoute
+  '/muscle-groups/': typeof privateDashboardMuscleGroupsIndexRoute
+  '/workouts/': typeof privateDashboardWorkoutsIndexRoute
 }
 export interface FileRoutesByTo {
   '/api/$': typeof ApiSplatRoute
@@ -105,9 +201,21 @@ export interface FileRoutesByTo {
   '/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/body-weight/$bodyWeightId': typeof privateDashboardBodyWeightBodyWeightIdRoute
+  '/body-weight/create': typeof privateDashboardBodyWeightCreateRoute
+  '/exercises/$exerciseId': typeof privateDashboardExercisesExerciseIdRoute
+  '/exercises/create': typeof privateDashboardExercisesCreateRoute
   '/gyms/$gymId': typeof privateDashboardGymsGymIdRoute
   '/gyms/create': typeof privateDashboardGymsCreateRoute
+  '/muscle-groups/$muscleGroupId': typeof privateDashboardMuscleGroupsMuscleGroupIdRoute
+  '/muscle-groups/create': typeof privateDashboardMuscleGroupsCreateRoute
+  '/workouts/$workoutId': typeof privateDashboardWorkoutsWorkoutIdRoute
+  '/workouts/create': typeof privateDashboardWorkoutsCreateRoute
+  '/body-weight': typeof privateDashboardBodyWeightIndexRoute
+  '/exercises': typeof privateDashboardExercisesIndexRoute
   '/gyms': typeof privateDashboardGymsIndexRoute
+  '/muscle-groups': typeof privateDashboardMuscleGroupsIndexRoute
+  '/workouts': typeof privateDashboardWorkoutsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -120,9 +228,21 @@ export interface FileRoutesById {
   '/(public)/_auth/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/(private)/_dashboard/body-weight/$bodyWeightId': typeof privateDashboardBodyWeightBodyWeightIdRoute
+  '/(private)/_dashboard/body-weight/create': typeof privateDashboardBodyWeightCreateRoute
+  '/(private)/_dashboard/exercises/$exerciseId': typeof privateDashboardExercisesExerciseIdRoute
+  '/(private)/_dashboard/exercises/create': typeof privateDashboardExercisesCreateRoute
   '/(private)/_dashboard/gyms/$gymId': typeof privateDashboardGymsGymIdRoute
   '/(private)/_dashboard/gyms/create': typeof privateDashboardGymsCreateRoute
+  '/(private)/_dashboard/muscle-groups/$muscleGroupId': typeof privateDashboardMuscleGroupsMuscleGroupIdRoute
+  '/(private)/_dashboard/muscle-groups/create': typeof privateDashboardMuscleGroupsCreateRoute
+  '/(private)/_dashboard/workouts/$workoutId': typeof privateDashboardWorkoutsWorkoutIdRoute
+  '/(private)/_dashboard/workouts/create': typeof privateDashboardWorkoutsCreateRoute
+  '/(private)/_dashboard/body-weight/': typeof privateDashboardBodyWeightIndexRoute
+  '/(private)/_dashboard/exercises/': typeof privateDashboardExercisesIndexRoute
   '/(private)/_dashboard/gyms/': typeof privateDashboardGymsIndexRoute
+  '/(private)/_dashboard/muscle-groups/': typeof privateDashboardMuscleGroupsIndexRoute
+  '/(private)/_dashboard/workouts/': typeof privateDashboardWorkoutsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -134,9 +254,21 @@ export interface FileRouteTypes {
     | '/signup'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/body-weight/$bodyWeightId'
+    | '/body-weight/create'
+    | '/exercises/$exerciseId'
+    | '/exercises/create'
     | '/gyms/$gymId'
     | '/gyms/create'
+    | '/muscle-groups/$muscleGroupId'
+    | '/muscle-groups/create'
+    | '/workouts/$workoutId'
+    | '/workouts/create'
+    | '/body-weight/'
+    | '/exercises/'
     | '/gyms/'
+    | '/muscle-groups/'
+    | '/workouts/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/api/$'
@@ -146,9 +278,21 @@ export interface FileRouteTypes {
     | '/signup'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/body-weight/$bodyWeightId'
+    | '/body-weight/create'
+    | '/exercises/$exerciseId'
+    | '/exercises/create'
     | '/gyms/$gymId'
     | '/gyms/create'
+    | '/muscle-groups/$muscleGroupId'
+    | '/muscle-groups/create'
+    | '/workouts/$workoutId'
+    | '/workouts/create'
+    | '/body-weight'
+    | '/exercises'
     | '/gyms'
+    | '/muscle-groups'
+    | '/workouts'
   id:
     | '__root__'
     | '/(private)/_dashboard'
@@ -160,9 +304,21 @@ export interface FileRouteTypes {
     | '/(public)/_auth/signup'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/(private)/_dashboard/body-weight/$bodyWeightId'
+    | '/(private)/_dashboard/body-weight/create'
+    | '/(private)/_dashboard/exercises/$exerciseId'
+    | '/(private)/_dashboard/exercises/create'
     | '/(private)/_dashboard/gyms/$gymId'
     | '/(private)/_dashboard/gyms/create'
+    | '/(private)/_dashboard/muscle-groups/$muscleGroupId'
+    | '/(private)/_dashboard/muscle-groups/create'
+    | '/(private)/_dashboard/workouts/$workoutId'
+    | '/(private)/_dashboard/workouts/create'
+    | '/(private)/_dashboard/body-weight/'
+    | '/(private)/_dashboard/exercises/'
     | '/(private)/_dashboard/gyms/'
+    | '/(private)/_dashboard/muscle-groups/'
+    | '/(private)/_dashboard/workouts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -239,6 +395,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRpcSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(private)/_dashboard/body-weight/': {
+      id: '/(private)/_dashboard/body-weight/'
+      path: '/body-weight'
+      fullPath: '/body-weight/'
+      preLoaderRoute: typeof privateDashboardBodyWeightIndexRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/body-weight/$bodyWeightId': {
+      id: '/(private)/_dashboard/body-weight/$bodyWeightId'
+      path: '/body-weight/$bodyWeightId'
+      fullPath: '/body-weight/$bodyWeightId'
+      preLoaderRoute: typeof privateDashboardBodyWeightBodyWeightIdRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/body-weight/create': {
+      id: '/(private)/_dashboard/body-weight/create'
+      path: '/body-weight/create'
+      fullPath: '/body-weight/create'
+      preLoaderRoute: typeof privateDashboardBodyWeightCreateRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/exercises/': {
+      id: '/(private)/_dashboard/exercises/'
+      path: '/exercises'
+      fullPath: '/exercises/'
+      preLoaderRoute: typeof privateDashboardExercisesIndexRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/exercises/$exerciseId': {
+      id: '/(private)/_dashboard/exercises/$exerciseId'
+      path: '/exercises/$exerciseId'
+      fullPath: '/exercises/$exerciseId'
+      preLoaderRoute: typeof privateDashboardExercisesExerciseIdRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/exercises/create': {
+      id: '/(private)/_dashboard/exercises/create'
+      path: '/exercises/create'
+      fullPath: '/exercises/create'
+      preLoaderRoute: typeof privateDashboardExercisesCreateRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
     '/(private)/_dashboard/gyms/': {
       id: '/(private)/_dashboard/gyms/'
       path: '/gyms'
@@ -260,21 +458,93 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof privateDashboardGymsCreateRouteImport
       parentRoute: typeof privateDashboardRouteRoute
     }
+    '/(private)/_dashboard/muscle-groups/': {
+      id: '/(private)/_dashboard/muscle-groups/'
+      path: '/muscle-groups'
+      fullPath: '/muscle-groups/'
+      preLoaderRoute: typeof privateDashboardMuscleGroupsIndexRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/muscle-groups/$muscleGroupId': {
+      id: '/(private)/_dashboard/muscle-groups/$muscleGroupId'
+      path: '/muscle-groups/$muscleGroupId'
+      fullPath: '/muscle-groups/$muscleGroupId'
+      preLoaderRoute: typeof privateDashboardMuscleGroupsMuscleGroupIdRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/muscle-groups/create': {
+      id: '/(private)/_dashboard/muscle-groups/create'
+      path: '/muscle-groups/create'
+      fullPath: '/muscle-groups/create'
+      preLoaderRoute: typeof privateDashboardMuscleGroupsCreateRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/workouts/': {
+      id: '/(private)/_dashboard/workouts/'
+      path: '/workouts'
+      fullPath: '/workouts/'
+      preLoaderRoute: typeof privateDashboardWorkoutsIndexRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/workouts/$workoutId': {
+      id: '/(private)/_dashboard/workouts/$workoutId'
+      path: '/workouts/$workoutId'
+      fullPath: '/workouts/$workoutId'
+      preLoaderRoute: typeof privateDashboardWorkoutsWorkoutIdRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/workouts/create': {
+      id: '/(private)/_dashboard/workouts/create'
+      path: '/workouts/create'
+      fullPath: '/workouts/create'
+      preLoaderRoute: typeof privateDashboardWorkoutsCreateRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
   }
 }
 
 interface privateDashboardRouteRouteChildren {
   privateDashboardDashboardRoute: typeof privateDashboardDashboardRoute
+  privateDashboardBodyWeightBodyWeightIdRoute: typeof privateDashboardBodyWeightBodyWeightIdRoute
+  privateDashboardBodyWeightCreateRoute: typeof privateDashboardBodyWeightCreateRoute
+  privateDashboardExercisesExerciseIdRoute: typeof privateDashboardExercisesExerciseIdRoute
+  privateDashboardExercisesCreateRoute: typeof privateDashboardExercisesCreateRoute
   privateDashboardGymsGymIdRoute: typeof privateDashboardGymsGymIdRoute
   privateDashboardGymsCreateRoute: typeof privateDashboardGymsCreateRoute
+  privateDashboardMuscleGroupsMuscleGroupIdRoute: typeof privateDashboardMuscleGroupsMuscleGroupIdRoute
+  privateDashboardMuscleGroupsCreateRoute: typeof privateDashboardMuscleGroupsCreateRoute
+  privateDashboardWorkoutsWorkoutIdRoute: typeof privateDashboardWorkoutsWorkoutIdRoute
+  privateDashboardWorkoutsCreateRoute: typeof privateDashboardWorkoutsCreateRoute
+  privateDashboardBodyWeightIndexRoute: typeof privateDashboardBodyWeightIndexRoute
+  privateDashboardExercisesIndexRoute: typeof privateDashboardExercisesIndexRoute
   privateDashboardGymsIndexRoute: typeof privateDashboardGymsIndexRoute
+  privateDashboardMuscleGroupsIndexRoute: typeof privateDashboardMuscleGroupsIndexRoute
+  privateDashboardWorkoutsIndexRoute: typeof privateDashboardWorkoutsIndexRoute
 }
 
 const privateDashboardRouteRouteChildren: privateDashboardRouteRouteChildren = {
   privateDashboardDashboardRoute: privateDashboardDashboardRoute,
+  privateDashboardBodyWeightBodyWeightIdRoute:
+    privateDashboardBodyWeightBodyWeightIdRoute,
+  privateDashboardBodyWeightCreateRoute: privateDashboardBodyWeightCreateRoute,
+  privateDashboardExercisesExerciseIdRoute:
+    privateDashboardExercisesExerciseIdRoute,
+  privateDashboardExercisesCreateRoute: privateDashboardExercisesCreateRoute,
   privateDashboardGymsGymIdRoute: privateDashboardGymsGymIdRoute,
   privateDashboardGymsCreateRoute: privateDashboardGymsCreateRoute,
+  privateDashboardMuscleGroupsMuscleGroupIdRoute:
+    privateDashboardMuscleGroupsMuscleGroupIdRoute,
+  privateDashboardMuscleGroupsCreateRoute:
+    privateDashboardMuscleGroupsCreateRoute,
+  privateDashboardWorkoutsWorkoutIdRoute:
+    privateDashboardWorkoutsWorkoutIdRoute,
+  privateDashboardWorkoutsCreateRoute: privateDashboardWorkoutsCreateRoute,
+  privateDashboardBodyWeightIndexRoute: privateDashboardBodyWeightIndexRoute,
+  privateDashboardExercisesIndexRoute: privateDashboardExercisesIndexRoute,
   privateDashboardGymsIndexRoute: privateDashboardGymsIndexRoute,
+  privateDashboardMuscleGroupsIndexRoute:
+    privateDashboardMuscleGroupsIndexRoute,
+  privateDashboardWorkoutsIndexRoute: privateDashboardWorkoutsIndexRoute,
 }
 
 const privateDashboardRouteRouteWithChildren =

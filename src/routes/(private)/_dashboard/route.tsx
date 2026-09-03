@@ -1,5 +1,12 @@
 import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router'
-import { Dumbbell, LayoutDashboard, Plus } from 'lucide-react'
+import {
+  BicepsFlexed,
+  ClipboardList,
+  Dumbbell,
+  LayoutDashboard,
+  Plus,
+  Scale,
+} from 'lucide-react'
 
 import { ThemeToggler } from '@/components/theme-toggler'
 import { getSession } from '@/features/auth/server/session'
@@ -21,6 +28,30 @@ const dashboardLinks = [
     to: '/gyms/create',
     label: 'Nova academia',
     icon: Plus,
+    activeOptions: { exact: true },
+  },
+  {
+    to: '/muscle-groups/',
+    label: 'Grupos',
+    icon: BicepsFlexed,
+    activeOptions: { exact: true },
+  },
+  {
+    to: '/exercises/',
+    label: 'Exercicios',
+    icon: Dumbbell,
+    activeOptions: { exact: true },
+  },
+  {
+    to: '/body-weight/',
+    label: 'Peso',
+    icon: Scale,
+    activeOptions: { exact: true },
+  },
+  {
+    to: '/workouts/',
+    label: 'Treinos',
+    icon: ClipboardList,
     activeOptions: { exact: true },
   },
 ] as const
@@ -52,7 +83,10 @@ function RouteComponent() {
           </Link>
 
           <div className="flex items-center justify-between gap-3">
-            <nav aria-label="Navegacao da dashboard" className="flex gap-1">
+            <nav
+              aria-label="Navegacao da dashboard"
+              className="flex flex-wrap gap-1"
+            >
               {dashboardLinks.map(
                 ({ to, label, icon: Icon, activeOptions }) => (
                   <Link

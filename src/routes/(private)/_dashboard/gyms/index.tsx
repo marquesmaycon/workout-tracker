@@ -3,6 +3,13 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { Dumbbell, Star } from 'lucide-react'
 
 import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty'
+import {
   Item,
   ItemActions,
   ItemContent,
@@ -85,18 +92,18 @@ function GymsPage() {
             ))}
           </ItemGroup>
         ) : (
-          <div className="rounded-lg border border-dashed p-8 text-center">
-            <Dumbbell
-              aria-hidden="true"
-              className="text-muted-foreground mx-auto size-8"
-            />
-            <h2 className="mt-4 text-lg font-semibold">
-              Nenhuma academia cadastrada
-            </h2>
-            <p className="text-muted-foreground mx-auto mt-2 max-w-md text-sm">
-              Quando uma academia for adicionada, ela vai aparecer nesta lista.
-            </p>
-          </div>
+          <Empty className="border">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Dumbbell aria-hidden="true" />
+              </EmptyMedia>
+              <EmptyTitle>Nenhuma academia cadastrada</EmptyTitle>
+              <EmptyDescription>
+                Quando uma academia for adicionada, ela vai aparecer nesta
+                lista.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         )}
       </section>
     </Page>
