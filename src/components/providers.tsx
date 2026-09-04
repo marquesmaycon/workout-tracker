@@ -4,14 +4,17 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import { devtools } from '@/lib/tanstack-query'
 
-import { ThemeProvider } from './theme-provider'
+import { ThemeProvider } from './layout/theme/theme-provider'
 import { Toaster } from './ui/sonner'
+import { TooltipProvider } from './ui/tooltip'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider>
-      {children}
-      <Toaster richColors />
+      <TooltipProvider>
+        {children}
+        <Toaster richColors />
+      </TooltipProvider>
       <TanStackDevtools
         config={{ position: 'bottom-right' }}
         plugins={[

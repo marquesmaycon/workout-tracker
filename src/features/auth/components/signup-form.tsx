@@ -1,3 +1,4 @@
+import { Link, useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -8,9 +9,9 @@ import {
   FieldSeparator,
 } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
-import { Link, useRouter } from '@tanstack/react-router'
-import { signupFormOptions } from '../validation/signup.schema'
 import { authClient } from '@/lib/auth-client'
+
+import { signupFormOptions } from '../validation/signup.schema'
 
 export function SignupForm() {
   const router = useRouter()
@@ -71,7 +72,7 @@ export function SignupForm() {
                 <form.SubmitButton label="Sign Up" />
               </form.AppForm>
               <FieldDescription className="text-center">
-                Already have an account? <Link to="/auth/signin">Login</Link>
+                Already have an account? <Link to="/signin">Login</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>
