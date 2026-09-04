@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
-import { AppSidebar } from '@/components/layout/dashboard/app-sidebar'
+import { AppSidebar } from '@/components/layout/sidebar/app-sidebar'
 import { Separator } from '@/components/ui/separator'
 import {
   SidebarInset,

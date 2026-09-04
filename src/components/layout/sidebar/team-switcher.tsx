@@ -1,6 +1,7 @@
-"use client"
+'use client'
 
-import * as React from "react"
+import { ChevronsUpDownIcon, PlusIcon } from 'lucide-react'
+import * as React from 'react'
 
 import {
   DropdownMenu,
@@ -11,14 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "#/components/ui/dropdown-menu.tsx"
+} from '#/components/ui/dropdown-menu.tsx'
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "#/components/ui/sidebar.tsx"
-import { ChevronsUpDownIcon, PlusIcon } from "lucide-react"
+} from '#/components/ui/sidebar.tsx'
 
 export function TeamSwitcher({
   teams,
@@ -46,7 +46,7 @@ export function TeamSwitcher({
               />
             }
           >
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
               {activeTeam.logo}
             </div>
             <div className="grid flex-1 text-left text-sm leading-tight">
@@ -58,11 +58,11 @@ export function TeamSwitcher({
           <DropdownMenuContent
             className="w-fit"
             align="start"
-            side={isMobile ? "bottom" : "right"}
+            side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
           >
             <DropdownMenuGroup>
-              <DropdownMenuLabel className="text-xs text-muted-foreground">
+              <DropdownMenuLabel className="text-muted-foreground text-xs">
                 Teams
               </DropdownMenuLabel>
               {teams.map((team, index) => (
@@ -85,7 +85,7 @@ export function TeamSwitcher({
                 <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                   <PlusIcon className="size-4" />
                 </div>
-                <div className="font-medium text-muted-foreground">
+                <div className="text-muted-foreground font-medium">
                   Add team
                 </div>
               </DropdownMenuItem>

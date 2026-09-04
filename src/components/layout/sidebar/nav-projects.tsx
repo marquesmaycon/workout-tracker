@@ -1,4 +1,11 @@
-"use client"
+'use client'
+
+import {
+  ArrowRightIcon,
+  FolderIcon,
+  MoreHorizontalIcon,
+  Trash2Icon,
+} from 'lucide-react'
 
 import {
   DropdownMenu,
@@ -6,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "#/components/ui/dropdown-menu.tsx"
+} from '#/components/ui/dropdown-menu.tsx'
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -15,8 +22,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "#/components/ui/sidebar.tsx"
-import { MoreHorizontalIcon, FolderIcon, ArrowRightIcon, Trash2Icon } from "lucide-react"
+} from '#/components/ui/sidebar.tsx'
 
 export function NavProjects({
   projects,
@@ -47,29 +53,25 @@ export function NavProjects({
                   />
                 }
               >
-                <MoreHorizontalIcon
-                />
+                <MoreHorizontalIcon />
                 <span className="sr-only">More</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 className="w-fit"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
+                side={isMobile ? 'bottom' : 'right'}
+                align={isMobile ? 'end' : 'start'}
               >
                 <DropdownMenuItem>
-                  <FolderIcon
-                  />
+                  <FolderIcon />
                   <span>View Project</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <ArrowRightIcon
-                  />
+                  <ArrowRightIcon />
                   <span>Share Project</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive">
-                  <Trash2Icon
-                  />
+                  <Trash2Icon />
                   <span>Delete Project</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
