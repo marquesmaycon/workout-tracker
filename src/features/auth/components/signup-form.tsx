@@ -33,7 +33,7 @@ export function SignupForm() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-xl">New account</CardTitle>
+        <CardTitle className="text-xl">Nova conta</CardTitle>
       </CardHeader>
       <CardContent>
         <form
@@ -44,11 +44,11 @@ export function SignupForm() {
         >
           <FieldGroup>
             <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-              Create you account
+              Crie sua conta
             </FieldSeparator>
 
             <form.AppField name="name">
-              {({ InputField }) => <InputField label="Full Name" />}
+              {({ InputField }) => <InputField label="Nome Completo" />}
             </form.AppField>
 
             <form.AppField name="email">
@@ -56,23 +56,21 @@ export function SignupForm() {
             </form.AppField>
 
             <form.AppField name="password">
-              {({ InputField }) => (
-                <InputField label="Password" type="password" />
-              )}
+              {({ InputField }) => <InputField label="Senha" type="password" />}
             </form.AppField>
 
             <form.AppField name="passwordConfirmation">
               {({ InputField }) => (
-                <InputField label="Password Confirmation" type="password" />
+                <InputField label="Confirmação da Senha" type="password" />
               )}
             </form.AppField>
 
             <Field>
               <form.AppForm>
-                <form.SubmitButton label="Sign Up" />
+                <form.SubmitButton label="Cadastrar" />
               </form.AppForm>
               <FieldDescription className="text-center">
-                Already have an account? <Link to="/signin">Login</Link>
+                Já tem uma conta? <Link to="/signin">Entrar</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>

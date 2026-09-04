@@ -1,3 +1,5 @@
+import { Link, useRouter } from '@tanstack/react-router'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Field,
@@ -6,10 +8,9 @@ import {
   FieldSeparator,
 } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
-
-import { Link, useRouter } from '@tanstack/react-router'
-import { signinFormOptions } from '../validation/signin.validation'
 import { authClient } from '@/lib/auth-client'
+
+import { signinFormOptions } from '../validation/signin.validation'
 
 export function SigninForm() {
   const router = useRouter()
@@ -31,7 +32,7 @@ export function SigninForm() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-xl">Welcome back</CardTitle>
+        <CardTitle className="text-xl">Bem-vindo de volta</CardTitle>
       </CardHeader>
       <CardContent>
         <form
@@ -42,7 +43,7 @@ export function SigninForm() {
         >
           <FieldGroup>
             <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-              Login with your account
+              Entre na sua conta
             </FieldSeparator>
 
             <form.AppField name="email">
@@ -50,24 +51,22 @@ export function SigninForm() {
             </form.AppField>
 
             <form.AppField name="password">
-              {({ InputField }) => (
-                <InputField label="Password" type="password" />
-              )}
+              {({ InputField }) => <InputField label="Senha" type="password" />}
             </form.AppField>
 
-            {/* <Link
-              href="/forgot-password"
-              className="ml-auto text-sm underline-offset-4 hover:underline"
+            <Link
+              to="."
+              className="text-muted-foreground ml-auto text-xs underline-offset-4 hover:underline"
             >
-              Forgot your password?
-            </Link> */}
+              Esqueceu sua senha?
+            </Link>
 
             <Field>
               <form.AppForm>
-                <form.SubmitButton label="Login" />
+                <form.SubmitButton label="Entrar" />
               </form.AppForm>
               <FieldDescription className="text-center">
-                Don&apos;t have an account? <Link to="/signup">Sign up</Link>
+                Não tem uma conta? <Link to="/signup">Cadastre-se</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>
