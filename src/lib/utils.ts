@@ -1,5 +1,5 @@
-import { clsx } from 'clsx'
 import type { ClassValue } from 'clsx'
+import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -14,4 +14,13 @@ export function getDatabaseUrl() {
   }
 
   return databaseUrl
+}
+
+export function getInitials(name: string) {
+  return name
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
 }

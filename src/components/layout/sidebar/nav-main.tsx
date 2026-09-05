@@ -1,50 +1,63 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { ChevronRightIcon } from 'lucide-react'
-import type * as React from 'react'
-
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '#/components/ui/collapsible.tsx'
+  BicepsFlexedIcon,
+  Building2Icon,
+  DumbbellIcon,
+  LayoutDashboardIcon,
+  Plus,
+  ScaleIcon,
+} from 'lucide-react'
+
+import type { FileRouteTypes } from '@/routeTree.gen'
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from '#/components/ui/sidebar.tsx'
 
-type NavRoute =
-  | '/dashboard'
-  | '/gyms'
-  | '/gyms/create'
-  | '/exercises'
-  | '/exercises/create'
-  | '/muscle-groups'
-  | '/workouts'
-  | '/workouts/create'
-  | '/body-weight'
-  | '/body-weight/create'
-
-type NavMainItem = {
+type NavItem = {
   title: string
-  to: NavRoute
+  to: FileRouteTypes['to']
   icon?: React.ReactNode
-  items?: {
-    title: string
-    to: NavRoute
-  }[]
+  actionLink?: FileRouteTypes['to']
 }
 
-function isActivePath(pathname: string, to: NavRoute) {
-  return pathname === to || pathname.startsWith(`${to}/`)
-}
+const items: NavItem[] = [
+  {
+    title: 'Dashboard',
+    to: '/dashboard',
+    icon: <LayoutDashboardIcon />,
+  },
+  {
+    title: 'Academias',
+    to: '/gyms',
+    icon: <Building2Icon />,
+    actionLink: '/gyms/create',
+  },
+  {
+    title: 'Exercícios',
+    to: '/exercises',
+    icon: <BicepsFlexedIcon />,
+    actionLink: '/exercises/create',
+  },
+  {
+    title: 'Treinos',
+    to: '/workouts',
+    icon: <DumbbellIcon />,
+    actionLink: '/workouts/create',
+  },
+  {
+    title: 'Evolução',
+    to: '/body-weight',
+    icon: <ScaleIcon />,
+    actionLink: '/body-weight/create',
+  },
+]
 
-export function NavMain({ items }: { items: NavMainItem[] }) {
+export function NavMain() {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
@@ -54,71 +67,33 @@ export function NavMain({ items }: { items: NavMainItem[] }) {
       <SidebarGroupLabel>Navegação</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
-          const isActive = isActivePath(pathname, item.to)
-
-          if (!item.items?.length) {
-            return (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  isActive={isActive}
-                  tooltip={item.title}
-                  render={
-                    <Link
-                      to={item.to}
-                      activeOptions={{ exact: item.to === '/dashboard' }}
-                    />
-                  }
-                >
-                  {item.icon}
-                  <span>{item.title}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            )
-          }
-
           return (
-            <Collapsible
-              key={item.title}
-              defaultOpen={isActive}
-              className="group/collapsible"
-              render={<SidebarMenuItem />}
-            >
-              <CollapsibleTrigger
-                render={
-                  <SidebarMenuButton
-                    isActive={isActive}
-                    tooltip={item.title}
-                    render={<Link to={item.to} />}
-                  />
-                }
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton
+                isActive={isActivePath(pathname, item.to)}
+                render={<Link to={item.to} activeOptions={{ exact: true }} />}
               >
                 {item.icon}
                 <span>{item.title}</span>
-                <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-open/collapsible:rotate-90" />
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <SidebarMenuSub>
-                  {item.items.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton
-                        isActive={isActivePath(pathname, subItem.to)}
-                        render={
-                          <Link
-                            to={subItem.to}
-                            activeOptions={{ exact: true }}
-                          />
-                        }
-                      >
-                        <span>{subItem.title}</span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
-              </CollapsibleContent>
-            </Collapsible>
+                {item.actionLink && (
+                  <SidebarMenuAction
+                    showOnHover
+                    className="aria-expanded:bg-muted"
+                    render={<Link to={item.actionLink} />}
+                  >
+                    <Plus />
+                    <span className="sr-only">Novo</span>
+                  </SidebarMenuAction>
+                )}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           )
         })}
       </SidebarMenu>
     </SidebarGroup>
   )
+}
+
+function isActivePath(pathname: string, to: FileRouteTypes['to']) {
+  return pathname === to || pathname.startsWith(`${to}/`)
 }

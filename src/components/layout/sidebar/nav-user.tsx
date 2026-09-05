@@ -1,3 +1,4 @@
+import { getRouteApi } from '@tanstack/react-router'
 import {
   BadgeCheckIcon,
   BellIcon,
@@ -7,7 +8,8 @@ import {
   SparklesIcon,
 } from 'lucide-react'
 
-import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar.tsx'
+import { getInitials } from '@/lib/utils'
+import { Avatar, AvatarFallback } from '#/components/ui/avatar.tsx'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,16 +26,11 @@ import {
   useSidebar,
 } from '#/components/ui/sidebar.tsx'
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+const dashboardRoute = getRouteApi('/(private)/_dashboard')
+
+export function NavUser() {
   const { isMobile } = useSidebar()
+  const { user } = dashboardRoute.useRouteContext()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -44,8 +41,7 @@ export function NavUser({
             }
           >
             <Avatar>
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{user.name}</span>
@@ -63,8 +59,7 @@ export function NavUser({
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar>
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">{user.name}</span>
