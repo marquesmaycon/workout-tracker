@@ -9,6 +9,8 @@ import {
 import { prisma } from '@/lib/db'
 import { authProcedure } from '@/orpc/procedures'
 
+import type { BodyWeightLog } from '../../../prisma/generated/client'
+
 const id = bodyWeightSchema.pick({ id: true })
 
 const listBodyWeight = authProcedure
@@ -20,11 +22,12 @@ const listBodyWeight = authProcedure
   })
   .input(z.undefined())
   .output(z.array(bodyWeightSchema))
-  .handler(({ context }) => {
-    return prisma.bodyWeightLog.findMany({
+  .handler(async ({ context }) => {
+    const bodyWeightLogs = await prisma.bodyWeightLog.findMany({
       where: { userId: context.user.id },
       orderBy: { measuredAt: 'desc' },
     })
+    return bodyWeightLogs.map(serializeBodyWeight)
   })
 
 const getBodyWeight = authProcedure
@@ -48,7 +51,7 @@ const getBodyWeight = authProcedure
       throw new ORPCError('NOT_FOUND')
     }
 
-    return bodyWeight
+    return serializeBodyWeight(bodyWeight)
   })
 
 const createBodyWeight = authProcedure
@@ -61,8 +64,8 @@ const createBodyWeight = authProcedure
   })
   .input(createBodyWeightSchema)
   .output(bodyWeightSchema)
-  .handler(({ input, context }) => {
-    return prisma.bodyWeightLog.create({
+  .handler(async ({ input, context }) => {
+    const bodyWeight = await prisma.bodyWeightLog.create({
       data: {
         measuredAt: new Date(input.measuredAt),
         weight: input.weight,
@@ -70,6 +73,7 @@ const createBodyWeight = authProcedure
         userId: context.user.id,
       },
     })
+    return serializeBodyWeight(bodyWeight)
   })
 
 const updateBodyWeight = authProcedure
@@ -94,7 +98,7 @@ const updateBodyWeight = authProcedure
       throw new ORPCError('NOT_FOUND')
     }
 
-    return prisma.bodyWeightLog.update({
+    const updatedBodyWeight = await prisma.bodyWeightLog.update({
       where: { id: bodyWeight.id },
       data: {
         measuredAt: new Date(input.measuredAt),
@@ -102,6 +106,7 @@ const updateBodyWeight = authProcedure
         notes: emptyToNull(input.notes),
       },
     })
+    return serializeBodyWeight(updatedBodyWeight)
   })
 
 const deleteBodyWeight = authProcedure
@@ -135,6 +140,10 @@ const deleteBodyWeight = authProcedure
 
 function emptyToNull(value?: string) {
   return value?.trim() ? value.trim() : null
+}
+
+function serializeBodyWeight(bodyWeight: BodyWeightLog) {
+  return { ...bodyWeight, weight: bodyWeight.weight.toString() }
 }
 
 export default {

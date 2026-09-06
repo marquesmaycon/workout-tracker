@@ -5,12 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 
-import type { BodyWeightLog } from '../../../../prisma/generated/client'
+import type { BodyWeight } from '../validation/schemas'
 import { useBodyWeightMutations } from '../hooks/use-body-weight-mutations'
 import { bodyWeightFormOptions } from '../validation/schemas'
 
 type BodyWeightFormProps = {
-  bodyWeight?: BodyWeightLog
+  bodyWeight?: BodyWeight
 }
 
 export function BodyWeightForm({ bodyWeight }: BodyWeightFormProps) {

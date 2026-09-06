@@ -1,8 +1,6 @@
 import { formOptions } from '@tanstack/react-form'
 import { z } from 'zod'
 
-import type { BodyWeightLog } from '../../../../prisma/generated/client'
-
 const requiredDecimalString = z
   .string()
   .min(1)
@@ -12,11 +10,13 @@ export const bodyWeightSchema = z.object({
   id: z.string(),
   userId: z.string(),
   measuredAt: z.date(),
-  weight: z.custom<BodyWeightLog['weight']>(),
+  weight: z.string(),
   notes: z.string().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
-}) satisfies z.ZodType<BodyWeightLog>
+})
+
+export type BodyWeight = z.infer<typeof bodyWeightSchema>
 
 export const createBodyWeightSchema = z.object({
   measuredAt: z.string().min(1),
@@ -36,7 +36,7 @@ export const bodyWeightFormDefaultValues: BodyWeightFormSchema = {
   notes: '',
 }
 
-export const bodyWeightFormOptions = (bodyWeight?: BodyWeightLog) => {
+export const bodyWeightFormOptions = (bodyWeight?: BodyWeight) => {
   return formOptions({
     defaultValues: bodyWeight
       ? {
