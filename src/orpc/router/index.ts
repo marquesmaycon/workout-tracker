@@ -2,6 +2,7 @@ import bodyWeightRoutes from './body-weight'
 import exercisesRoutes from './exercises'
 import gymsRoutes from './gyms'
 import muscleGroupsRoutes from './muscle-groups'
+import schedulesRoutes from './schedules'
 import workoutsRoutes from './workouts'
 
 export default {
@@ -9,5 +10,6 @@ export default {
   exercises: exercisesRoutes,
   gyms: gymsRoutes,
   muscleGroups: muscleGroupsRoutes,
+  schedules: schedulesRoutes,
   workouts: workoutsRoutes,
 }

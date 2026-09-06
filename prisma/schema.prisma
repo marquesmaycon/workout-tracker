@@ -20,6 +20,7 @@ model User {
   accounts        Account[]
   gyms            Gym[]
   workouts        Workout[]
+  schedules       Schedule[]
   workoutSessions WorkoutSession[]
   bodyWeightLogs  BodyWeightLog[]
 
@@ -97,9 +98,45 @@ model Workout {
   user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   exercises       WorkoutExercise[]
   workoutSessions WorkoutSession[]
+  scheduleItems   ScheduleItem[]
 
   @@index([userId])
   @@map("workout")
+}
+
+model Schedule {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  name        String
+  description String?
+  isActive    Boolean  @default(false) @map("is_active")
+  weekdays    Int[]
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items ScheduleItem[]
+
+  // A partial unique index in the migration enforces one active schedule per user.
+  @@index([userId])
+  @@map("schedule")
+}
+
+model ScheduleItem {
+  id         String   @id @default(cuid())
+  scheduleId String   @map("schedule_id")
+  workoutId  String   @map("workout_id")
+  orderIndex Int      @map("order_index")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  schedule        Schedule         @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  workout         Workout          @relation(fields: [workoutId], references: [id], onDelete: Restrict)
+  workoutSessions WorkoutSession[]
+
+  @@unique([scheduleId, orderIndex])
+  @@index([workoutId])
+  @@map("schedule_item")
 }
 
 model WorkoutExercise {
@@ -128,26 +165,29 @@ model WorkoutExercise {
 }
 
 model WorkoutSession {
-  id         String               @id @default(cuid())
-  userId     String               @map("user_id")
-  workoutId  String               @map("workout_id")
-  gymId      String?              @map("gym_id")
-  startedAt  DateTime             @default(now()) @map("started_at")
-  finishedAt DateTime?            @map("finished_at")
-  status     WorkoutSessionStatus @default(IN_PROGRESS)
-  notes      String?
-  createdAt  DateTime             @default(now()) @map("created_at")
-  updatedAt  DateTime             @updatedAt @map("updated_at")
+  id             String               @id @default(cuid())
+  userId         String               @map("user_id")
+  workoutId      String               @map("workout_id")
+  scheduleItemId String?              @map("schedule_item_id")
+  gymId          String?              @map("gym_id")
+  startedAt      DateTime             @default(now()) @map("started_at")
+  finishedAt     DateTime?            @map("finished_at")
+  status         WorkoutSessionStatus @default(IN_PROGRESS)
+  notes          String?
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
 
-  user      User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  workout   Workout                  @relation(fields: [workoutId], references: [id], onDelete: Restrict)
-  gym       Gym?                     @relation(fields: [gymId], references: [id], onDelete: SetNull)
-  exercises WorkoutSessionExercise[]
+  user         User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout      Workout                  @relation(fields: [workoutId], references: [id], onDelete: Restrict)
+  scheduleItem ScheduleItem?            @relation(fields: [scheduleItemId], references: [id], onDelete: Restrict)
+  gym          Gym?                     @relation(fields: [gymId], references: [id], onDelete: SetNull)
+  exercises    WorkoutSessionExercise[]
 
   @@index([userId])
   @@index([workoutId])
   @@index([gymId])
   @@index([startedAt])
+  @@index([scheduleItemId])
   @@map("workout_session")
 }
 

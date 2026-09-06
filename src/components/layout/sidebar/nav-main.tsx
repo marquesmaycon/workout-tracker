@@ -2,6 +2,7 @@ import { Link, useRouterState } from '@tanstack/react-router'
 import {
   BicepsFlexedIcon,
   Building2Icon,
+  CalendarDays,
   DumbbellIcon,
   LayoutDashboardIcon,
   Plus,
@@ -48,6 +49,12 @@ const items: NavItem[] = [
     to: '/workouts',
     icon: <DumbbellIcon />,
     actionLink: '/workouts/create',
+  },
+  {
+    title: 'Programações',
+    to: '/schedules',
+    icon: <CalendarDays />,
+    actionLink: '/schedules/create',
   },
   {
     title: 'Evolução',

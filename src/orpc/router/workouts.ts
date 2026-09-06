@@ -84,7 +84,7 @@ const updateWorkout = authProcedure
   })
   .input(updateWorkoutSchema)
   .output(workoutSchema)
-  .handler(async ({ input, context, path }) => {
+  .handler(async ({ input, context }) => {
     const workout = await prisma.workout.findFirst({
       where: {
         id: input.id,
@@ -129,9 +129,17 @@ const deleteWorkout = authProcedure
       throw new ORPCError('NOT_FOUND')
     }
 
-    await prisma.workout.delete({
-      where: { id: workout.id },
-    })
+    try {
+      await prisma.workout.delete({ where: { id: workout.id } })
+    } catch (error) {
+      if (error instanceof Error && 'code' in error && error.code === 'P2003') {
+        throw new ORPCError('CONFLICT', {
+          message:
+            'Este treino está em uso em uma programação ou sessão. Desative-o em vez de excluí-lo.',
+        })
+      }
+      throw error
+    }
 
     return workout
   })
