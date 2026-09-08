@@ -82,17 +82,17 @@ export function NavMain() {
               >
                 {item.icon}
                 <span>{item.title}</span>
-                {item.actionLink && (
-                  <SidebarMenuAction
-                    showOnHover
-                    className="aria-expanded:bg-muted"
-                    render={<Link to={item.actionLink} />}
-                  >
-                    <Plus />
-                    <span className="sr-only">Novo</span>
-                  </SidebarMenuAction>
-                )}
               </SidebarMenuButton>
+              {item.actionLink && (
+                <SidebarMenuAction
+                  showOnHover
+                  className="aria-expanded:bg-muted"
+                  render={<Link to={item.actionLink} />}
+                >
+                  <Plus />
+                  <span className="sr-only">Novo</span>
+                </SidebarMenuAction>
+              )}
             </SidebarMenuItem>
           )
         })}
