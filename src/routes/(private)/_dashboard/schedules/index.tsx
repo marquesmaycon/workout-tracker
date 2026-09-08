@@ -69,14 +69,15 @@ function SchedulesPage() {
                     {schedule.isActive ? 'Ativa' : 'Inativa'}
                   </span>
                 </ItemTitle>
-                <p className="text-muted-foreground text-sm">
-                  {weekdayOptions
-                    .filter((day) => schedule.weekdays.includes(day.value))
-                    .map((day) => day.short)
+                <p className="text-sm wrap-break-word">
+                  {schedule.items
+                    .map((item) => {
+                      const day = weekdayOptions.find(
+                        (option) => option.value === item.weekday,
+                      )
+                      return `${day?.short}: ${item.workout.name}`
+                    })
                     .join(' · ')}
-                </p>
-                <p className="text-sm break-words">
-                  {schedule.items.map((item) => item.workout.name).join(' → ')}
                 </p>
                 {schedule.items.some((item) => !item.workout.isActive) && (
                   <p className="text-destructive text-sm">

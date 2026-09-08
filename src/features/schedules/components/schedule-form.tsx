@@ -1,9 +1,7 @@
 import { Link, useRouter } from '@tanstack/react-router'
-import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { toast } from 'sonner'
 
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -12,6 +10,8 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
+  FieldSet,
 } from '@/components/ui/field'
 import {
   Select,
@@ -36,7 +36,6 @@ export function ScheduleForm({
   workouts: WorkoutOption[]
 }) {
   const router = useRouter()
-  const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null)
 
   const { createSchedule, updateSchedule } = useScheduleMutations()
 
@@ -56,11 +55,26 @@ export function ScheduleForm({
       }
     },
   })
-  const activeWorkouts = workouts.filter((workout) => workout.isActive)
-  const workoutOptions = activeWorkouts.map((workout) => ({
-    value: workout.id,
-    label: workout.name,
-  }))
+  const workoutsById = useMemo(
+    () => new Map(workouts.map((workout) => [workout.id, workout])),
+    [workouts],
+  )
+  const originalItemsById = useMemo(
+    () => new Map(schedule?.items.map((item) => [item.id, item])),
+    [schedule],
+  )
+  const activeWorkouts = useMemo(
+    () => workouts.filter((workout) => workout.isActive),
+    [workouts],
+  )
+  const workoutOptions = useMemo(
+    () =>
+      activeWorkouts.map((workout) => ({
+        value: workout.id,
+        label: workout.name,
+      })),
+    [activeWorkouts],
+  )
 
   return (
     <Card>
@@ -83,241 +97,181 @@ export function ScheduleForm({
                       <TextareaField label="Descrição" rows={3} />
                     )}
                   </form.AppField>
-                  <form.AppField name="weekdays">
-                    {(field) => (
-                      <Field data-invalid={!field.state.meta.isValid}>
-                        <FieldLabel>Dias de treino</FieldLabel>
-                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                          {weekdayOptions.map((day) => (
-                            <label
-                              key={day.value}
-                              className="flex items-center gap-2 rounded-md border p-3 text-sm"
-                            >
-                              <Checkbox
-                                checked={field.state.value.includes(day.value)}
-                                onCheckedChange={(checked) => {
-                                  field.handleChange(
-                                    checked
-                                      ? [...field.state.value, day.value].sort(
-                                          (a, b) => a - b,
-                                        )
-                                      : field.state.value.filter(
-                                          (value) => value !== day.value,
-                                        ),
-                                  )
-                                }}
-                              />
-                              {day.label}
-                            </label>
-                          ))}
-                        </div>
-                        <FieldDescription>
-                          Os dias indicam quando treinar. A sequência continua
-                          de onde você parou, sem reiniciar na semana seguinte.
-                        </FieldDescription>
-                        <FieldError errors={field.state.meta.errors} />
-                      </Field>
-                    )}
-                  </form.AppField>
                   <form.AppField name="items">
-                    {(field) => (
-                      <Field data-invalid={!field.state.meta.isValid}>
-                        <FieldLabel>Sequência de treinos</FieldLabel>
-                        <FieldDescription>
-                          Adicione os treinos na ordem desejada. Você pode
-                          repetir um treino; após o último, a sequência volta ao
-                          primeiro.
-                        </FieldDescription>
-                        <ol className="grid gap-3">
-                          {field.state.value.map((item, index) => {
-                            const original = schedule?.items.find(
-                              (entry) => entry.id === item.id,
-                            )
-                            const workout =
-                              workouts.find(
-                                (entry) => entry.id === item.workoutId,
-                              ) ?? original?.workout
-                            const locked =
-                              (original?._count.workoutSessions ?? 0) > 0
-                            const options =
-                              workout && !workout.isActive
-                                ? [
-                                    ...workoutOptions,
-                                    {
-                                      value: workout.id,
-                                      label: `${workout.name} (inativo)`,
-                                    },
-                                  ]
-                                : workoutOptions
-                            const move = (target: number) => {
-                              const next = [...field.state.value]
-                              const [moved] = next.splice(index, 1)
-                              next.splice(target, 0, moved)
-                              field.handleChange(next)
-                            }
-                            return (
-                              <li
-                                key={item.id ?? `new-${index}`}
-                                className="grid min-w-0 gap-3 rounded-lg border p-3 sm:grid-cols-[1fr_auto] sm:items-center"
-                              >
-                                <div className="grid min-w-0 gap-2">
-                                  <label
-                                    htmlFor={`schedule-item-${index}`}
-                                    className="text-sm font-medium"
+                    {(field) => {
+                      const items = field.state.value
+                      const itemsByWeekday = new Map(
+                        items.map((item) => [item.weekday, item]),
+                      )
+                      const isLocked = (itemId: string | undefined) =>
+                        !!itemId &&
+                        (originalItemsById.get(itemId)?._count
+                          .workoutSessions ?? 0) > 0
+
+                      const toggleWeekday = (
+                        weekday: number,
+                        checked: boolean,
+                      ) => {
+                        field.handleChange(
+                          checked
+                            ? [...items, { weekday, workoutId: '' }].sort(
+                                (a, b) => a.weekday - b.weekday,
+                              )
+                            : items.filter((item) => item.weekday !== weekday),
+                        )
+                      }
+
+                      const setWorkout = (weekday: number, workoutId: string) =>
+                        field.handleChange(
+                          items.map((item) =>
+                            item.weekday === weekday
+                              ? { ...item, workoutId }
+                              : item,
+                          ),
+                        )
+
+                      return (
+                        <Field data-invalid={!field.state.meta.isValid}>
+                          <FieldSet>
+                            <FieldLegend variant="label">
+                              Dias de treino
+                            </FieldLegend>
+                            <FieldDescription>
+                              Selecione os dias da semana e escolha um treino
+                              para cada um.
+                            </FieldDescription>
+                            <FieldGroup
+                              data-slot="checkbox-group"
+                              className="grid grid-cols-2 gap-3 sm:grid-cols-4"
+                            >
+                              {weekdayOptions.map((day) => {
+                                const item = itemsByWeekday.get(day.value)
+                                const locked = isLocked(item?.id)
+                                const id = `schedule-weekday-${day.value}`
+                                return (
+                                  <Field
+                                    key={day.value}
+                                    orientation="horizontal"
                                   >
-                                    Etapa {index + 1}
-                                  </label>
-                                  <Select
-                                    items={options}
-                                    value={item.workoutId}
-                                    disabled={locked}
-                                    onValueChange={(value) => {
-                                      if (value)
-                                        field.handleChange(
-                                          field.state.value.map(
-                                            (entry, position) =>
-                                              position === index
-                                                ? {
-                                                    ...entry,
-                                                    workoutId: String(value),
-                                                  }
-                                                : entry,
-                                          ),
+                                    <Checkbox
+                                      id={id}
+                                      checked={!!item}
+                                      disabled={locked}
+                                      onCheckedChange={(checked) =>
+                                        toggleWeekday(
+                                          day.value,
+                                          Boolean(checked),
                                         )
-                                    }}
-                                  >
-                                    <SelectTrigger
-                                      id={`schedule-item-${index}`}
-                                      className="w-full"
+                                      }
+                                    />
+                                    <FieldLabel
+                                      htmlFor={id}
+                                      className="font-normal"
                                     >
-                                      <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {options.map((option) => (
-                                        <SelectItem
-                                          key={option.value}
-                                          value={option.value}
-                                        >
-                                          {option.label}
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                  {workout && !workout.isActive && (
-                                    <p className="text-destructive text-sm">
-                                      Treino inativo. Substitua-o ou reative o
-                                      treino para ativar a programação.
-                                    </p>
-                                  )}
-                                  {locked && (
-                                    <p className="text-muted-foreground text-xs">
-                                      Etapa com histórico: permite apenas
-                                      reordenação.
-                                    </p>
-                                  )}
-                                </div>
-                                <div className="flex flex-wrap gap-2">
-                                  <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={index === 0}
-                                    onClick={() => move(index - 1)}
-                                    aria-label={`Subir etapa ${index + 1}`}
+                                      {day.label}
+                                    </FieldLabel>
+                                  </Field>
+                                )
+                              })}
+                            </FieldGroup>
+                          </FieldSet>
+
+                          <ol className="mt-4 flex flex-col gap-3 lg:flex-row lg:flex-wrap">
+                            {weekdayOptions
+                              .filter((day) => itemsByWeekday.has(day.value))
+                              .map((day) => {
+                                const item = itemsByWeekday.get(day.value)
+                                if (!item) return null
+
+                                const original = item.id
+                                  ? originalItemsById.get(item.id)
+                                  : undefined
+
+                                const workout =
+                                  workoutsById.get(item.workoutId) ??
+                                  original?.workout
+
+                                const locked = isLocked(item.id)
+
+                                const options =
+                                  workout && !workout.isActive
+                                    ? [
+                                        ...workoutOptions,
+                                        {
+                                          value: workout.id,
+                                          label: `${workout.name} (inativo)`,
+                                        },
+                                      ]
+                                    : workoutOptions
+
+                                return (
+                                  <li
+                                    key={day.value}
+                                    className="grid flex-1 gap-2 rounded-lg border p-3 lg:min-w-52"
                                   >
-                                    <ArrowUp aria-hidden="true" />
-                                    Subir
-                                  </Button>
-                                  <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={
-                                      index === field.state.value.length - 1
-                                    }
-                                    onClick={() => move(index + 1)}
-                                    aria-label={`Descer etapa ${index + 1}`}
-                                  >
-                                    <ArrowDown aria-hidden="true" />
-                                    Descer
-                                  </Button>
-                                  <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={locked}
-                                    onClick={() =>
-                                      field.handleChange(
-                                        field.state.value.filter(
-                                          (_, position) => position !== index,
-                                        ),
-                                      )
-                                    }
-                                    aria-label={`Remover etapa ${index + 1}`}
-                                  >
-                                    <Trash2 aria-hidden="true" />
-                                    Remover
-                                  </Button>
-                                </div>
-                              </li>
-                            )
-                          })}
-                        </ol>
-                        {activeWorkouts.length ? (
-                          <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
-                            <Select
-                              items={workoutOptions}
-                              value={selectedWorkout}
-                              onValueChange={(value) =>
-                                setSelectedWorkout(value ? String(value) : null)
-                              }
-                            >
-                              <SelectTrigger
-                                aria-label="Treino para adicionar"
-                                className="w-full"
-                              >
-                                <SelectValue placeholder="Selecione um treino" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {workoutOptions.map((option) => (
-                                  <SelectItem
-                                    key={option.value}
-                                    value={option.value}
-                                  >
-                                    {option.label}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              disabled={!selectedWorkout}
-                              onClick={() => {
-                                if (selectedWorkout)
-                                  field.handleChange([
-                                    ...field.state.value,
-                                    { workoutId: selectedWorkout },
-                                  ])
-                              }}
-                            >
-                              <Plus aria-hidden="true" />
-                              Adicionar treino
-                            </Button>
-                          </div>
-                        ) : (
-                          <p className="text-muted-foreground text-sm">
-                            Nenhum treino ativo disponível.{' '}
-                            <Link to="/workouts/create" className="underline">
-                              Cadastre um treino
-                            </Link>{' '}
-                            ou reative um existente.
-                          </p>
-                        )}
-                        <FieldError errors={field.state.meta.errors} />
-                      </Field>
-                    )}
+                                    <label
+                                      htmlFor={`schedule-item-${day.value}`}
+                                      className="text-sm font-medium"
+                                    >
+                                      {day.label}
+                                    </label>
+                                    <Select
+                                      items={options}
+                                      value={item.workoutId}
+                                      disabled={locked}
+                                      onValueChange={(value) => {
+                                        if (value)
+                                          setWorkout(day.value, String(value))
+                                      }}
+                                    >
+                                      <SelectTrigger
+                                        id={`schedule-item-${day.value}`}
+                                        className="w-full"
+                                      >
+                                        <SelectValue placeholder="Selecione um treino" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {options.map((option) => (
+                                          <SelectItem
+                                            key={option.value}
+                                            value={option.value}
+                                          >
+                                            {option.label}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                    {workout && !workout.isActive && (
+                                      <p className="text-destructive text-sm">
+                                        Treino inativo. Substitua-o ou reative o
+                                        treino para ativar a programação.
+                                      </p>
+                                    )}
+                                    {locked && (
+                                      <p className="text-muted-foreground text-xs">
+                                        Dia com histórico: não pode ser removido
+                                        nem ter o treino alterado.
+                                      </p>
+                                    )}
+                                  </li>
+                                )
+                              })}
+                          </ol>
+                          {!activeWorkouts.length && (
+                            <p className="text-muted-foreground text-sm">
+                              Nenhum treino ativo disponível.{' '}
+                              <Link to="/workouts/create" className="underline">
+                                Cadastre um treino
+                              </Link>{' '}
+                              ou reative um existente.
+                            </p>
+                          )}
+                          <FieldError errors={field.state.meta.errors} />
+                        </Field>
+                      )
+                    }}
                   </form.AppField>
+
                   <form.AppField name="isActive">
                     {({ CheckboxField }) => (
                       <CheckboxField

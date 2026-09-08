@@ -16,11 +16,11 @@ export const weekdayOptions = [
   { value: 7, label: 'Domingo', short: 'Dom' },
 ]
 
-const schemaItemSchema = z.object({
+const scheduleItemSchema = z.object({
   id: z.string(),
   scheduleId: z.string(),
   workoutId: z.string(),
-  orderIndex: z.number(),
+  weekday: z.number(),
   createdAt: z.date(),
   updatedAt: z.date(),
   workout: z.object({
@@ -37,35 +37,28 @@ export const scheduleSchema = z.object({
   name: z.string(),
   description: z.string().nullable(),
   isActive: z.boolean(),
-  weekdays: z.array(z.number()),
   createdAt: z.date(),
   updatedAt: z.date(),
-  items: z.array(schemaItemSchema),
+  items: z.array(scheduleItemSchema),
 }) satisfies z.ZodType<Schedule>
 
 export const createScheduleSchema = z.object({
   name: z.string().trim().min(3, 'Informe pelo menos três caracteres.'),
   description: z.string(),
   isActive: z.boolean(),
-  weekdays: z
-    .array(z.number().int().min(1).max(7))
-    .min(1, 'Selecione pelo menos um dia.')
-    .refine(
-      (days) => new Set(days).size === days.length,
-      'Não repita dias da semana.',
-    ),
   items: z
     .array(
       z.object({
         id: z.string().min(1).optional(),
+        weekday: z.number().int().min(1).max(7),
         workoutId: z.string().min(1, 'Selecione um treino.'),
       }),
     )
-    .min(1, 'Adicione pelo menos um treino.')
+    .min(1, 'Selecione pelo menos um dia de treino.')
     .refine((items) => {
-      const ids = items.flatMap((item) => (item.id ? [item.id] : []))
-      return new Set(ids).size === ids.length
-    }, 'Não repita o identificador de uma etapa.'),
+      const weekdays = items.map((item) => item.weekday)
+      return new Set(weekdays).size === weekdays.length
+    }, 'Não repita dias da semana.'),
 })
 
 export const updateScheduleSchema = createScheduleSchema.extend({
@@ -79,7 +72,6 @@ const scheduleFormDefaultValues: ScheduleFormSchema = {
   name: '',
   description: '',
   isActive: true,
-  weekdays: [],
   items: [],
 }
 
@@ -88,7 +80,9 @@ export const scheduleFormOptions = (schedule?: ScheduleSchema) => {
     ? {
         ...schedule,
         description: schedule.description ?? '',
-        items: schedule.items.map(({ id, workoutId }) => ({ id, workoutId })),
+        items: [...schedule.items]
+          .sort((a, b) => a.weekday - b.weekday)
+          .map(({ id, weekday, workoutId }) => ({ id, weekday, workoutId })),
       }
     : scheduleFormDefaultValues
 

@@ -110,7 +110,6 @@ model Schedule {
   name        String
   description String?
   isActive    Boolean  @default(false) @map("is_active")
-  weekdays    Int[]
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
@@ -126,7 +125,7 @@ model ScheduleItem {
   id         String   @id @default(cuid())
   scheduleId String   @map("schedule_id")
   workoutId  String   @map("workout_id")
-  orderIndex Int      @map("order_index")
+  weekday    Int
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
@@ -134,7 +133,7 @@ model ScheduleItem {
   workout         Workout          @relation(fields: [workoutId], references: [id], onDelete: Restrict)
   workoutSessions WorkoutSession[]
 
-  @@unique([scheduleId, orderIndex])
+  @@unique([scheduleId, weekday])
   @@index([workoutId])
   @@map("schedule_item")
 }

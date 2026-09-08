@@ -13,7 +13,7 @@ import type { Prisma } from '../../../prisma/generated/client'
 
 const include = {
   items: {
-    orderBy: { orderIndex: 'asc' },
+    orderBy: { weekday: 'asc' },
     include: {
       workout: { select: { id: true, name: true, isActive: true } },
       _count: { select: { workoutSessions: true } },
@@ -67,7 +67,7 @@ export default {
       return mutateSchedule(async (tx) => {
         if (input.items.some((item) => item.id)) {
           throw new ORPCError('BAD_REQUEST', {
-            message: 'Novas etapas não devem informar identificadores.',
+            message: 'Uma nova programação não deve informar identificadores.',
           })
         }
 
@@ -85,11 +85,10 @@ export default {
             name: input.name,
             description: input.description.trim() || null,
             isActive: input.isActive,
-            weekdays: input.weekdays,
             items: {
-              create: input.items.map((item, orderIndex) => ({
+              create: input.items.map((item) => ({
                 workoutId: item.workoutId,
-                orderIndex,
+                weekday: item.weekday,
               })),
             },
           },
@@ -126,7 +125,7 @@ export default {
           input.items.some((item) => item.id && !existingItems.has(item.id))
         ) {
           throw new ORPCError('BAD_REQUEST', {
-            message: 'Etapa inválida para esta programação.',
+            message: 'Dia inválido para esta programação.',
           })
         }
         for (const item of schedule.items) {
@@ -136,7 +135,8 @@ export default {
             (!submitted || submitted.workoutId !== item.workoutId)
           ) {
             throw new ORPCError('CONFLICT', {
-              message: 'Etapas com histórico permitem apenas reordenação.',
+              message:
+                'Dias com histórico de treinos não podem ser removidos nem ter o treino alterado.',
             })
           }
         }
@@ -159,20 +159,6 @@ export default {
             id: { notIn: [...submittedItems.keys()] },
           },
         })
-        // Park retained items outside both the current and final index ranges.
-        const offset =
-          Math.max(
-            input.items.length,
-            ...schedule.items.map((item) => item.orderIndex),
-          ) + 1
-        for (const [index, item] of schedule.items.entries()) {
-          if (submittedItems.has(item.id)) {
-            await tx.scheduleItem.update({
-              where: { id: item.id },
-              data: { orderIndex: offset + index },
-            })
-          }
-        }
 
         return tx.schedule.update({
           where: { id: schedule.id, userId: context.user.id },
@@ -180,20 +166,24 @@ export default {
             name: input.name,
             description: input.description.trim() || null,
             isActive: input.isActive,
-            weekdays: input.weekdays,
             items: {
-              update: input.items.flatMap((item, orderIndex) =>
+              update: input.items.flatMap((item) =>
                 item.id
                   ? [
                       {
                         where: { id: item.id },
-                        data: { workoutId: item.workoutId, orderIndex },
+                        data: {
+                          workoutId: item.workoutId,
+                          weekday: item.weekday,
+                        },
                       },
                     ]
                   : [],
               ),
-              create: input.items.flatMap((item, orderIndex) =>
-                item.id ? [] : [{ workoutId: item.workoutId, orderIndex }],
+              create: input.items.flatMap((item) =>
+                item.id
+                  ? []
+                  : [{ workoutId: item.workoutId, weekday: item.weekday }],
               ),
             },
           },
@@ -233,7 +223,7 @@ async function validateWorkouts(
   ) {
     throw new ORPCError('BAD_REQUEST', {
       message:
-        'Use treinos ativos para adicionar etapas ou ativar a programação.',
+        'Use treinos ativos para os dias de treino ou ative a programação.',
     })
   }
 }
