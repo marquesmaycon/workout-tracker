@@ -9,8 +9,13 @@ import {
   PageTitle,
 } from '@/components/ui/page'
 import { WorkoutForm } from '@/features/workouts/components/workout-form'
+import { orpc } from '@/orpc/client'
+
+const exercisesQuery = orpc.exercises.list.queryOptions()
 
 export const Route = createFileRoute('/(private)/_dashboard/workouts/create')({
+  loader: ({ context }) =>
+    context.queryClient.query({ ...exercisesQuery, staleTime: 'static' }),
   component: RouteComponent,
 })
 

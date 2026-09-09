@@ -14,7 +14,7 @@ import {
 } from '@/features/exercises/validation/schemas'
 import { gymSchema } from '@/features/gyms/validation/schemas'
 import { muscleGroupSchema } from '@/features/muscle-groups/validation/schemas'
-import { workoutSchema } from '@/features/workouts/validation/schemas'
+import { workoutSchema } from '@/features/workouts/validation/workout.schemas'
 import router from '@/orpc/router'
 
 const handler = new OpenAPIHandler(router, {

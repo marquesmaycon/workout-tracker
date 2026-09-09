@@ -5,12 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 
-import type { Workout } from '../../../../prisma/generated/client'
 import { useWorkoutMutations } from '../hooks/use-workout-mutations'
-import { workoutFormOptions } from '../validation/schemas'
+import type { WorkoutSchema } from '../validation/workout.schemas'
+import { workoutFormOptions } from '../validation/workout.schemas'
+import { WorkoutExerciseChildForm } from './workout-exercise-child-form'
 
 type WorkoutFormProps = {
-  workout?: Workout
+  workout?: WorkoutSchema
 }
 
 export function WorkoutForm({ workout }: WorkoutFormProps) {
@@ -51,38 +52,46 @@ export function WorkoutForm({ workout }: WorkoutFormProps) {
             form.handleSubmit()
           }}
         >
-          <FieldGroup>
-            <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-              {isEditing ? 'Atualize os dados' : 'Cadastre um treino'}
-            </FieldSeparator>
+          <form.Subscribe selector={(state) => state.isSubmitting}>
+            {(isSubmitting) => (
+              <fieldset disabled={isSubmitting} className="min-w-0">
+                <FieldGroup>
+                  <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
+                    {isEditing ? 'Atualize os dados' : 'Cadastre um treino'}
+                  </FieldSeparator>
 
-            <form.AppField name="name">
-              {({ InputField }) => <InputField label="Nome" />}
-            </form.AppField>
+                  <form.AppField name="name">
+                    {({ InputField }) => <InputField label="Nome" />}
+                  </form.AppField>
 
-            <form.AppField name="description">
-              {({ TextareaField }) => (
-                <TextareaField label="Descricao" rows={3} />
-              )}
-            </form.AppField>
+                  <form.AppField name="description">
+                    {({ TextareaField }) => (
+                      <TextareaField label="Descricao" rows={3} />
+                    )}
+                  </form.AppField>
 
-            <form.AppField name="isActive">
-              {({ CheckboxField }) => (
-                <CheckboxField
-                  label="Ativo"
-                  description="Deixe marcado para usar este treino nas rotinas."
-                />
-              )}
-            </form.AppField>
+                  <WorkoutExerciseChildForm form={form} />
 
-            <Field>
-              <form.AppForm>
-                <form.SubmitButton
-                  label={isEditing ? 'Salvar treino' : 'Criar treino'}
-                />
-              </form.AppForm>
-            </Field>
-          </FieldGroup>
+                  <form.AppField name="isActive">
+                    {({ CheckboxField }) => (
+                      <CheckboxField
+                        label="Ativo"
+                        description="Deixe marcado para usar este treino nas rotinas."
+                      />
+                    )}
+                  </form.AppField>
+
+                  <Field>
+                    <form.AppForm>
+                      <form.SubmitButton
+                        label={isEditing ? 'Salvar treino' : 'Criar treino'}
+                      />
+                    </form.AppForm>
+                  </Field>
+                </FieldGroup>
+              </fieldset>
+            )}
+          </form.Subscribe>
         </form>
       </CardContent>
     </Card>

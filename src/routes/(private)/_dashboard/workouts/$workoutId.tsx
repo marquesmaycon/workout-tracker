@@ -11,6 +11,8 @@ import {
 import { WorkoutForm } from '@/features/workouts/components/workout-form'
 import { orpc } from '@/orpc/client'
 
+const exercisesQuery = orpc.exercises.list.queryOptions()
+
 const workoutQueryOptions = (workoutId: string) =>
   orpc.workouts.get.queryOptions({ input: { id: workoutId } })
 
@@ -18,15 +20,18 @@ export const Route = createFileRoute(
   '/(private)/_dashboard/workouts/$workoutId',
 )({
   loader: ({ context, params }) =>
-    context.queryClient.query({
-      ...workoutQueryOptions(params.workoutId),
-      staleTime: 'static',
-    }),
+    Promise.all([
+      context.queryClient.query({
+        ...workoutQueryOptions(params.workoutId),
+        staleTime: 'static',
+      }),
+      context.queryClient.query({ ...exercisesQuery, staleTime: 'static' }),
+    ]),
   component: WorkoutEditPage,
 })
 
 function WorkoutEditPage() {
-  const workout = Route.useLoaderData()
+  const [workout] = Route.useLoaderData()
 
   return (
     <Page>

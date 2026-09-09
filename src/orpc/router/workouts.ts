@@ -5,11 +5,32 @@ import {
   createWorkoutSchema,
   updateWorkoutSchema,
   workoutSchema,
-} from '@/features/workouts/validation/schemas'
+} from '@/features/workouts/validation/workout.schemas'
 import { prisma } from '@/lib/db'
 import { authProcedure } from '@/orpc/procedures'
 
+import type { Prisma } from '../../../prisma/generated/client'
+
 const id = workoutSchema.pick({ id: true })
+
+const include = {
+  exercises: {
+    orderBy: { orderIndex: 'asc' },
+    include: { exercise: { select: { id: true, name: true } } },
+  },
+} satisfies Prisma.WorkoutInclude
+
+type WorkoutWithExercises = Prisma.WorkoutGetPayload<{ include: typeof include }>
+
+function serializeWorkout(workout: WorkoutWithExercises) {
+  return {
+    ...workout,
+    exercises: workout.exercises.map((exercise) => ({
+      ...exercise,
+      targetWeight: exercise.targetWeight?.toString() ?? null,
+    })),
+  }
+}
 
 const listWorkouts = authProcedure
   .route({
@@ -20,14 +41,16 @@ const listWorkouts = authProcedure
   })
   .input(z.object({ isActive: z.boolean().optional() }).optional())
   .output(z.array(workoutSchema))
-  .handler(({ input, context }) => {
-    return prisma.workout.findMany({
+  .handler(async ({ input, context }) => {
+    const workouts = await prisma.workout.findMany({
       where: {
         userId: context.user.id,
         isActive: input?.isActive,
       },
       orderBy: [{ isActive: 'desc' }, { name: 'asc' }],
+      include,
     })
+    return workouts.map(serializeWorkout)
   })
 
 const getWorkout = authProcedure
@@ -45,13 +68,14 @@ const getWorkout = authProcedure
         id: input.id,
         userId: context.user.id,
       },
+      include,
     })
 
     if (!workout) {
       throw new ORPCError('NOT_FOUND')
     }
 
-    return workout
+    return serializeWorkout(workout)
   })
 
 const createWorkout = authProcedure
@@ -65,13 +89,22 @@ const createWorkout = authProcedure
   .input(createWorkoutSchema)
   .output(workoutSchema)
   .handler(({ input, context }) => {
-    return prisma.workout.create({
-      data: {
-        name: input.name,
-        description: emptyToNull(input.description),
-        isActive: input.isActive ?? true,
-        userId: context.user.id,
-      },
+    return mutateWorkout(async () => {
+      const workout = await prisma.workout.create({
+        data: {
+          name: input.name,
+          description: emptyToNull(input.description),
+          isActive: input.isActive ?? true,
+          userId: context.user.id,
+          exercises: {
+            create: input.exercises.map((exercise, index) =>
+              toWorkoutExerciseData(exercise, index),
+            ),
+          },
+        },
+        include,
+      })
+      return serializeWorkout(workout)
     })
   })
 
@@ -97,13 +130,28 @@ const updateWorkout = authProcedure
       throw new ORPCError('NOT_FOUND')
     }
 
-    return prisma.workout.update({
-      where: { id: workout.id },
-      data: {
-        name: input.name,
-        description: emptyToNull(input.description),
-        isActive: input.isActive,
-      },
+    return mutateWorkout(async () => {
+      const updated = await prisma.$transaction(async (tx) => {
+        await tx.workoutExercise.deleteMany({
+          where: { workoutId: workout.id },
+        })
+
+        return tx.workout.update({
+          where: { id: workout.id },
+          data: {
+            name: input.name,
+            description: emptyToNull(input.description),
+            isActive: input.isActive,
+            exercises: {
+              create: input.exercises.map((exercise, index) =>
+                toWorkoutExerciseData(exercise, index),
+              ),
+            },
+          },
+          include,
+        })
+      })
+      return serializeWorkout(updated)
     })
   })
 
@@ -144,8 +192,42 @@ const deleteWorkout = authProcedure
     return workout
   })
 
+function toWorkoutExerciseData(
+  exercise: z.infer<typeof createWorkoutSchema>['exercises'][number],
+  index: number,
+) {
+  return {
+    exerciseId: exercise.exerciseId,
+    orderIndex: index,
+    targetSetsMin: toInt(exercise.targetSetsMin),
+    targetSetsMax: toInt(exercise.targetSetsMax),
+    targetRepsMin: toInt(exercise.targetRepsMin),
+    targetRepsMax: toInt(exercise.targetRepsMax),
+    targetWeight: exercise.targetWeight?.trim() || null,
+    restSeconds: toInt(exercise.restSeconds),
+    notes: exercise.notes?.trim() || null,
+  }
+}
+
+function toInt(value?: string) {
+  return value?.trim() ? Number(value) : null
+}
+
 function emptyToNull(value?: string | null) {
   return value?.trim() ? value.trim() : null
+}
+
+async function mutateWorkout<T>(operation: () => Promise<T>) {
+  try {
+    return await operation()
+  } catch (error) {
+    if (error instanceof Error && 'code' in error && error.code === 'P2003') {
+      throw new ORPCError('BAD_REQUEST', {
+        message: 'Exercício inválido.',
+      })
+    }
+    throw error
+  }
 }
 
 export default {
