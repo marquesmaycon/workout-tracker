@@ -1,3 +1,4 @@
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 
@@ -31,7 +32,8 @@ export const Route = createFileRoute(
 })
 
 function WorkoutEditPage() {
-  const [workout] = Route.useLoaderData()
+  const { workoutId } = Route.useParams()
+  const { data: workout } = useSuspenseQuery(workoutQueryOptions(workoutId))
 
   return (
     <Page>

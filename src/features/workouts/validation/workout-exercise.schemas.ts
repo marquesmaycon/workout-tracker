@@ -1,20 +1,6 @@
 import { z } from 'zod'
 
-const optionalIntString = z
-  .string()
-  .refine(
-    (value) =>
-      value === '' || (Number.isInteger(Number(value)) && Number(value) >= 0),
-  )
-  .optional()
-
-const optionalDecimalString = z
-  .string()
-  .refine(
-    (value) =>
-      value === '' || (Number.isFinite(Number(value)) && Number(value) >= 0),
-  )
-  .optional()
+import { optionalDecimalString, optionalIntString } from '@/lib/zod-helpers'
 
 export const workoutExerciseSchema = z.object({
   id: z.string(),

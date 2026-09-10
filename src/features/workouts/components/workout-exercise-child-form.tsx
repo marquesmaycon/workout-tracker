@@ -11,6 +11,7 @@ import {
   FieldSet,
 } from '@/components/ui/field'
 import { withForm } from '@/hooks/form'
+import { decimalOnly, digitsOnly } from '@/lib/input-masks'
 import { orpc } from '@/orpc/client'
 
 import { workoutFormOptions } from '../validation/workout.schemas'
@@ -203,11 +204,3 @@ export const WorkoutExerciseChildForm = withForm({
     )
   },
 })
-
-function digitsOnly(value: string) {
-  return value.replace(/\D/g, '')
-}
-
-function decimalOnly(value: string) {
-  return value.replace(/[^0-9.]/g, '')
-}
