@@ -28,6 +28,15 @@ export const workoutSessionExerciseSchema = z.object({
     id: z.string(),
     name: z.string(),
   }),
+  lastPerformed: z
+    .object({
+      actualSets: z.number().nullable(),
+      actualReps: z.number().nullable(),
+      actualWeight: z.string().nullable(),
+      rpe: z.string().nullable(),
+      completedAt: z.date().nullable(),
+    })
+    .nullable(),
 })
 
 export type WorkoutSessionExercise = z.infer<typeof workoutSessionExerciseSchema>

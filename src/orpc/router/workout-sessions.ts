@@ -27,7 +27,55 @@ type WorkoutSessionWithExercises = Prisma.WorkoutSessionGetPayload<{
   include: typeof include
 }>
 
-function serializeSession(session: WorkoutSessionWithExercises) {
+type LastPerformance = {
+  actualSets: number | null
+  actualReps: number | null
+  actualWeight: string | null
+  rpe: string | null
+  completedAt: Date | null
+}
+
+async function getLastPerformanceByExercise(
+  session: WorkoutSessionWithExercises,
+) {
+  const exerciseIds = [...new Set(session.exercises.map((e) => e.exerciseId))]
+  if (exerciseIds.length === 0) return new Map<string, LastPerformance>()
+
+  const rows = await prisma.workoutSessionExercise.findMany({
+    where: {
+      exerciseId: { in: exerciseIds },
+      workoutSessionId: { not: session.id },
+      completed: true,
+      workoutSession: { userId: session.userId, status: 'COMPLETED' },
+    },
+    distinct: ['exerciseId'],
+    orderBy: [{ workoutSession: { startedAt: 'desc' } }],
+    select: {
+      exerciseId: true,
+      actualSets: true,
+      actualReps: true,
+      actualWeight: true,
+      rpe: true,
+      completedAt: true,
+    },
+  })
+
+  return new Map(
+    rows.map((row) => [
+      row.exerciseId,
+      {
+        actualSets: row.actualSets,
+        actualReps: row.actualReps,
+        actualWeight: row.actualWeight?.toString() ?? null,
+        rpe: row.rpe?.toString() ?? null,
+        completedAt: row.completedAt,
+      },
+    ]),
+  )
+}
+
+async function serializeSession(session: WorkoutSessionWithExercises) {
+  const lastByExercise = await getLastPerformanceByExercise(session)
   return {
     ...session,
     exercises: session.exercises.map((exercise) => ({
@@ -35,12 +83,14 @@ function serializeSession(session: WorkoutSessionWithExercises) {
       plannedWeight: exercise.plannedWeight?.toString() ?? null,
       actualWeight: exercise.actualWeight?.toString() ?? null,
       rpe: exercise.rpe?.toString() ?? null,
+      lastPerformed: lastByExercise.get(exercise.exerciseId) ?? null,
     })),
   }
 }
 
 function getTodayWeekday() {
   return ((new Date().getDay() + 6) % 7) + 1
+}
 }
 
 const getCurrentSession = authProcedure
@@ -56,7 +106,7 @@ const getCurrentSession = authProcedure
       where: { userId: context.user.id, status: 'IN_PROGRESS' },
       include,
     })
-    return session ? serializeSession(session) : null
+    return session ? await serializeSession(session) : null
   })
 
 const getTodayWorkout = authProcedure

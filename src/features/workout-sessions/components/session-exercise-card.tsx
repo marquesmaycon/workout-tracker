@@ -32,6 +32,7 @@ export function SessionExerciseCard({
   })
 
   const target = formatTarget(exercise)
+  const last = formatLastPerformed(exercise)
 
   return (
     <Card>
@@ -42,6 +43,11 @@ export function SessionExerciseCard({
         )}
       </CardHeader>
       <CardContent>
+        {last && (
+          <p className="text-muted-foreground mb-2 text-xs">
+            Última vez: {last}
+          </p>
+        )}
         {readOnly ? (
           <p className="text-sm">
             {exercise.actualSets ?? '—'} séries x {exercise.actualReps ?? '—'}{' '}
@@ -129,4 +135,16 @@ function formatTarget(exercise: WorkoutSessionExercise) {
       : null
   const weight = exercise.plannedWeight ? `${exercise.plannedWeight} kg` : null
   return [sets, reps, weight].filter(Boolean).join(' x ') || null
+}
+
+function formatLastPerformed(exercise: WorkoutSessionExercise) {
+  const last = exercise.lastPerformed
+  if (!last) return null
+
+  const parts = [
+    `${last.actualSets ?? '—'} séries x ${last.actualReps ?? '—'} reps`,
+  ]
+  if (last.actualWeight) parts.push(`${last.actualWeight} kg`)
+  if (last.rpe) parts.push(`RPE ${last.rpe}`)
+  return parts.join(' · ')
 }
