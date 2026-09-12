@@ -5,9 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 
-import type { BodyWeight } from '../validation/schemas'
+import type { BodyWeight } from '../validation/body-weight.entity'
 import { useBodyWeightMutations } from '../hooks/use-body-weight-mutations'
-import { bodyWeightFormOptions } from '../validation/schemas'
+import { bodyWeightFormOptions } from '../validation/body-weight.form'
 
 type BodyWeightFormProps = {
   bodyWeight?: BodyWeight

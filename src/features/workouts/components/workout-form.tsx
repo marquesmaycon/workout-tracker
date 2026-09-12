@@ -6,8 +6,8 @@ import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 
 import { useWorkoutMutations } from '../hooks/use-workout-mutations'
-import type { WorkoutSchema } from '../validation/workout.schemas'
-import { workoutFormOptions } from '../validation/workout.schemas'
+import type { WorkoutSchema } from '../validation/workout.entity'
+import { workoutFormOptions } from '../validation/workout.form'
 import { WorkoutExerciseChildForm } from './workout-exercise-child-form'
 
 type WorkoutFormProps = {

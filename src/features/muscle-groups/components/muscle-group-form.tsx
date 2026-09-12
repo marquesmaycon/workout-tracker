@@ -7,7 +7,7 @@ import { useAppForm } from '@/hooks/form'
 
 import type { MuscleGroup } from '../../../../prisma/generated/client'
 import { useMuscleGroupMutations } from '../hooks/use-muscle-group-mutations'
-import { muscleGroupFormOptions } from '../validation/schemas'
+import { muscleGroupFormOptions } from '../validation/muscle-group.form'
 
 type MuscleGroupFormProps = {
   muscleGroup?: MuscleGroup

@@ -6,8 +6,8 @@ import { useAppForm } from '@/hooks/form'
 import { decimalOnly, digitsOnly } from '@/lib/input-masks'
 
 import { useWorkoutSessionMutations } from '../hooks/use-workout-session-mutations'
-import type { WorkoutSessionExercise } from '../validation/workout-session-exercise.schemas'
-import { sessionExerciseFormOptions } from '../validation/workout-session-exercise.schemas'
+import type { WorkoutSessionExercise } from '../validation/workout-session-exercise.entity'
+import { sessionExerciseFormOptions } from '../validation/workout-session-exercise.form'
 
 type SessionExerciseCardProps = {
   exercise: WorkoutSessionExercise

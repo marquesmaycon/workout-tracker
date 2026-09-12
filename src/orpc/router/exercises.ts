@@ -6,7 +6,7 @@ import {
   exerciseSchema,
   exerciseWithMuscleGroupsSchema,
   updateExerciseSchema,
-} from '@/features/exercises/validation/schemas'
+} from '@/features/exercises/validation/exercise.entity'
 import { prisma } from '@/lib/db'
 import { authProcedure } from '@/orpc/procedures'
 

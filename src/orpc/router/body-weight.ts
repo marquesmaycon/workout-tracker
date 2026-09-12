@@ -5,7 +5,7 @@ import {
   bodyWeightSchema,
   createBodyWeightSchema,
   updateBodyWeightSchema,
-} from '@/features/body-weight/validation/schemas'
+} from '@/features/body-weight/validation/body-weight.entity'
 import { prisma } from '@/lib/db'
 import { authProcedure } from '@/orpc/procedures'
 

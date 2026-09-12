@@ -7,14 +7,14 @@ import { onError } from '@orpc/server'
 import { ZodToJsonSchemaConverter } from '@orpc/zod/zod4'
 import { createFileRoute } from '@tanstack/react-router'
 
-import { bodyWeightSchema } from '@/features/body-weight/validation/schemas'
+import { bodyWeightSchema } from '@/features/body-weight/validation/body-weight.entity'
 import {
   exerciseSchema,
   exerciseWithMuscleGroupsSchema,
-} from '@/features/exercises/validation/schemas'
-import { gymSchema } from '@/features/gyms/validation/schemas'
-import { muscleGroupSchema } from '@/features/muscle-groups/validation/schemas'
-import { workoutSchema } from '@/features/workouts/validation/workout.schemas'
+} from '@/features/exercises/validation/exercise.entity'
+import { gymSchema } from '@/features/gyms/validation/gym.entity'
+import { muscleGroupSchema } from '@/features/muscle-groups/validation/muscle-group.entity'
+import { workoutSchema } from '@/features/workouts/validation/workout.entity'
 import router from '@/orpc/router'
 
 const handler = new OpenAPIHandler(router, {

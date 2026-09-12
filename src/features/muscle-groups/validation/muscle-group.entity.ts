@@ -1,6 +1,4 @@
-import { formOptions } from '@tanstack/react-form'
 import { z } from 'zod'
-
 import type { MuscleGroup } from '../../../../prisma/generated/client'
 
 export const muscleGroupSchema = z.object({
@@ -15,16 +13,3 @@ export const createMuscleGroupSchema = muscleGroupSchema.pick({ name: true })
 export const updateMuscleGroupSchema = muscleGroupSchema
   .pick({ id: true })
   .extend(createMuscleGroupSchema.shape)
-
-export type MuscleGroupFormSchema = z.infer<typeof createMuscleGroupSchema>
-
-export const muscleGroupFormDefaultValues: MuscleGroupFormSchema = {
-  name: '',
-}
-
-export const muscleGroupFormOptions = (muscleGroup?: MuscleGroup) => {
-  return formOptions({
-    defaultValues: muscleGroup ?? muscleGroupFormDefaultValues,
-    validators: { onSubmit: createMuscleGroupSchema },
-  })
-}

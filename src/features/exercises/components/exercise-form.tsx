@@ -14,8 +14,8 @@ import { useAppForm } from '@/hooks/form'
 
 import type { MuscleGroup } from '../../../../prisma/generated/client'
 import { useExerciseMutations } from '../hooks/use-exercise-mutations'
-import type { ExerciseWithMuscleGroups } from '../validation/schemas'
-import { exerciseFormOptions } from '../validation/schemas'
+import type { ExerciseWithMuscleGroups } from '../validation/exercise.entity'
+import { exerciseFormOptions } from '../validation/exercise.form'
 
 type ExerciseFormProps = {
   exercise?: ExerciseWithMuscleGroups

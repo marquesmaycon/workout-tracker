@@ -7,7 +7,7 @@ import {
   createGymSchema,
   gymSchema,
   updateGymSchema,
-} from '@/features/gyms/validation/schemas'
+} from '@/features/gyms/validation/gym.entity'
 
 const id = gymSchema.pick({ id: true })
 

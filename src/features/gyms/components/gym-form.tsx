@@ -5,7 +5,7 @@ import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 import { useRouter } from '@tanstack/react-router'
 import { useGymMutations } from '../hooks/use-gym-mutations'
-import { gymFormOptions } from '../validation/schemas'
+import { gymFormOptions } from '../validation/gym.form'
 import type { Gym } from '../../../../prisma/generated/client'
 
 type GymFormProps = {

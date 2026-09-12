@@ -1,6 +1,7 @@
 # Agent workflow rules
 
 - Do NOT start the dev server (`npm run dev`, `vite`, etc.) or run any test suite on your own. The user runs those themselves.
+- After editing a file, run `npx eslint --fix <file>` on it (this applies the `simple-import-sort` autofix, same as the editor's organize-imports-on-save) before moving on.
 - After making changes, only run linting and typechecking to verify your work: `npm run lint` and `npx tsc --noEmit` (there is no dedicated typecheck/test script in package.json).
 - If you believe running the dev server or tests is truly necessary, ask the user first instead of running it yourself.
 

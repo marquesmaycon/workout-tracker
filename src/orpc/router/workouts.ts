@@ -5,7 +5,7 @@ import {
   createWorkoutSchema,
   updateWorkoutSchema,
   workoutSchema,
-} from '@/features/workouts/validation/workout.schemas'
+} from '@/features/workouts/validation/workout.entity'
 import { prisma } from '@/lib/db'
 import { authProcedure } from '@/orpc/procedures'
 

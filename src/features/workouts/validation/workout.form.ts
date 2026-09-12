@@ -1,39 +1,9 @@
 import { formOptions } from '@tanstack/react-form'
 import { z } from 'zod'
 
-import type { Workout } from '../../../../prisma/generated/client'
-import {
-  workoutExerciseFormSchema,
-  workoutExerciseSchema,
-} from './workout-exercise.schemas'
-
-export const workoutSchema = z.object({
-  id: z.string(),
-  userId: z.string(),
-  name: z.string().min(3),
-  description: z.string().nullable(),
-  isActive: z.boolean(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  exercises: z.array(workoutExerciseSchema),
-}) satisfies z.ZodType<Workout>
-
-export const createWorkoutSchema = workoutSchema
-  .pick({ name: true, description: true, isActive: true })
-  .extend({
-    description: z.string().optional(),
-    exercises: z
-      .array(workoutExerciseFormSchema)
-      .min(1, 'Adicione pelo menos um exercício.'),
-  })
-  .partial({ isActive: true })
-
-export const updateWorkoutSchema = createWorkoutSchema.extend({
-  id: z.string(),
-})
+import { createWorkoutSchema, type WorkoutSchema } from './workout.entity'
 
 export type WorkoutFormSchema = z.infer<typeof createWorkoutSchema>
-export type WorkoutSchema = z.infer<typeof workoutSchema>
 
 export const workoutFormDefaultValues: WorkoutFormSchema = {
   name: '',

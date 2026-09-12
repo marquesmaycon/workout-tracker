@@ -2,26 +2,6 @@ import { z } from 'zod'
 
 import { optionalDecimalString, optionalIntString } from '@/lib/zod-helpers'
 
-export const workoutExerciseSchema = z.object({
-  id: z.string(),
-  workoutId: z.string(),
-  exerciseId: z.string(),
-  orderIndex: z.number(),
-  targetSetsMin: z.number().nullable(),
-  targetSetsMax: z.number().nullable(),
-  targetRepsMin: z.number().nullable(),
-  targetRepsMax: z.number().nullable(),
-  targetWeight: z.string().nullable(),
-  restSeconds: z.number().nullable(),
-  notes: z.string().nullable(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  exercise: z.object({
-    id: z.string(),
-    name: z.string(),
-  }),
-})
-
 export const workoutExerciseFormSchema = z
   .object({
     exerciseId: z.string().min(1, 'Selecione um exercício.'),
@@ -54,7 +34,6 @@ export const workoutExerciseFormSchema = z
     },
   )
 
-export type WorkoutExerciseSchema = z.infer<typeof workoutExerciseSchema>
 export type WorkoutExerciseFormSchema = z.infer<
   typeof workoutExerciseFormSchema
 >

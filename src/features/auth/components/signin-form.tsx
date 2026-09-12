@@ -10,7 +10,7 @@ import {
 import { useAppForm } from '@/hooks/form'
 import { authClient } from '@/lib/auth-client'
 
-import { signinFormOptions } from '../validation/signin.validation'
+import { signinFormOptions } from '../validation/signin.form'
 
 export function SigninForm() {
   const router = useRouter()

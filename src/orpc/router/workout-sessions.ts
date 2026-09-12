@@ -5,8 +5,8 @@ import {
   startWorkoutSessionSchema,
   todayWorkoutSchema,
   workoutSessionSchema,
-} from '@/features/workout-sessions/validation/workout-session.schemas'
-import { updateSessionExerciseSchema } from '@/features/workout-sessions/validation/workout-session-exercise.schemas'
+} from '@/features/workout-sessions/validation/workout-session.entity'
+import { updateSessionExerciseSchema } from '@/features/workout-sessions/validation/workout-session-exercise.form'
 import { prisma } from '@/lib/db'
 import { authProcedure } from '@/orpc/procedures'
 

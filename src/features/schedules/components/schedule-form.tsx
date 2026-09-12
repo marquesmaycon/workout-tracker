@@ -23,8 +23,8 @@ import {
 import { useAppForm } from '@/hooks/form'
 
 import { useScheduleMutations } from '../hooks/use-schedule-mutations'
-import type { ScheduleSchema } from '../validation/schemas'
-import { scheduleFormOptions, weekdayOptions } from '../validation/schemas'
+import type { ScheduleSchema } from '../validation/schedule.entity'
+import { scheduleFormOptions, weekdayOptions } from '../validation/schedule.form'
 
 type WorkoutOption = { id: string; name: string; isActive: boolean }
 

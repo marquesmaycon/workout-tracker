@@ -5,7 +5,7 @@ import {
   createScheduleSchema,
   scheduleSchema,
   updateScheduleSchema,
-} from '@/features/schedules/validation/schemas'
+} from '@/features/schedules/validation/schedule.entity'
 import { prisma } from '@/lib/db'
 import { authProcedure } from '@/orpc/procedures'
 

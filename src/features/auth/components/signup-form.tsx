@@ -11,7 +11,7 @@ import {
 import { useAppForm } from '@/hooks/form'
 import { authClient } from '@/lib/auth-client'
 
-import { signupFormOptions } from '../validation/signup.schema'
+import { signupFormOptions } from '../validation/signup.form'
 
 export function SignupForm() {
   const router = useRouter()

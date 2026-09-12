@@ -14,8 +14,8 @@ import { withForm } from '@/hooks/form'
 import { decimalOnly, digitsOnly } from '@/lib/input-masks'
 import { orpc } from '@/orpc/client'
 
-import { workoutFormOptions } from '../validation/workout.schemas'
-import { workoutExerciseDefaultValues } from '../validation/workout-exercise.schemas'
+import { workoutFormOptions } from '../validation/workout.form'
+import { workoutExerciseDefaultValues } from '../validation/workout-exercise.form'
 
 const exercisesQuery = orpc.exercises.list.queryOptions()
 

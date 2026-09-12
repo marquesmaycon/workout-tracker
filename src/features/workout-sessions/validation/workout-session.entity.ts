@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { workoutSessionExerciseSchema } from './workout-session-exercise.schemas'
+import { workoutSessionExerciseSchema } from './workout-session-exercise.entity'
 
 export const workoutSessionSchema = z.object({
   id: z.string(),

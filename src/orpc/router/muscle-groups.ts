@@ -5,7 +5,7 @@ import {
   createMuscleGroupSchema,
   muscleGroupSchema,
   updateMuscleGroupSchema,
-} from '@/features/muscle-groups/validation/schemas'
+} from '@/features/muscle-groups/validation/muscle-group.entity'
 import { prisma } from '@/lib/db'
 import { authProcedure } from '@/orpc/procedures'
 

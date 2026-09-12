@@ -17,7 +17,7 @@ import {
   PageHeader,
   PageTitle,
 } from '@/components/ui/page'
-import { weekdayOptions } from '@/features/schedules/validation/schemas'
+import { weekdayOptions } from '@/features/schedules/validation/schedule.form'
 import { orpc } from '@/orpc/client'
 
 const schedulesQuery = orpc.schedules.list.queryOptions({})

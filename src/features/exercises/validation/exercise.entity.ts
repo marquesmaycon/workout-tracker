@@ -1,7 +1,6 @@
-import { formOptions } from '@tanstack/react-form'
 import { z } from 'zod'
 
-import { muscleGroupSchema } from '@/features/muscle-groups/validation/schemas'
+import { muscleGroupSchema } from '@/features/muscle-groups/validation/muscle-group.entity'
 
 import type { Exercise } from '../../../../prisma/generated/client'
 
@@ -38,36 +37,6 @@ export const updateExerciseSchema = createExerciseSchema.extend({
   id: z.string(),
 })
 
-export type ExerciseFormSchema = z.infer<typeof createExerciseSchema>
 export type ExerciseWithMuscleGroups = z.infer<
   typeof exerciseWithMuscleGroupsSchema
 >
-
-export const exerciseFormDefaultValues: ExerciseFormSchema = {
-  name: '',
-  description: '',
-  instructions: '',
-  videoUrl: '',
-  muscleGroupIds: [],
-  primaryMuscleGroupId: '',
-}
-
-export const exerciseFormOptions = (exercise?: ExerciseWithMuscleGroups) => {
-  return formOptions({
-    defaultValues: exercise
-      ? {
-          name: exercise.name,
-          description: exercise.description ?? '',
-          instructions: exercise.instructions ?? '',
-          videoUrl: exercise.videoUrl ?? '',
-          muscleGroupIds: exercise.muscleGroups.map(
-            ({ muscleGroupId }) => muscleGroupId,
-          ),
-          primaryMuscleGroupId:
-            exercise.muscleGroups.find(({ isPrimary }) => isPrimary)
-              ?.muscleGroupId ?? '',
-        }
-      : exerciseFormDefaultValues,
-    validators: { onSubmit: createExerciseSchema },
-  })
-}
