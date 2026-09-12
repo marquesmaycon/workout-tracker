@@ -91,6 +91,17 @@ async function serializeSession(session: WorkoutSessionWithExercises) {
 function getTodayWeekday() {
   return ((new Date().getDay() + 6) % 7) + 1
 }
+
+function startOfDay(date: Date) {
+  const d = new Date(date)
+  d.setHours(0, 0, 0, 0)
+  return d
+}
+
+function subDays(date: Date, days: number) {
+  const d = new Date(date)
+  d.setDate(d.getDate() - days)
+  return d
 }
 
 const getCurrentSession = authProcedure
@@ -118,17 +129,40 @@ const getTodayWorkout = authProcedure
   })
   .output(todayWorkoutSchema.nullable())
   .handler(async ({ context }) => {
-    const item = await prisma.scheduleItem.findFirst({
-      where: {
-        weekday: getTodayWeekday(),
-        schedule: { userId: context.user.id, isActive: true },
-      },
+    const items = await prisma.scheduleItem.findMany({
+      where: { schedule: { userId: context.user.id, isActive: true } },
       include: {
         workout: { select: { id: true, name: true, isActive: true } },
+        workoutSessions: {
+          where: { status: 'COMPLETED' },
+          orderBy: { finishedAt: 'desc' },
+          take: 1,
+        },
       },
     })
-    if (!item || !item.workout.isActive) return null
-    return { scheduleItemId: item.id, workout: item.workout }
+
+    const today = startOfDay(new Date())
+    const todayWeekday = getTodayWeekday()
+
+    let best: { item: (typeof items)[number]; daysSince: number } | null =
+      null
+
+    for (const item of items) {
+      if (!item.workout.isActive) continue
+
+      const daysSince = (todayWeekday - item.weekday + 7) % 7
+      const dueDate = subDays(today, daysSince)
+      if (dueDate < startOfDay(item.createdAt)) continue
+
+      const lastCompleted = item.workoutSessions[0]?.finishedAt
+      const isDone = lastCompleted && startOfDay(lastCompleted) >= dueDate
+      if (isDone) continue
+
+      if (!best || daysSince > best.daysSince) best = { item, daysSince }
+    }
+
+    if (!best) return null
+    return { scheduleItemId: best.item.id, workout: best.item.workout }
   })
 
 const startWorkoutSession = authProcedure
@@ -206,7 +240,7 @@ const startWorkoutSession = authProcedure
           },
           include,
         })
-        return serializeSession(session)
+        return await serializeSession(session)
       },
       { isolationLevel: 'Serializable' },
     )
@@ -227,7 +261,7 @@ const getSession = authProcedure
       include,
     })
     if (!session) throw new ORPCError('NOT_FOUND')
-    return serializeSession(session)
+    return await serializeSession(session)
   })
 
 const updateSessionExercise = authProcedure
@@ -268,7 +302,7 @@ const updateSessionExercise = authProcedure
       where: { id: exercise.workoutSession.id },
       include,
     })
-    return serializeSession(session)
+    return await serializeSession(session)
   })
 
 const finishWorkoutSession = authProcedure
@@ -318,7 +352,7 @@ async function endSession(
     data: { status, finishedAt: new Date() },
     include,
   })
-  return serializeSession(updated)
+  return await serializeSession(updated)
 }
 
 function toInt(value?: string) {
