@@ -1,6 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { Page, PageDescription, PageHeader, PageTitle } from '@/components/ui/page'
+import {
+  Page,
+  PageDescription,
+  PageHeader,
+  PageTitle,
+} from '@/components/ui/page'
 import { StartWorkoutCard } from '@/features/workout-sessions/components/start-workout-card'
 import { orpc } from '@/orpc/client'
 
@@ -13,9 +18,15 @@ const activeWorkoutsQuery = orpc.workouts.list.queryOptions({
 export const Route = createFileRoute('/(private)/_dashboard/dashboard')({
   loader: ({ context }) =>
     Promise.all([
-      context.queryClient.query(currentSessionQuery),
-      context.queryClient.query(todayWorkoutQuery),
-      context.queryClient.query(activeWorkoutsQuery),
+      context.queryClient.query({
+        ...currentSessionQuery,
+        staleTime: 'static',
+      }),
+      context.queryClient.query({ ...todayWorkoutQuery, staleTime: 'static' }),
+      context.queryClient.query({
+        ...activeWorkoutsQuery,
+        staleTime: 'static',
+      }),
     ]),
   component: RouteComponent,
 })

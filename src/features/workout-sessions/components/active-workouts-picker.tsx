@@ -29,6 +29,9 @@ export function ActiveWorkoutsPicker({
   onStart: (workoutId: string) => void
 }) {
   const { data: workouts } = useSuspenseQuery(activeWorkoutsQuery)
+  const { data: currentSession } = useSuspenseQuery(
+    orpc.workoutSessions.current.queryOptions(),
+  )
 
   if (!workouts.length) {
     return (
@@ -59,7 +62,11 @@ export function ActiveWorkoutsPicker({
               <ItemTitle>{workout.name}</ItemTitle>
             </ItemContent>
             <ItemActions>
-              <Button size="sm" onClick={() => onStart(workout.id)}>
+              <Button
+                size="sm"
+                onClick={() => onStart(workout.id)}
+                disabled={!!currentSession}
+              >
                 <Play aria-hidden="true" />
                 Iniciar
               </Button>
