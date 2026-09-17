@@ -2,14 +2,8 @@ import * as React from 'react'
 
 import { cn } from '#/lib/utils.ts'
 
-function Page({ className, ...props }: React.ComponentProps<'main'>) {
-  return (
-    <main
-      data-slot="page"
-      className={cn('flex flex-col gap-6', className)}
-      {...props}
-    />
-  )
+function Page({ className, ...props }: React.ComponentProps<'div'>) {
+  return <div data-slot="page" className={cn('flex flex-col gap-6', className)} {...props} />
 }
 
 function PageHeader({ className, ...props }: React.ComponentProps<'header'>) {

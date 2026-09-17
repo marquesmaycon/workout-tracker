@@ -1,6 +1,8 @@
+import { ChevronDownIcon } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Field, FieldGroup } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 import { decimalOnly, digitsOnly } from '@/lib/input-masks'
@@ -15,11 +17,7 @@ type SessionExerciseCardProps = {
   onSaved: () => void
 }
 
-export function SessionExerciseCard({
-  exercise,
-  readOnly,
-  onSaved,
-}: SessionExerciseCardProps) {
+export function SessionExerciseCard({ exercise, readOnly, onSaved }: SessionExerciseCardProps) {
   const { updateSessionExercise } = useWorkoutSessionMutations()
 
   const form = useAppForm({
@@ -38,20 +36,13 @@ export function SessionExerciseCard({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between gap-2">
         <CardTitle>{exercise.exercise.name}</CardTitle>
-        {target && (
-          <span className="text-muted-foreground text-xs">Alvo: {target}</span>
-        )}
+        {target && <span className="text-muted-foreground text-xs">Alvo: {target}</span>}
       </CardHeader>
       <CardContent>
-        {last && (
-          <p className="text-muted-foreground mb-2 text-xs">
-            Última vez: {last}
-          </p>
-        )}
+        {last && <p className="text-muted-foreground mb-2 text-xs">Última vez: {last}</p>}
         {readOnly ? (
           <p className="text-sm">
-            {exercise.actualSets ?? '—'} séries x {exercise.actualReps ?? '—'}{' '}
-            reps
+            {exercise.actualSets ?? '—'} séries x {exercise.actualReps ?? '—'} reps
             {exercise.actualWeight ? ` · ${exercise.actualWeight} kg` : ''}
             {exercise.rpe ? ` · RPE ${exercise.rpe}` : ''}
           </p>
@@ -66,50 +57,34 @@ export function SessionExerciseCard({
               <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
                 <form.AppField name="actualSets">
                   {({ InputField }) => (
-                    <InputField
-                      label="Séries"
-                      inputMode="numeric"
-                      mask={digitsOnly}
-                    />
+                    <InputField label="Séries" inputMode="numeric" type="number" mask={digitsOnly} />
                   )}
                 </form.AppField>
                 <form.AppField name="actualReps">
-                  {({ InputField }) => (
-                    <InputField
-                      label="Reps"
-                      inputMode="numeric"
-                      mask={digitsOnly}
-                    />
-                  )}
+                  {({ InputField }) => <InputField label="Reps" inputMode="numeric" mask={digitsOnly} />}
                 </form.AppField>
                 <form.AppField name="actualWeight">
-                  {({ InputField }) => (
-                    <InputField
-                      label="Peso"
-                      inputMode="decimal"
-                      mask={decimalOnly}
-                    />
-                  )}
+                  {({ InputField }) => <InputField label="Peso" inputMode="decimal" mask={decimalOnly} />}
                 </form.AppField>
                 <form.AppField name="rpe">
-                  {({ InputField }) => (
-                    <InputField
-                      label="RPE"
-                      inputMode="decimal"
-                      mask={decimalOnly}
-                    />
-                  )}
+                  {({ InputField }) => <InputField label="RPE" inputMode="decimal" mask={decimalOnly} />}
                 </form.AppField>
               </div>
-              <form.AppField name="notes">
-                {({ TextareaField }) => (
-                  <TextareaField label="Notas" rows={2} />
-                )}
-              </form.AppField>
+              <Field>
+                <Collapsible>
+                  <CollapsibleTrigger className="text-muted-foreground flex items-center gap-1 text-sm font-medium">
+                    Adicionar anotação
+                    <ChevronDownIcon className="size-4" />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-2">
+                    <form.AppField name="notes">
+                      {({ TextareaField }) => <TextareaField label="Notas" rows={2} />}
+                    </form.AppField>
+                  </CollapsibleContent>
+                </Collapsible>
+              </Field>
               <form.AppField name="completed">
-                {({ CheckboxField }) => (
-                  <CheckboxField label="Exercício concluído" />
-                )}
+                {({ CheckboxField }) => <CheckboxField label="Exercício concluído" />}
               </form.AppField>
               <Field>
                 <form.AppForm>
@@ -141,9 +116,7 @@ function formatLastPerformed(exercise: WorkoutSessionExercise) {
   const last = exercise.lastPerformed
   if (!last) return null
 
-  const parts = [
-    `${last.actualSets ?? '—'} séries x ${last.actualReps ?? '—'} reps`,
-  ]
+  const parts = [`${last.actualSets ?? '—'} séries x ${last.actualReps ?? '—'} reps`]
   if (last.actualWeight) parts.push(`${last.actualWeight} kg`)
   if (last.rpe) parts.push(`RPE ${last.rpe}`)
   return parts.join(' · ')
