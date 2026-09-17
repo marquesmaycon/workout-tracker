@@ -64,7 +64,9 @@ export function SessionExerciseCard({ exercise, readOnly, onSaved }: SessionExer
                   {({ InputField }) => <InputField label="Reps" inputMode="numeric" mask={digitsOnly} />}
                 </form.AppField>
                 <form.AppField name="actualWeight">
-                  {({ InputField }) => <InputField label="Peso" inputMode="decimal" mask={decimalOnly} />}
+                  {({ StepperField }) => (
+                    <StepperField label="Peso" inputMode="decimal" mask={decimalOnly} step={2.5} />
+                  )}
                 </form.AppField>
                 <form.AppField name="rpe">
                   {({ InputField }) => <InputField label="RPE" inputMode="decimal" mask={decimalOnly} />}
