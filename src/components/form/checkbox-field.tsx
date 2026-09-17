@@ -28,8 +28,8 @@ export function CheckboxField({ label, description, ...props }: CheckboxFieldPro
         <FieldLabel htmlFor={field.name} className="font-normal">
           {label}
         </FieldLabel>
-        <FieldDescription>{description}</FieldDescription>
-        {true && <FieldError errors={field.state.meta.errors} />}
+        {description && <FieldDescription>{description}</FieldDescription>}
+        {isInvalid && <FieldError errors={field.state.meta.errors} />}
       </div>
     </Field>
   )
