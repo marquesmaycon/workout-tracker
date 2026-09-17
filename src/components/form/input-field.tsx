@@ -3,15 +3,16 @@ import type { ComponentProps } from 'react'
 import { useFieldContext } from '@/hooks/form-context'
 import { cn } from '@/lib/utils'
 
-import { Field, FieldError, FieldLabel } from '../ui/field'
+import { Field, FieldDescription, FieldError, FieldLabel } from '../ui/field'
 import { Input } from '../ui/input'
 
 type InputFieldProps = ComponentProps<typeof Input> & {
   mask?: (value: string) => string
   label: string
+  description?: string
 }
 
-export function InputField({ label, mask, ...props }: InputFieldProps) {
+export function InputField({ label, mask, description, ...props }: InputFieldProps) {
   const field = useFieldContext<string>()
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
 
@@ -28,6 +29,7 @@ export function InputField({ label, mask, ...props }: InputFieldProps) {
         className={cn('bg-background')}
         {...props}
       />
+      {description && <FieldDescription>{description}</FieldDescription>}
       {isInvalid && <FieldError errors={field.state.meta.errors} />}
     </Field>
   )

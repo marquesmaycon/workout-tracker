@@ -3,16 +3,17 @@ import type { ComponentProps } from 'react'
 
 import { useFieldContext } from '@/hooks/form-context'
 
-import { Field, FieldError, FieldLabel } from '../ui/field'
+import { Field, FieldDescription, FieldError, FieldLabel } from '../ui/field'
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '../ui/input-group'
 
 type StepperFieldProps = Omit<ComponentProps<typeof InputGroupInput>, 'onChange' | 'value'> & {
   mask?: (value: string) => string
   label: string
   step: number
+  description?: string
 }
 
-export function StepperField({ label, mask, step, ...props }: StepperFieldProps) {
+export function StepperField({ label, mask, step, description, ...props }: StepperFieldProps) {
   const field = useFieldContext<string>()
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
 
@@ -25,7 +26,7 @@ export function StepperField({ label, mask, step, ...props }: StepperFieldProps)
   return (
     <Field data-invalid={isInvalid}>
       <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-      <InputGroup>
+      <InputGroup className="bg-background">
         <InputGroupAddon align="inline-start">
           <InputGroupButton aria-label={`Diminuir ${step}`} onClick={() => adjust(-step)}>
             <MinusIcon />
@@ -47,6 +48,7 @@ export function StepperField({ label, mask, step, ...props }: StepperFieldProps)
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>
+      {description && <FieldDescription>{description}</FieldDescription>}
       {isInvalid && <FieldError errors={field.state.meta.errors} />}
     </Field>
   )
