@@ -3,6 +3,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { CheckCircle2, X } from 'lucide-react'
 import { toast } from 'sonner'
 
+import { Accordion } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import {
   Page,
@@ -88,19 +89,18 @@ function SessionPage() {
         )}
       </PageHeader>
 
-      <ol className="flex flex-col gap-3">
+      <Accordion multiple defaultValue={session.exercises.map((exercise) => exercise.id)}>
         {session.exercises.map((exercise) => (
-          <li key={exercise.id}>
-            <SessionExerciseCard
-              exercise={exercise}
-              readOnly={!isInProgress}
-              onSaved={() =>
-                queryClient.invalidateQueries(sessionQueryOptions(sessionId))
-              }
-            />
-          </li>
+          <SessionExerciseCard
+            key={exercise.id}
+            exercise={exercise}
+            readOnly={!isInProgress}
+            onSaved={() =>
+              queryClient.invalidateQueries(sessionQueryOptions(sessionId))
+            }
+          />
         ))}
-      </ol>
+      </Accordion>
     </Page>
   )
 }

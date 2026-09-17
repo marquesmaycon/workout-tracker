@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from 'lucide-react'
 import { toast } from 'sonner'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Field, FieldGroup } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
@@ -33,12 +33,14 @@ export function SessionExerciseCard({ exercise, readOnly, onSaved }: SessionExer
   const last = formatLastPerformed(exercise)
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between gap-2">
-        <CardTitle>{exercise.exercise.name}</CardTitle>
-        {target && <span className="text-muted-foreground text-xs">Alvo: {target}</span>}
-      </CardHeader>
-      <CardContent>
+    <AccordionItem value={exercise.id}>
+      <AccordionTrigger>
+        <span className="flex flex-1 flex-wrap items-center justify-between gap-2">
+          <span className="text-sm font-medium">{exercise.exercise.name}</span>
+          {target && <span className="text-muted-foreground text-xs">Alvo: {target}</span>}
+        </span>
+      </AccordionTrigger>
+      <AccordionContent>
         {last && <p className="text-muted-foreground mb-2 text-xs">Última vez: {last}</p>}
         {readOnly ? (
           <p className="text-sm">
@@ -96,8 +98,8 @@ export function SessionExerciseCard({ exercise, readOnly, onSaved }: SessionExer
             </FieldGroup>
           </form>
         )}
-      </CardContent>
-    </Card>
+      </AccordionContent>
+    </AccordionItem>
   )
 }
 
