@@ -9,16 +9,18 @@ import { Input } from '../ui/input'
 type InputFieldProps = ComponentProps<typeof Input> & {
   mask?: (value: string) => string
   label: string
-  description?: string
+  description?: string | React.ReactNode
+  footer?: React.ReactNode
 }
 
-export function InputField({ label, mask, description, ...props }: InputFieldProps) {
+export function InputField({ label, mask, description, footer, ...props }: InputFieldProps) {
   const field = useFieldContext<string>()
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
 
   return (
     <Field data-invalid={isInvalid}>
       <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+      {description && <FieldDescription>{description}</FieldDescription>}
       <Input
         id={field.name}
         name={field.name}
@@ -29,7 +31,7 @@ export function InputField({ label, mask, description, ...props }: InputFieldPro
         className={cn('bg-background')}
         {...props}
       />
-      {description && <FieldDescription>{description}</FieldDescription>}
+      {footer}
       {isInvalid && <FieldError errors={field.state.meta.errors} />}
     </Field>
   )

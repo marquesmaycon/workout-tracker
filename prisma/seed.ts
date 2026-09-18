@@ -355,7 +355,7 @@ async function createWorkoutHistoryForUser(
               max: workoutExercise.targetRepsMax ?? 12,
             }),
             actualWeight,
-            rpe: faker.number.float({ min: 6, max: 10, fractionDigits: 1 }),
+            rpe: faker.number.int({ min: 6, max: 10 }),
             completed: true,
             completedAt: finishedAt,
           },

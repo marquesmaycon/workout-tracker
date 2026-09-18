@@ -9,15 +9,21 @@ import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '
 type StepperFieldProps = Omit<ComponentProps<typeof InputGroupInput>, 'onChange' | 'value'> & {
   mask?: (value: string) => string
   label: string
-  step: number
-  description?: string
+  step?: number
+  baseValue?: number | string | null
+  description?: string | React.ReactNode
+  footer?: React.ReactNode
 }
 
-export function StepperField({ label, mask, step, description, ...props }: StepperFieldProps) {
+export function StepperField({ label, mask, step = 1, baseValue, description, footer, ...props }: StepperFieldProps) {
   const field = useFieldContext<string>()
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
 
   const adjust = (delta: number) => {
+    if (!field.state.value && baseValue != null) {
+      field.handleChange(baseValue.toString())
+      return
+    }
     const current = Number.parseFloat(field.state.value) || 0
     const next = Math.max(0, Math.round((current + delta) * 100) / 100)
     field.handleChange(next.toString())
@@ -26,6 +32,7 @@ export function StepperField({ label, mask, step, description, ...props }: Stepp
   return (
     <Field data-invalid={isInvalid}>
       <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+      {description && <FieldDescription>{description}</FieldDescription>}
       <InputGroup className="bg-background">
         <InputGroupAddon align="inline-start">
           <InputGroupButton aria-label={`Diminuir ${step}`} onClick={() => adjust(-step)}>
@@ -48,7 +55,7 @@ export function StepperField({ label, mask, step, description, ...props }: Stepp
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>
-      {description && <FieldDescription>{description}</FieldDescription>}
+      {footer}
       {isInvalid && <FieldError errors={field.state.meta.errors} />}
     </Field>
   )

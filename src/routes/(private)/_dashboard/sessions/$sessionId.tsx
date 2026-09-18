@@ -94,10 +94,7 @@ function SessionPage() {
           <SessionExerciseCard
             key={exercise.id}
             exercise={exercise}
-            readOnly={!isInProgress}
-            onSaved={() =>
-              queryClient.invalidateQueries(sessionQueryOptions(sessionId))
-            }
+            onSaved={() => queryClient.invalidateQueries(sessionQueryOptions(sessionId))}
           />
         ))}
       </Accordion>
