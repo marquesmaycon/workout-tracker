@@ -1,16 +1,14 @@
 import { formOptions } from '@tanstack/react-form'
 import { z } from 'zod'
 
-import { optionalDecimalString, optionalIntString } from '@/lib/zod-helpers'
-
 import type { WorkoutSessionExercise } from './workout-session-exercise.entity'
 
 export const updateSessionExerciseSchema = z.object({
   id: z.string().min(1),
-  actualSets: optionalIntString,
-  actualReps: optionalIntString,
-  actualWeight: optionalDecimalString,
-  rpe: optionalDecimalString,
+  actualSets: z.string().min(1, 'Informe para completar o exercício'),
+  actualReps: z.string().min(1, 'Informe para completar o exercício'),
+  actualWeight: z.string().min(1, 'Informe para completar o exercício'),
+  rpe: z.string().min(1, 'Informe para completar o exercício'),
   notes: z.string().optional(),
   completed: z.boolean(),
 })

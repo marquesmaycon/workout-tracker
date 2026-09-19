@@ -88,6 +88,12 @@ type SeedUser = { id: string; name: string; email: string }
 type SeedExercise = { id: string; name: string; muscleGroupNames: string[] }
 type SeedWorkout = { id: string; exercises: WorkoutExercise[] }
 
+const WEIGHT_STEP = 2.5
+
+function randomWeight(min: number, max: number) {
+  return faker.number.int({ min: min / WEIGHT_STEP, max: max / WEIGHT_STEP }) * WEIGHT_STEP
+}
+
 function toEmail(name: string, index: number) {
   const slug = name
     .toLowerCase()
@@ -239,7 +245,7 @@ async function createWorkoutsForUser(
             targetSetsMax: 4,
             targetRepsMin: 8,
             targetRepsMax: 12,
-            targetWeight: faker.number.float({ min: 10, max: 80, fractionDigits: 1 }),
+            targetWeight: randomWeight(10, 80),
             restSeconds: faker.helpers.arrayElement([60, 90, 120]),
           },
         }),
@@ -332,10 +338,7 @@ async function createWorkoutHistoryForUser(
         const actualWeight =
           plannedWeight === null
             ? null
-            : Math.max(
-                0,
-                plannedWeight + faker.number.float({ min: -2.5, max: 5, fractionDigits: 1 }),
-              )
+            : Math.max(0, plannedWeight + faker.helpers.arrayElement([-WEIGHT_STEP, 0, WEIGHT_STEP, 2 * WEIGHT_STEP]))
 
         await prisma.workoutSessionExercise.create({
           data: {

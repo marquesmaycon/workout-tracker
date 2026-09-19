@@ -290,8 +290,8 @@ const updateSessionExercise = authProcedure
       data: {
         actualSets: toInt(input.actualSets),
         actualReps: toInt(input.actualReps),
-        actualWeight: input.actualWeight?.trim() || null,
-        rpe: input.rpe?.trim() || null,
+        actualWeight: input.actualWeight.trim() || null,
+        rpe: input.rpe.trim() || null,
         notes: emptyToNull(input.notes),
         completed: input.completed,
         completedAt: input.completed ? new Date() : null,
