@@ -5,6 +5,7 @@ import { GalleryVerticalEnd } from 'lucide-react'
 import * as React from 'react'
 
 import { NavMain } from '@/components/layout/sidebar/nav-main'
+import { NavSession } from '@/components/layout/sidebar/nav-session'
 import { NavUser } from '@/components/layout/sidebar/nav-user'
 import {
   Sidebar,
@@ -43,6 +44,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        <NavSession />
         <NavMain />
       </SidebarContent>
       <SidebarFooter>

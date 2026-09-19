@@ -8,18 +8,24 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar'
 import { getSession } from '@/features/auth/server/session'
+import { orpc } from '@/orpc/client'
+
+const currentSessionQuery = orpc.workoutSessions.current.queryOptions()
+
 
 export const Route = createFileRoute('/(private)/_dashboard')({
   beforeLoad: async ({ location }) => {
     const session = await getSession()
     if (!session) {
-      throw redirect({
-        to: '/signin',
-        search: { redirect: location.href },
-      })
+      throw redirect({ to: '/signin', search: { redirect: location.href } })
     }
     return { user: session.user }
   },
+  loader: ({ context }) =>
+    context.queryClient.query({
+      ...currentSessionQuery,
+      staleTime: 'static',
+    }),
   component: RouteComponent,
 })
 
