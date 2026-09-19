@@ -17,6 +17,7 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '#/components/ui/sidebar.tsx'
 
 type NavItem = {
@@ -68,6 +69,8 @@ export function NavMain() {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
+  const { setOpenMobile } = useSidebar()
+  const closeMobileMenu = () => setOpenMobile(false)
 
   return (
     <SidebarGroup>
@@ -78,7 +81,13 @@ export function NavMain() {
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
                 isActive={isActivePath(pathname, item.to)}
-                render={<Link to={item.to} activeOptions={{ exact: true }} />}
+                render={
+                  <Link
+                    to={item.to}
+                    activeOptions={{ exact: true }}
+                    onClick={closeMobileMenu}
+                  />
+                }
               >
                 {item.icon}
                 <span>{item.title}</span>
@@ -87,7 +96,9 @@ export function NavMain() {
                 <SidebarMenuAction
                   showOnHover
                   className="aria-expanded:bg-muted"
-                  render={<Link to={item.actionLink} />}
+                  render={
+                    <Link to={item.actionLink} onClick={closeMobileMenu} />
+                  }
                 >
                   <Plus />
                   <span className="sr-only">Novo</span>
