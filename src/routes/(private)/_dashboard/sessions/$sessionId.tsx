@@ -74,20 +74,9 @@ function SessionPage() {
             {session.gym ? ` · ${session.gym.name}` : ''}
           </PageDescription>
         </div>
-
-        {isInProgress && (
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={handleCancel}>
-              <X aria-hidden="true" />
-              Cancelar treino
-            </Button>
-            <Button onClick={handleFinish}>
-              <CheckCircle2 aria-hidden="true" />
-              Finalizar treino
-            </Button>
-          </div>
-        )}
       </PageHeader>
+
+      <p className="font-heading">Exercícios do dia</p>
 
       <Accordion multiple defaultValue={session.exercises.map((exercise) => exercise.id)}>
         {session.exercises.map((exercise) => (
@@ -98,6 +87,19 @@ function SessionPage() {
           />
         ))}
       </Accordion>
+
+      {isInProgress && (
+        <div className="flex justify-between gap-2">
+          <Button variant="outline" onClick={handleCancel}>
+            <X aria-hidden="true" />
+            Cancelar treino
+          </Button>
+          <Button onClick={handleFinish}>
+            <CheckCircle2 aria-hidden="true" />
+            Finalizar treino
+          </Button>
+        </div>
+      )}
     </Page>
   )
 }

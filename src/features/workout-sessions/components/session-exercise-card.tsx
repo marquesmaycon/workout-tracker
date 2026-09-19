@@ -1,4 +1,5 @@
 import { CheckIcon, ChevronDownIcon } from 'lucide-react'
+import { useRef } from 'react'
 import { toast } from 'sonner'
 
 import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
@@ -7,12 +8,16 @@ import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Field, FieldGroup } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
+import { useDebouncedCallback } from '@/hooks/use-debounced-callback'
 import { decimalOnly, digitsOnly } from '@/lib/input-masks'
 import { cn } from '@/lib/utils'
 
 import { useWorkoutSessionMutations } from '../hooks/use-workout-session-mutations'
 import type { WorkoutSessionExercise } from '../validation/workout-session-exercise.entity'
+import type { SessionExerciseFormSchema } from '../validation/workout-session-exercise.form'
 import { sessionExerciseFormOptions, updateSessionExerciseSchema } from '../validation/workout-session-exercise.form'
+
+const AUTO_SAVE_DELAY_MS = 1500
 
 type SessionExerciseCardProps = {
   exercise: WorkoutSessionExercise
@@ -21,13 +26,29 @@ type SessionExerciseCardProps = {
 
 export function SessionExerciseCard({ exercise, onSaved }: SessionExerciseCardProps) {
   const { updateSessionExercise } = useWorkoutSessionMutations()
+  const savedCompleted = useRef(exercise.completed)
+
+  const save = async (value: SessionExerciseFormSchema) => {
+    try {
+      await updateSessionExercise(value)
+      if (value.completed !== savedCompleted.current) {
+        savedCompleted.current = value.completed
+        toast.success(`${exercise.exercise.name} ${value.completed ? 'concluído' : 'reaberto'}`)
+      }
+      onSaved()
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Não foi possível salvar o exercício.')
+    }
+  }
+
+  const debouncedSave = useDebouncedCallback(save, AUTO_SAVE_DELAY_MS)
 
   const form = useAppForm({
     ...sessionExerciseFormOptions(exercise),
-    onSubmit: async ({ value }) => {
-      await updateSessionExercise(value)
-      toast.success(`${exercise.exercise.name} atualizado`)
-      onSaved()
+    onSubmit: ({ value }) => save(value),
+    listeners: {
+      // Salva progresso parcial direto na mutation, sem passar pelos validators de submit
+      onChange: ({ formApi }) => debouncedSave(formApi.state.values),
     },
   })
 
