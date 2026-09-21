@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 
 export function useDebouncedCallback<TArgs extends Array<unknown>>(
   callback: (...args: TArgs) => void,
@@ -21,10 +21,9 @@ export function useDebouncedCallback<TArgs extends Array<unknown>>(
     if (args) callbackRef.current(...args)
   }, [])
 
-  // Envia o que estiver pendente ao desmontar, para não perder a última edição
   useEffect(() => flush, [flush])
 
-  return useCallback(
+  const run = useCallback(
     (...args: TArgs) => {
       pendingArgsRef.current = args
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
@@ -32,4 +31,6 @@ export function useDebouncedCallback<TArgs extends Array<unknown>>(
     },
     [delayMs, flush],
   )
+
+  return useMemo(() => ({ run, flush }), [run, flush])
 }

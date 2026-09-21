@@ -1,6 +1,5 @@
 import { CheckIcon, ChevronDownIcon } from 'lucide-react'
-import { useRef } from 'react'
-import { toast } from 'sonner'
+import { memo, useEffect } from 'react'
 
 import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Badge } from '@/components/ui/badge'
@@ -12,7 +11,6 @@ import { useDebouncedCallback } from '@/hooks/use-debounced-callback'
 import { decimalOnly, digitsOnly } from '@/lib/input-masks'
 import { cn } from '@/lib/utils'
 
-import { useWorkoutSessionMutations } from '../hooks/use-workout-session-mutations'
 import type { WorkoutSessionExercise } from '../validation/workout-session-exercise.entity'
 import type { SessionExerciseFormSchema } from '../validation/workout-session-exercise.form'
 import { sessionExerciseFormOptions, updateSessionExerciseSchema } from '../validation/workout-session-exercise.form'
@@ -21,35 +19,19 @@ const AUTO_SAVE_DELAY_MS = 1500
 
 type SessionExerciseCardProps = {
   exercise: WorkoutSessionExercise
-  onSaved: () => void
+  onSave: (value: SessionExerciseFormSchema) => Promise<void>
+  registerFlush: (flush: () => void) => () => void
 }
 
-export function SessionExerciseCard({ exercise, onSaved }: SessionExerciseCardProps) {
-  const { updateSessionExercise } = useWorkoutSessionMutations()
-  const savedCompleted = useRef(exercise.completed)
+function SessionExerciseCardComponent({ exercise, onSave, registerFlush }: SessionExerciseCardProps) {
+  const debouncedSave = useDebouncedCallback(onSave, AUTO_SAVE_DELAY_MS)
 
-  const save = async (value: SessionExerciseFormSchema) => {
-    try {
-      await updateSessionExercise(value)
-      if (value.completed !== savedCompleted.current) {
-        savedCompleted.current = value.completed
-        toast.success(`${exercise.exercise.name} ${value.completed ? 'concluído' : 'reaberto'}`)
-      }
-      onSaved()
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Não foi possível salvar o exercício.')
-    }
-  }
-
-  const debouncedSave = useDebouncedCallback(save, AUTO_SAVE_DELAY_MS)
+  useEffect(() => registerFlush(debouncedSave.flush), [registerFlush, debouncedSave.flush])
 
   const form = useAppForm({
     ...sessionExerciseFormOptions(exercise),
-    onSubmit: ({ value }) => save(value),
-    listeners: {
-      // Salva progresso parcial direto na mutation, sem passar pelos validators de submit
-      onChange: ({ formApi }) => debouncedSave(formApi.state.values),
-    },
+    onSubmit: ({ value }) => onSave(value),
+    listeners: { onChange: ({ formApi }) => debouncedSave.run(formApi.state.values) },
   })
 
   const last = exercise.lastPerformed
@@ -59,15 +41,23 @@ export function SessionExerciseCard({ exercise, onSaved }: SessionExerciseCardPr
   const lastRpe = last?.rpe ? `Última: ${last.rpe}` : undefined
 
   return (
-    <form.Subscribe selector={(state) => [state.values, state.isSubmitting] as const}>
-      {([{ completed, actualReps, actualSets, actualWeight, rpe }, isSubmitting]) => (
+    <form.Subscribe selector={(state) => state.values.completed}>
+      {(completed) => (
         <AccordionItem value={exercise.id} data-completed={completed || undefined} className="data-completed:bg-muted">
           <AccordionTrigger>
             <span className="wrap-break-word">{exercise.exercise.name}</span>
             {completed && (
               <div className="text-muted-foreground flex flex-1 items-center justify-between gap-1">
                 <CheckIcon className="mr-auto size-4 text-green-500" />
-                <Badge className="bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300">{`${actualSets} x ${actualReps}, ${actualWeight}kg, RPE ${rpe}`}</Badge>
+                <form.Subscribe
+                  selector={({ values: v }) =>
+                    `${v.actualSets} x ${v.actualReps} | ${v.actualWeight}kg |  RPE ${v.rpe}`
+                  }
+                >
+                  {(summary) => (
+                    <Badge className="bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300">{summary}</Badge>
+                  )}
+                </form.Subscribe>
               </div>
             )}
           </AccordionTrigger>
@@ -165,30 +155,34 @@ export function SessionExerciseCard({ exercise, onSaved }: SessionExerciseCardPr
                 <Field>
                   <form.AppField name="completed">
                     {() => (
-                      <Button
-                        type="button"
-                        variant={completed ? 'ghost' : 'outline'}
-                        aria-pressed={completed}
-                        loading={isSubmitting}
-                        onClick={async () => {
-                          const errors = await form.validateAllFields('submit')
-                          if (errors.length) return
+                      <form.Subscribe selector={(state) => state.isSubmitting}>
+                        {(isSubmitting) => (
+                          <Button
+                            type="button"
+                            variant={completed ? 'ghost' : 'outline'}
+                            aria-pressed={completed}
+                            loading={isSubmitting}
+                            onClick={async () => {
+                              const errors = await form.validateAllFields('submit')
+                              if (errors.length) return
 
-                          form.setFieldValue('completed', !completed)
-                        }}
-                      >
-                        <span
-                          className={cn(
-                            'flex size-3.5 items-center justify-center rounded-[3px] border',
-                            completed
-                              ? 'border-primary-foreground bg-primary-foreground text-primary'
-                              : 'border-current',
-                          )}
-                        >
-                          {completed && <CheckIcon className="size-3" />}
-                        </span>
-                        Concluído
-                      </Button>
+                              form.setFieldValue('completed', !completed)
+                            }}
+                          >
+                            <span
+                              className={cn(
+                                'flex size-3.5 items-center justify-center rounded-[3px] border',
+                                completed
+                                  ? 'border-primary-foreground bg-primary-foreground text-primary'
+                                  : 'border-current',
+                              )}
+                            >
+                              {completed && <CheckIcon className="size-3" />}
+                            </span>
+                            Concluído
+                          </Button>
+                        )}
+                      </form.Subscribe>
                     )}
                   </form.AppField>
                 </Field>
@@ -200,3 +194,9 @@ export function SessionExerciseCard({ exercise, onSaved }: SessionExerciseCardPr
     </form.Subscribe>
   )
 }
+
+export const SessionExerciseCard = memo(
+  SessionExerciseCardComponent,
+  (prev, next) =>
+    prev.exercise.id === next.exercise.id && prev.onSave === next.onSave && prev.registerFlush === next.registerFlush,
+)

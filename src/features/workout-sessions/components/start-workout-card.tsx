@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { orpc } from '@/orpc/client'
 
-import { useWorkoutSessionMutations } from '../hooks/use-workout-session-mutations'
+import { useStartWorkoutSession } from '../hooks/use-workout-session-mutations'
 import { ActiveWorkoutsPicker } from './active-workouts-picker'
 
 const currentSessionQuery = orpc.workoutSessions.current.queryOptions()
@@ -17,7 +17,7 @@ export function StartWorkoutCard() {
   const router = useRouter()
   const { data: currentSession } = useSuspenseQuery(currentSessionQuery)
   const { data: todayWorkout } = useSuspenseQuery(todayWorkoutQuery)
-  const { startWorkoutSession } = useWorkoutSessionMutations()
+  const startWorkoutSession = useStartWorkoutSession()
 
   const goToSession = (sessionId: string) =>
     router.navigate({ to: '/sessions/$sessionId', params: { sessionId } })
