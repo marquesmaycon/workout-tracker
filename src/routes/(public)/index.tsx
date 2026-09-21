@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 
 import { ThemeToggler } from '@/components/layout/theme/theme-toggler'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -17,8 +18,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { getSession } from '@/features/auth/server/session'
+import { getInitials } from '@/lib/utils'
 
-export const Route = createFileRoute('/(public)/')({ component: Home })
+export const Route = createFileRoute('/(public)/')({
+  beforeLoad: async () => {
+    const session = await getSession()
+    return { user: session?.user ?? null }
+  },
+  component: Home,
+})
 
 const features = [
   {
@@ -48,6 +57,8 @@ const features = [
 ] as const
 
 function Home() {
+  const { user } = Route.useRouteContext()
+
   return (
     <div className="bg-background flex min-h-svh flex-col">
       <header className="bg-background/90 sticky top-0 z-10 border-b px-4 py-3 backdrop-blur md:px-6">
@@ -61,8 +72,32 @@ function Home() {
 
           <div className="flex items-center gap-2">
             <ThemeToggler />
-            <Button variant="ghost" render={<Link to="/signin">Entrar</Link>} />
-            <Button render={<Link to="/signup">Criar conta</Link>} />
+            {user ? (
+              <>
+                <div className="flex items-center gap-2 px-1">
+                  <Avatar>
+                    <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+                  </Avatar>
+                  <div className="hidden text-left text-sm leading-tight sm:grid">
+                    <span className="max-w-40 truncate font-medium">
+                      {user.name}
+                    </span>
+                    <span className="text-muted-foreground max-w-40 truncate text-xs">
+                      {user.email}
+                    </span>
+                  </div>
+                </div>
+                <Button render={<Link to="/dashboard">Ir para o app</Link>} />
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="ghost"
+                  render={<Link to="/signin">Entrar</Link>}
+                />
+                <Button render={<Link to="/signup">Criar conta</Link>} />
+              </>
+            )}
           </div>
         </div>
       </header>
