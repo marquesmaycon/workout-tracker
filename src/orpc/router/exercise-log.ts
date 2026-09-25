@@ -64,6 +64,7 @@ function buildWhere(input: ExerciseLogSearch, userId: string): Prisma.WorkoutSes
   return {
     completed: true,
     exerciseId: input.exerciseId,
+    workoutSessionId: input.workoutSessionId,
     workoutSession: {
       userId,
       status: 'COMPLETED',

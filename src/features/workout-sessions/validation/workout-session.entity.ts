@@ -29,6 +29,25 @@ export const workoutSessionSchema = z.object({
 
 export type WorkoutSession = z.infer<typeof workoutSessionSchema>
 
+export const recentWorkoutSessionSchema = z.object({
+  id: z.string(),
+  startedAt: z.date(),
+  finishedAt: z.date(),
+  workout: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
+  gym: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+    })
+    .nullable(),
+  exerciseCount: z.number(),
+})
+
+export type RecentWorkoutSession = z.infer<typeof recentWorkoutSessionSchema>
+
 export const todayWorkoutSchema = z.object({
   scheduleItemId: z.string(),
   workout: z.object({
@@ -40,4 +59,5 @@ export const todayWorkoutSchema = z.object({
 export const startWorkoutSessionSchema = z.object({
   workoutId: z.string().min(1),
   scheduleItemId: z.string().min(1).optional(),
+  gymId: z.string().min(1).optional(),
 })

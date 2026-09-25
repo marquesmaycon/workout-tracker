@@ -17,10 +17,11 @@ export const exerciseLogSearchSchema = z.object({
   exerciseId: z.string().min(1).optional().catch(undefined),
   workoutId: z.string().min(1).optional().catch(undefined),
   gymId: z.string().min(1).optional().catch(undefined),
+  workoutSessionId: z.string().min(1).optional().catch(undefined),
   from: z.iso.date().optional().catch(undefined),
   to: z.iso.date().optional().catch(undefined),
 })
 
 export type ExerciseLogSearch = z.infer<typeof exerciseLogSearchSchema>
 
-export type ExerciseLogFilterKey = keyof Pick<ExerciseLogSearch, 'exerciseId' | 'workoutId' | 'gymId' | 'from' | 'to'>
+export type ExerciseLogFilterKey = keyof Pick<ExerciseLogSearch, 'exerciseId' | 'workoutId' | 'gymId' | 'from' | 'to' | 'workoutSessionId'>

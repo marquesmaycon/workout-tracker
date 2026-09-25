@@ -47,6 +47,7 @@ export const useEndWorkoutSession = (sessionId: string) => {
       },
       onSettled: (_, __, ___, ____, { client }) => {
         client.invalidateQueries(orpc.workoutSessions.current.queryOptions())
+        client.invalidateQueries(orpc.workoutSessions.recent.queryOptions())
       },
     }),
   )

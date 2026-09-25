@@ -4,19 +4,19 @@ import { Dumbbell, Play } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty'
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemGroup,
-  ItemTitle,
-} from '@/components/ui/item'
 import { orpc } from '@/orpc/client'
 
 const activeWorkoutsQuery = orpc.workouts.list.queryOptions({
@@ -55,25 +55,30 @@ export function ActiveWorkoutsPicker({
       <h2 className="font-heading text-sm font-medium">
         Escolha um treino para iniciar
       </h2>
-      <ItemGroup>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {workouts.map((workout) => (
-          <Item key={workout.id} variant="muted">
-            <ItemContent>
-              <ItemTitle>{workout.name}</ItemTitle>
-            </ItemContent>
-            <ItemActions>
+          <Card key={workout.id} size="sm">
+            <CardHeader>
+              <CardTitle className="line-clamp-1">{workout.name}</CardTitle>
+              <CardDescription>
+                {workout.exercises.length}{' '}
+                {workout.exercises.length === 1 ? 'exercício' : 'exercícios'}
+              </CardDescription>
+            </CardHeader>
+            <CardFooter className="mt-auto">
               <Button
                 size="sm"
+                className="w-full"
                 onClick={() => onStart(workout.id)}
                 disabled={!!currentSession}
               >
                 <Play aria-hidden="true" />
                 Iniciar
               </Button>
-            </ItemActions>
-          </Item>
+            </CardFooter>
+          </Card>
         ))}
-      </ItemGroup>
+      </div>
     </div>
   )
 }

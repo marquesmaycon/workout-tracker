@@ -2,6 +2,7 @@ import { ORPCError } from '@orpc/server'
 import { z } from 'zod'
 
 import {
+  recentWorkoutSessionSchema,
   startWorkoutSessionSchema,
   todayWorkoutSchema,
   workoutSessionSchema,
@@ -165,6 +166,40 @@ const getTodayWorkout = authProcedure
     return { scheduleItemId: best.item.id, workout: best.item.workout }
   })
 
+const listRecentSessions = authProcedure
+  .route({
+    method: 'GET',
+    path: '/workout-sessions/recent',
+    tags: ['Workout sessions'],
+    summary: 'List recently completed workout sessions',
+  })
+  .output(z.array(recentWorkoutSessionSchema))
+  .handler(async ({ context }) => {
+    const sessions = await prisma.workoutSession.findMany({
+      where: {
+        userId: context.user.id,
+        status: 'COMPLETED',
+        finishedAt: { not: null },
+      },
+      orderBy: { finishedAt: 'desc' },
+      take: 5,
+      select: {
+        id: true,
+        startedAt: true,
+        finishedAt: true,
+        workout: { select: { id: true, name: true } },
+        gym: { select: { id: true, name: true } },
+        _count: { select: { exercises: true } },
+      },
+    })
+
+    return sessions.map(({ _count, finishedAt, ...session }) => ({
+      ...session,
+      finishedAt: finishedAt!,
+      exerciseCount: _count.exercises,
+    }))
+  })
+
 const startWorkoutSession = authProcedure
   .route({
     method: 'POST',
@@ -220,11 +255,26 @@ const startWorkoutSession = authProcedure
           scheduleItemId = scheduleItem.id
         }
 
+        let gymId: string | undefined
+        if (input.gymId) {
+          const gym = await tx.gym.findFirst({
+            where: { id: input.gymId, userId: context.user.id },
+            select: { id: true },
+          })
+          if (!gym) {
+            throw new ORPCError('BAD_REQUEST', {
+              message: 'Academia inválida.',
+            })
+          }
+          gymId = gym.id
+        }
+
         const session = await tx.workoutSession.create({
           data: {
             userId: context.user.id,
             workoutId: workout.id,
             scheduleItemId,
+            gymId,
             exercises: {
               create: workout.exercises.map((exercise) => ({
                 exerciseId: exercise.exerciseId,
@@ -377,6 +427,7 @@ function emptyToNull(value?: string) {
 export default {
   current: getCurrentSession,
   today: getTodayWorkout,
+  recent: listRecentSessions,
   start: startWorkoutSession,
   get: getSession,
   updateExercise: updateSessionExercise,

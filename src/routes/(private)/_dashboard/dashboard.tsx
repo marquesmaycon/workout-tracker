@@ -6,6 +6,7 @@ import {
   PageHeader,
   PageTitle,
 } from '@/components/ui/page'
+import { RecentSessionsList } from '@/features/workout-sessions/components/recent-sessions-list'
 import { StartWorkoutCard } from '@/features/workout-sessions/components/start-workout-card'
 import { orpc } from '@/orpc/client'
 
@@ -14,6 +15,8 @@ const todayWorkoutQuery = orpc.workoutSessions.today.queryOptions()
 const activeWorkoutsQuery = orpc.workouts.list.queryOptions({
   input: { isActive: true },
 })
+const gymsQuery = orpc.gyms.list.queryOptions()
+const recentSessionsQuery = orpc.workoutSessions.recent.queryOptions()
 
 export const Route = createFileRoute('/(private)/_dashboard/dashboard')({
   loader: ({ context }) =>
@@ -25,6 +28,11 @@ export const Route = createFileRoute('/(private)/_dashboard/dashboard')({
       context.queryClient.query({ ...todayWorkoutQuery, staleTime: 'static' }),
       context.queryClient.query({
         ...activeWorkoutsQuery,
+        staleTime: 'static',
+      }),
+      context.queryClient.query({ ...gymsQuery, staleTime: 'static' }),
+      context.queryClient.query({
+        ...recentSessionsQuery,
         staleTime: 'static',
       }),
     ]),
@@ -41,6 +49,7 @@ function RouteComponent() {
         </PageDescription>
       </PageHeader>
       <StartWorkoutCard />
+      <RecentSessionsList />
     </Page>
   )
 }

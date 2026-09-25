@@ -1,7 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
-import { FilterX } from 'lucide-react'
+import { FilterX, X } from 'lucide-react'
 
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -28,7 +29,9 @@ export function ExerciseLogFilters() {
   const { data: workouts } = useSuspenseQuery(exerciseLogFilterQueries.workouts)
   const { data: gyms } = useSuspenseQuery(exerciseLogFilterQueries.gyms)
 
-  const hasFilters = Boolean(search.exerciseId || search.workoutId || search.gymId || search.from || search.to)
+  const hasFilters = Boolean(
+    search.exerciseId || search.workoutId || search.gymId || search.from || search.to || search.workoutSessionId,
+  )
 
   function setFilter(key: ExerciseLogFilterKey, value: string | null) {
     void navigate({
@@ -46,6 +49,7 @@ export function ExerciseLogFilters() {
         gymId: undefined,
         from: undefined,
         to: undefined,
+        workoutSessionId: undefined,
         page: 1,
       }),
       replace: true,
@@ -53,7 +57,22 @@ export function ExerciseLogFilters() {
   }
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[repeat(5,minmax(0,1fr))_auto] lg:items-end">
+    <div className="grid gap-3">
+      {search.workoutSessionId && (
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary">Filtrando por uma sessão de treino</Badge>
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            aria-label="Remover filtro de sessão"
+            onClick={() => setFilter('workoutSessionId', null)}
+          >
+            <X aria-hidden="true" />
+          </Button>
+        </div>
+      )}
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[repeat(5,minmax(0,1fr))_auto] lg:items-end">
       <FilterSelect
         id="exercise-log-exercise"
         label="Exercício"
@@ -101,6 +120,7 @@ export function ExerciseLogFilters() {
         <FilterX aria-hidden="true" />
         Limpar filtros
       </Button>
+      </div>
     </div>
   )
 }
