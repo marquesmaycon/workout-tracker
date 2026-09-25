@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { getRouteApi } from '@tanstack/react-router'
+import { getRouteApi, useRouterState } from '@tanstack/react-router'
 import type { PaginationState, SortingState } from '@tanstack/react-table'
 import { functionalUpdate, useTable } from '@tanstack/react-table'
 
@@ -17,6 +17,7 @@ export function ExerciseLogTable() {
   const search = routeApi.useSearch()
   const navigate = routeApi.useNavigate()
   const { data } = useSuspenseQuery(orpc.exerciseLog.list.queryOptions({ input: search }))
+  const isNavigating = useRouterState({ select: (state) => state.status === 'pending' })
 
   const pagination: PaginationState = { pageIndex: search.page - 1, pageSize: search.pageSize }
   const sorting: SortingState = [{ id: search.sort, desc: search.order === 'desc' }]
@@ -60,8 +61,8 @@ export function ExerciseLogTable() {
 
   return (
     <div className="flex flex-col gap-4">
-      <DataTable table={table} emptyMessage="Nenhum exercício registrado com esses filtros." />
-      <DataTablePagination table={table} pageSizes={exerciseLogPageSizes} />
+      <DataTable table={table} loading={isNavigating} emptyMessage="Nenhum exercício registrado com esses filtros." />
+      <DataTablePagination table={table} pageSizes={exerciseLogPageSizes} loading={isNavigating} />
     </div>
   )
 }
