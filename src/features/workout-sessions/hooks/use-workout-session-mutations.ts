@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useIsMutating, useMutation } from '@tanstack/react-query'
 
 import { orpc } from '@/orpc/client'
 
@@ -20,6 +20,9 @@ export const useStartWorkoutSession = () => {
 
   return mutateAsync
 }
+
+export const useIsStartingWorkoutSession = () =>
+  useIsMutating({ mutationKey: orpc.workoutSessions.start.mutationKey() }) > 0
 
 export const useUpdateSessionExercise = (sessionId: string) => {
   const { mutateAsync } = useMutation(
