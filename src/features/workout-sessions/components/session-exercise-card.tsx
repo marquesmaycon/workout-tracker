@@ -1,4 +1,5 @@
-import { CheckIcon, ChevronDownIcon } from 'lucide-react'
+import { useMutationState } from '@tanstack/react-query'
+import { CheckIcon, ChevronDownIcon, Loader2 } from 'lucide-react'
 import { memo, useEffect } from 'react'
 
 import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
@@ -10,6 +11,7 @@ import { useAppForm } from '@/hooks/form'
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback'
 import { decimalOnly, digitsOnly } from '@/lib/input-masks'
 import { cn } from '@/lib/utils'
+import { orpc } from '@/orpc/client'
 
 import type { WorkoutSessionExercise } from '../validation/workout-session-exercise.entity'
 import type { SessionExerciseFormSchema } from '../validation/workout-session-exercise.form'
@@ -34,6 +36,11 @@ function SessionExerciseCardComponent({ exercise, onSave, registerFlush }: Sessi
     listeners: { onChange: ({ formApi }) => debouncedSave.run(formApi.state.values) },
   })
 
+  const isSaving = useMutationState({
+    filters: { mutationKey: orpc.workoutSessions.updateExercise.mutationKey(), status: 'pending' },
+    select: (mutation) => (mutation.state.variables as SessionExerciseFormSchema).id,
+  }).includes(exercise.id)
+
   const last = exercise.lastPerformed
   const lastSets = last?.actualSets != null ? `Última: ${last.actualSets}` : undefined
   const lastReps = last?.actualReps != null ? `Última: ${last.actualReps}` : undefined
@@ -44,11 +51,14 @@ function SessionExerciseCardComponent({ exercise, onSave, registerFlush }: Sessi
     <form.Subscribe selector={(state) => state.values.completed}>
       {(completed) => (
         <AccordionItem value={exercise.id} data-completed={completed || undefined} className="data-completed:bg-muted">
-          <AccordionTrigger>
-            <span className="wrap-break-word">{exercise.exercise.name}</span>
+          <AccordionTrigger className="items-center gap-2 **:data-[slot=accordion-trigger-icon]:ml-0">
+            <span className="mr-auto flex items-center gap-2">
+              <span className="wrap-break-word">{exercise.exercise.name}</span>
+              {isSaving && <Loader2 className="text-muted-foreground size-4 animate-spin" aria-label="Salvando" />}
+            </span>
             {completed && (
-              <div className="text-muted-foreground flex flex-1 items-center justify-between gap-1">
-                <CheckIcon className="mr-auto size-4 text-green-500" />
+              <span className="text-muted-foreground flex items-center gap-2">
+                <CheckIcon className="size-4 text-green-500" />
                 <form.Subscribe
                   selector={({ values: v }) =>
                     `${v.actualSets} x ${v.actualReps} | ${v.actualWeight}kg |  RPE ${v.rpe}`
@@ -58,7 +68,7 @@ function SessionExerciseCardComponent({ exercise, onSave, registerFlush }: Sessi
                     <Badge className="bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300">{summary}</Badge>
                   )}
                 </form.Subscribe>
-              </div>
+              </span>
             )}
           </AccordionTrigger>
           <AccordionContent>
