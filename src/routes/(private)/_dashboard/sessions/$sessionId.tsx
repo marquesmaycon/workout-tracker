@@ -7,6 +7,7 @@ import { Accordion } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import { Page, PageDescription, PageHeader, PageTitle } from '@/components/ui/page'
 import { SessionExerciseCard } from '@/features/workout-sessions/components/session-exercise-card'
+import { useSessionCompletion } from '@/features/workout-sessions/hooks/use-session-completion'
 import { useSessionExerciseSaver } from '@/features/workout-sessions/hooks/use-session-exercise-saver'
 import { useEndWorkoutSession } from '@/features/workout-sessions/hooks/use-workout-session-mutations'
 import { orpc } from '@/orpc/client'
@@ -25,6 +26,7 @@ function SessionPage() {
   const { data: session } = useSuspenseQuery(sessionQueryOptions(sessionId))
   const { saveExercise, registerFlush, flushPending } = useSessionExerciseSaver(session)
   const { finishWorkoutSession, cancelWorkoutSession, isFinishing, isCancelling } = useEndWorkoutSession(session.id)
+  const { completedCount, totalCount, allCompleted, setExerciseCompleted } = useSessionCompletion(session)
 
   const endSession = async (action: () => Promise<unknown>, successMessage: string, fallbackError: string) => {
     flushPending()
@@ -74,6 +76,7 @@ function SessionPage() {
             exercise={exercise}
             onSave={saveExercise}
             registerFlush={registerFlush}
+            onCompletedChange={setExerciseCompleted}
           />
         ))}
       </Accordion>
@@ -89,10 +92,21 @@ function SessionPage() {
             <X aria-hidden="true" />
             Cancelar treino
           </Button>
-          <Button onClick={handleFinish} loading={isFinishing} disabled={isFinishing || isCancelling}>
-            <CheckCircle2 aria-hidden="true" />
-            Finalizar treino
-          </Button>
+          <div className="flex items-center gap-3">
+            {!allCompleted && (
+              <span className="text-muted-foreground text-sm">
+                {completedCount}/{totalCount} concluídos
+              </span>
+            )}
+            <Button
+              onClick={handleFinish}
+              loading={isFinishing}
+              disabled={!allCompleted || isFinishing || isCancelling}
+            >
+              <CheckCircle2 aria-hidden="true" />
+              Finalizar treino
+            </Button>
+          </div>
         </div>
       )}
     </Page>

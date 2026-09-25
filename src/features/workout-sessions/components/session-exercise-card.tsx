@@ -23,9 +23,15 @@ type SessionExerciseCardProps = {
   exercise: WorkoutSessionExercise
   onSave: (value: SessionExerciseFormSchema) => Promise<void>
   registerFlush: (flush: () => void) => () => void
+  onCompletedChange: (id: string, completed: boolean) => void
 }
 
-function SessionExerciseCardComponent({ exercise, onSave, registerFlush }: SessionExerciseCardProps) {
+function SessionExerciseCardComponent({
+  exercise,
+  onSave,
+  registerFlush,
+  onCompletedChange,
+}: SessionExerciseCardProps) {
   const debouncedSave = useDebouncedCallback(onSave, AUTO_SAVE_DELAY_MS)
 
   useEffect(() => registerFlush(debouncedSave.flush), [registerFlush, debouncedSave.flush])
@@ -177,6 +183,7 @@ function SessionExerciseCardComponent({ exercise, onSave, registerFlush }: Sessi
                               if (errors.length) return
 
                               form.setFieldValue('completed', !completed)
+                              onCompletedChange(exercise.id, !completed)
                             }}
                           >
                             <span
@@ -208,5 +215,8 @@ function SessionExerciseCardComponent({ exercise, onSave, registerFlush }: Sessi
 export const SessionExerciseCard = memo(
   SessionExerciseCardComponent,
   (prev, next) =>
-    prev.exercise.id === next.exercise.id && prev.onSave === next.onSave && prev.registerFlush === next.registerFlush,
+    prev.exercise.id === next.exercise.id &&
+    prev.onSave === next.onSave &&
+    prev.registerFlush === next.registerFlush &&
+    prev.onCompletedChange === next.onCompletedChange,
 )

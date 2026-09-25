@@ -347,6 +347,17 @@ async function endSession(
     })
   }
 
+  if (status === 'COMPLETED') {
+    const pending = await prisma.workoutSessionExercise.count({
+      where: { workoutSessionId: session.id, completed: false },
+    })
+    if (pending > 0) {
+      throw new ORPCError('BAD_REQUEST', {
+        message: 'Conclua todos os exercícios antes de finalizar o treino.',
+      })
+    }
+  }
+
   const updated = await prisma.workoutSession.update({
     where: { id: session.id },
     data: { status, finishedAt: new Date() },
