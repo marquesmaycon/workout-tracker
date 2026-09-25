@@ -4,6 +4,7 @@ import {
   Building2Icon,
   CalendarDays,
   DumbbellIcon,
+  HistoryIcon,
   LayoutDashboardIcon,
   Plus,
   ScaleIcon,
@@ -50,6 +51,11 @@ const items: NavItem[] = [
     to: '/workouts',
     icon: <DumbbellIcon />,
     actionLink: '/workouts/create',
+  },
+  {
+    title: 'Histórico',
+    to: '/exercise-log',
+    icon: <HistoryIcon />,
   },
   {
     title: 'Programações',

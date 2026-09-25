@@ -21,6 +21,7 @@ import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as privateDashboardBodyWeightIndexRouteImport } from './routes/(private)/_dashboard/body-weight/index'
 import { Route as privateDashboardBodyWeightBodyWeightIdRouteImport } from './routes/(private)/_dashboard/body-weight/$bodyWeightId'
 import { Route as privateDashboardBodyWeightCreateRouteImport } from './routes/(private)/_dashboard/body-weight/create'
+import { Route as privateDashboardExerciseLogIndexRouteImport } from './routes/(private)/_dashboard/exercise-log/index'
 import { Route as privateDashboardExercisesIndexRouteImport } from './routes/(private)/_dashboard/exercises/index'
 import { Route as privateDashboardExercisesExerciseIdRouteImport } from './routes/(private)/_dashboard/exercises/$exerciseId'
 import { Route as privateDashboardExercisesCreateRouteImport } from './routes/(private)/_dashboard/exercises/create'
@@ -98,6 +99,12 @@ const privateDashboardBodyWeightCreateRoute =
   privateDashboardBodyWeightCreateRouteImport.update({
     id: '/body-weight/create',
     path: '/body-weight/create',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardExerciseLogIndexRoute =
+  privateDashboardExerciseLogIndexRouteImport.update({
+    id: '/exercise-log/',
+    path: '/exercise-log/',
     getParentRoute: () => privateDashboardRouteRoute,
   } as any)
 const privateDashboardExercisesIndexRoute =
@@ -219,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/workouts/$workoutId': typeof privateDashboardWorkoutsWorkoutIdRoute
   '/workouts/create': typeof privateDashboardWorkoutsCreateRoute
   '/body-weight/': typeof privateDashboardBodyWeightIndexRoute
+  '/exercise-log/': typeof privateDashboardExerciseLogIndexRoute
   '/exercises/': typeof privateDashboardExercisesIndexRoute
   '/gyms/': typeof privateDashboardGymsIndexRoute
   '/muscle-groups/': typeof privateDashboardMuscleGroupsIndexRoute
@@ -247,6 +255,7 @@ export interface FileRoutesByTo {
   '/workouts/$workoutId': typeof privateDashboardWorkoutsWorkoutIdRoute
   '/workouts/create': typeof privateDashboardWorkoutsCreateRoute
   '/body-weight': typeof privateDashboardBodyWeightIndexRoute
+  '/exercise-log': typeof privateDashboardExerciseLogIndexRoute
   '/exercises': typeof privateDashboardExercisesIndexRoute
   '/gyms': typeof privateDashboardGymsIndexRoute
   '/muscle-groups': typeof privateDashboardMuscleGroupsIndexRoute
@@ -278,6 +287,7 @@ export interface FileRoutesById {
   '/(private)/_dashboard/workouts/$workoutId': typeof privateDashboardWorkoutsWorkoutIdRoute
   '/(private)/_dashboard/workouts/create': typeof privateDashboardWorkoutsCreateRoute
   '/(private)/_dashboard/body-weight/': typeof privateDashboardBodyWeightIndexRoute
+  '/(private)/_dashboard/exercise-log/': typeof privateDashboardExerciseLogIndexRoute
   '/(private)/_dashboard/exercises/': typeof privateDashboardExercisesIndexRoute
   '/(private)/_dashboard/gyms/': typeof privateDashboardGymsIndexRoute
   '/(private)/_dashboard/muscle-groups/': typeof privateDashboardMuscleGroupsIndexRoute
@@ -308,6 +318,7 @@ export interface FileRouteTypes {
     | '/workouts/$workoutId'
     | '/workouts/create'
     | '/body-weight/'
+    | '/exercise-log/'
     | '/exercises/'
     | '/gyms/'
     | '/muscle-groups/'
@@ -336,6 +347,7 @@ export interface FileRouteTypes {
     | '/workouts/$workoutId'
     | '/workouts/create'
     | '/body-weight'
+    | '/exercise-log'
     | '/exercises'
     | '/gyms'
     | '/muscle-groups'
@@ -366,6 +378,7 @@ export interface FileRouteTypes {
     | '/(private)/_dashboard/workouts/$workoutId'
     | '/(private)/_dashboard/workouts/create'
     | '/(private)/_dashboard/body-weight/'
+    | '/(private)/_dashboard/exercise-log/'
     | '/(private)/_dashboard/exercises/'
     | '/(private)/_dashboard/gyms/'
     | '/(private)/_dashboard/muscle-groups/'
@@ -466,6 +479,13 @@ declare module '@tanstack/react-router' {
       path: '/body-weight/create'
       fullPath: '/body-weight/create'
       preLoaderRoute: typeof privateDashboardBodyWeightCreateRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/exercise-log/': {
+      id: '/(private)/_dashboard/exercise-log/'
+      path: '/exercise-log'
+      fullPath: '/exercise-log/'
+      preLoaderRoute: typeof privateDashboardExerciseLogIndexRouteImport
       parentRoute: typeof privateDashboardRouteRoute
     }
     '/(private)/_dashboard/exercises/': {
@@ -599,6 +619,7 @@ interface privateDashboardRouteRouteChildren {
   privateDashboardWorkoutsWorkoutIdRoute: typeof privateDashboardWorkoutsWorkoutIdRoute
   privateDashboardWorkoutsCreateRoute: typeof privateDashboardWorkoutsCreateRoute
   privateDashboardBodyWeightIndexRoute: typeof privateDashboardBodyWeightIndexRoute
+  privateDashboardExerciseLogIndexRoute: typeof privateDashboardExerciseLogIndexRoute
   privateDashboardExercisesIndexRoute: typeof privateDashboardExercisesIndexRoute
   privateDashboardGymsIndexRoute: typeof privateDashboardGymsIndexRoute
   privateDashboardMuscleGroupsIndexRoute: typeof privateDashboardMuscleGroupsIndexRoute
@@ -629,6 +650,7 @@ const privateDashboardRouteRouteChildren: privateDashboardRouteRouteChildren = {
     privateDashboardWorkoutsWorkoutIdRoute,
   privateDashboardWorkoutsCreateRoute: privateDashboardWorkoutsCreateRoute,
   privateDashboardBodyWeightIndexRoute: privateDashboardBodyWeightIndexRoute,
+  privateDashboardExerciseLogIndexRoute: privateDashboardExerciseLogIndexRoute,
   privateDashboardExercisesIndexRoute: privateDashboardExercisesIndexRoute,
   privateDashboardGymsIndexRoute: privateDashboardGymsIndexRoute,
   privateDashboardMuscleGroupsIndexRoute:
