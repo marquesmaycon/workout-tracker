@@ -1,4 +1,4 @@
-import { defineConfig, env } from 'prisma/config'
+import { defineConfig } from 'prisma/config'
 
 export default defineConfig({
   schema: './prisma/schema.prisma',
@@ -7,6 +7,8 @@ export default defineConfig({
     seed: 'tsx prisma/seed.ts',
   },
   datasource: {
-    url: env('DATABASE_URL'),
+    // process.env instead of env(): env() throws when unset, which breaks
+    // `prisma generate` (it doesn't need a DB connection) in builds without DATABASE_URL.
+    url: process.env.DATABASE_URL ?? '',
   },
 })
