@@ -408,10 +408,19 @@ async function endSession(
     }
   }
 
-  const updated = await prisma.workoutSession.update({
-    where: { id: session.id },
-    data: { status, finishedAt: new Date() },
-    include,
+  const updated = await prisma.$transaction(async (tx) => {
+    // A cancelled session keeps its own record, but its exercise logs are discarded.
+    if (status === 'CANCELLED') {
+      await tx.workoutSessionExercise.deleteMany({
+        where: { workoutSessionId: session.id },
+      })
+    }
+
+    return tx.workoutSession.update({
+      where: { id: session.id },
+      data: { status, finishedAt: new Date() },
+      include,
+    })
   })
   return await serializeSession(updated)
 }
