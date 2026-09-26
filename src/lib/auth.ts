@@ -1,7 +1,7 @@
 import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
-import { tanstackStartCookies } from 'better-auth/tanstack-start'
 
+import { tanstackStartCookies } from '@/lib/auth-cookies'
 import { prisma } from '@/lib/db'
 
 export const auth = betterAuth({
