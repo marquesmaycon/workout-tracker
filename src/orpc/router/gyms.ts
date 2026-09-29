@@ -1,13 +1,13 @@
 import { ORPCError } from '@orpc/server'
 import { z } from 'zod'
 
-import { authProcedure } from '@/orpc/procedures'
-import { prisma } from '@/lib/db'
 import {
   createGymSchema,
   gymSchema,
   updateGymSchema,
 } from '@/features/gyms/validation/gym.entity'
+import { prisma } from '@/lib/db'
+import { authProcedure } from '@/orpc/procedures'
 
 const id = gymSchema.pick({ id: true })
 
@@ -65,12 +65,21 @@ const createGym = authProcedure
   .input(createGymSchema)
   .output(gymSchema)
   .handler(({ input, context }) => {
-    return prisma.gym.create({
-      data: {
-        name: input.name,
-        favorite: input.favorite ?? false,
-        userId: context.user.id,
-      },
+    return prisma.$transaction(async (tx) => {
+      if (input.favorite) {
+        await tx.gym.updateMany({
+          where: { userId: context.user.id, favorite: true },
+          data: { favorite: false },
+        })
+      }
+
+      return tx.gym.create({
+        data: {
+          name: input.name,
+          favorite: input.favorite ?? false,
+          userId: context.user.id,
+        },
+      })
     })
   })
 
@@ -96,12 +105,25 @@ const updateGym = authProcedure
       throw new ORPCError('NOT_FOUND')
     }
 
-    return prisma.gym.update({
-      where: { id: gym.id },
-      data: {
-        name: input.name,
-        favorite: input.favorite,
-      },
+    return prisma.$transaction(async (tx) => {
+      if (input.favorite) {
+        await tx.gym.updateMany({
+          where: {
+            userId: context.user.id,
+            favorite: true,
+            id: { not: gym.id },
+          },
+          data: { favorite: false },
+        })
+      }
+
+      return tx.gym.update({
+        where: { id: gym.id },
+        data: {
+          name: input.name,
+          favorite: input.favorite,
+        },
+      })
     })
   })
 
