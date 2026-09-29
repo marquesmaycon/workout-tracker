@@ -15,7 +15,7 @@ import { orpc } from '@/orpc/client'
 
 import type { WorkoutSessionExercise } from '../validation/workout-session-exercise.entity'
 import type { SessionExerciseFormSchema } from '../validation/workout-session-exercise.form'
-import { sessionExerciseFormOptions, updateSessionExerciseSchema } from '../validation/workout-session-exercise.form'
+import { requiredToCompleteSchema, sessionExerciseFormOptions } from '../validation/workout-session-exercise.form'
 
 const AUTO_SAVE_DELAY_MS = 1500
 
@@ -74,9 +74,7 @@ function SessionExerciseCardComponent({
                     `${v.actualSets} x ${v.actualReps} | ${v.actualWeight}kg |  RPE ${v.rpe}`
                   }
                 >
-                  {(summary) => (
-                    <Badge className="bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300">{summary}</Badge>
-                  )}
+                  {(summary) => <Badge>{summary}</Badge>}
                 </form.Subscribe>
               </span>
             )}
@@ -90,13 +88,10 @@ function SessionExerciseCardComponent({
             >
               <FieldGroup>
                 <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-                  <form.AppField
-                    name="actualSets"
-                    validators={{ onSubmit: updateSessionExerciseSchema.shape.actualSets }}
-                  >
+                  <form.AppField name="actualSets" validators={{ onSubmit: requiredToCompleteSchema }}>
                     {({ StepperField }) => (
                       <StepperField
-                        label="Séries"
+                        label="SÃ©ries"
                         inputMode="numeric"
                         mask={digitsOnly}
                         baseValue={last?.actualSets}
@@ -111,10 +106,7 @@ function SessionExerciseCardComponent({
                       />
                     )}
                   </form.AppField>
-                  <form.AppField
-                    name="actualReps"
-                    validators={{ onSubmit: updateSessionExerciseSchema.shape.actualReps }}
-                  >
+                  <form.AppField name="actualReps" validators={{ onSubmit: requiredToCompleteSchema }}>
                     {({ StepperField }) => (
                       <StepperField
                         label="Reps"
@@ -132,10 +124,7 @@ function SessionExerciseCardComponent({
                       />
                     )}
                   </form.AppField>
-                  <form.AppField
-                    name="actualWeight"
-                    validators={{ onSubmit: updateSessionExerciseSchema.shape.actualWeight }}
-                  >
+                  <form.AppField name="actualWeight" validators={{ onSubmit: requiredToCompleteSchema }}>
                     {({ StepperField }) => (
                       <StepperField
                         label="Peso"
@@ -147,7 +136,7 @@ function SessionExerciseCardComponent({
                       />
                     )}
                   </form.AppField>
-                  <form.AppField name="rpe" validators={{ onSubmit: updateSessionExerciseSchema.shape.rpe }}>
+                  <form.AppField name="rpe" validators={{ onSubmit: requiredToCompleteSchema }}>
                     {({ StepperField }) => (
                       <StepperField
                         label="RPE"
