@@ -91,7 +91,7 @@ function SessionExerciseCardComponent({
                   <form.AppField name="actualSets" validators={{ onSubmit: requiredToCompleteSchema }}>
                     {({ StepperField }) => (
                       <StepperField
-                        label="SÃ©ries"
+                        label="Séries"
                         inputMode="numeric"
                         mask={digitsOnly}
                         baseValue={last?.actualSets}

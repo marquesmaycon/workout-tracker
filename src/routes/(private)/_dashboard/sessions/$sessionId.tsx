@@ -81,29 +81,31 @@ function SessionPage() {
         ))}
       </Accordion>
       {isInProgress && (
-        <div className="flex justify-between gap-2">
+        <div className="flex flex-wrap justify-between gap-2">
           <Button
             variant="outline"
             onClick={handleCancel}
             loading={isCancelling}
             disabled={isFinishing || isCancelling}
+            size="sm"
           >
             <X aria-hidden="true" />
-            Cancelar treino
+            Cancelar <span className="hidden sm:inline">treino</span>
           </Button>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {!allCompleted && (
-              <span className="text-muted-foreground text-sm">
-                {completedCount}/{totalCount} concluídos
+              <span className="text-muted-foreground text-xs">
+                {completedCount}/{totalCount} <span className="hidden sm:inline">concluídos</span>
               </span>
             )}
             <Button
               onClick={handleFinish}
               loading={isFinishing}
               disabled={!allCompleted || isFinishing || isCancelling}
+              size="sm"
             >
               <CheckCircle2 aria-hidden="true" />
-              Finalizar treino
+              Finalizar <span className="hidden sm:inline">treino</span>
             </Button>
           </div>
         </div>
