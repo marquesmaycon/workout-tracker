@@ -69,7 +69,7 @@ function SessionPage() {
 
       <p className="font-heading">Exercícios do dia</p>
 
-      <Accordion multiple defaultValue={session.exercises.map((exercise) => exercise.id)}>
+      <Accordion multiple defaultValue={session.exercises.map((exercise) => exercise.id)} className="border">
         {session.exercises.map((exercise) => (
           <SessionExerciseCard
             key={exercise.id}
@@ -80,7 +80,6 @@ function SessionPage() {
           />
         ))}
       </Accordion>
-
       {isInProgress && (
         <div className="flex justify-between gap-2">
           <Button
