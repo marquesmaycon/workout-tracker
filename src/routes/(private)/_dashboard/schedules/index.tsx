@@ -53,7 +53,7 @@ function SchedulesPage() {
           {schedules.map((schedule) => (
             <Item
               key={schedule.id}
-              variant="muted"
+              variant="outline"
               render={
                 <Link
                   to="/schedules/$scheduleId"

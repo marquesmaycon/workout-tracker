@@ -66,7 +66,7 @@ function BodyWeightPage() {
             {bodyWeightLogs.map((bodyWeight) => (
               <Item
                 key={bodyWeight.id}
-                variant="muted"
+                variant="outline"
                 render={
                   <Link
                     to="/body-weight/$bodyWeightId"

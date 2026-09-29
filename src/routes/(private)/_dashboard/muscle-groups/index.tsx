@@ -66,7 +66,7 @@ function MuscleGroupsPage() {
             {muscleGroups.map((muscleGroup) => (
               <Item
                 key={muscleGroup.id}
-                variant="muted"
+                variant="outline"
                 render={
                   <Link
                     to="/muscle-groups/$muscleGroupId"

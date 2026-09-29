@@ -67,7 +67,7 @@ function WorkoutsPage() {
             {workouts.map((workout) => (
               <Item
                 key={workout.id}
-                variant="muted"
+                variant="outline"
                 render={
                   <Link
                     to="/workouts/$workoutId"

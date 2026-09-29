@@ -43,9 +43,7 @@ function GymsPage() {
       <PageHeader className="gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
         <div className="grid gap-1">
           <PageTitle>Academias</PageTitle>
-          <PageDescription>
-            Lista das academias cadastradas para organizar seus treinos.
-          </PageDescription>
+          <PageDescription>Lista das academias cadastradas para organizar seus treinos.</PageDescription>
         </div>
 
         <Button
@@ -64,7 +62,7 @@ function GymsPage() {
             {gyms.map((gym) => (
               <Item
                 key={gym.id}
-                variant="muted"
+                variant="outline"
                 render={
                   <Link to="/gyms/$gymId" params={{ gymId: gym.id }}>
                     <ItemMedia variant="icon">
@@ -72,9 +70,7 @@ function GymsPage() {
                     </ItemMedia>
                     <ItemContent>
                       <ItemTitle>{gym.name}</ItemTitle>
-                      <ItemDescription>
-                        Criada em {formatDate(gym.createdAt)}
-                      </ItemDescription>
+                      <ItemDescription>Criada em {formatDate(gym.createdAt)}</ItemDescription>
                     </ItemContent>
                     {gym.favorite ? (
                       <ItemActions>
@@ -83,10 +79,7 @@ function GymsPage() {
                           title="Academia favorita"
                           className="bg-muted flex size-7 shrink-0 items-center justify-center rounded-md text-amber-500"
                         >
-                          <Star
-                            aria-hidden="true"
-                            className="size-4 fill-current"
-                          />
+                          <Star aria-hidden="true" className="size-4 fill-current" />
                         </span>
                       </ItemActions>
                     ) : null}
@@ -102,10 +95,7 @@ function GymsPage() {
                 <Dumbbell aria-hidden="true" />
               </EmptyMedia>
               <EmptyTitle>Nenhuma academia cadastrada</EmptyTitle>
-              <EmptyDescription>
-                Quando uma academia for adicionada, ela vai aparecer nesta
-                lista.
-              </EmptyDescription>
+              <EmptyDescription>Quando uma academia for adicionada, ela vai aparecer nesta lista.</EmptyDescription>
             </EmptyHeader>
           </Empty>
         )}
