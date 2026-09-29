@@ -1,12 +1,13 @@
+import { useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
-import { useRouter } from '@tanstack/react-router'
+
+import type { Gym } from '../../../../prisma/generated/client'
 import { useGymMutations } from '../hooks/use-gym-mutations'
 import { gymFormOptions } from '../validation/gym.form'
-import type { Gym } from '../../../../prisma/generated/client'
 
 type GymFormProps = {
   gym?: Gym
@@ -35,9 +36,7 @@ export function GymForm({ gym }: GymFormProps) {
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-xl">
-          {isEditing ? 'Editar academia' : 'Nova academia'}
-        </CardTitle>
+        <CardTitle className="text-xl">{isEditing ? 'Editar academia' : 'Nova academia'}</CardTitle>
       </CardHeader>
       <CardContent>
         <form
@@ -51,24 +50,17 @@ export function GymForm({ gym }: GymFormProps) {
               {isEditing ? 'Atualize os dados' : 'Cadastre uma academia'}
             </FieldSeparator>
 
-            <form.AppField name="name">
-              {({ InputField }) => <InputField label="Nome" />}
-            </form.AppField>
+            <form.AppField name="name">{({ InputField }) => <InputField label="Nome" />}</form.AppField>
 
             <form.AppField name="favorite">
               {({ CheckboxField }) => (
-                <CheckboxField
-                  label="Favorita"
-                  description="Destacar esta academia na sua lista."
-                />
+                <CheckboxField label="Favorita" description="Destacar esta academia na sua lista." />
               )}
             </form.AppField>
 
             <Field>
               <form.AppForm>
-                <form.SubmitButton
-                  label={isEditing ? 'Salvar academia' : 'Criar academia'}
-                />
+                <form.SubmitButton label={isEditing ? 'Salvar academia' : 'Criar academia'} />
               </form.AppForm>
             </Field>
           </FieldGroup>

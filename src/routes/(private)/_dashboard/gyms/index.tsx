@@ -1,7 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Dumbbell, Star } from 'lucide-react'
+import { Dumbbell, Plus, Star } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
 import {
   Empty,
   EmptyDescription,
@@ -36,7 +37,6 @@ export const Route = createFileRoute('/(private)/_dashboard/gyms/')({
 
 function GymsPage() {
   const { data: gyms } = useSuspenseQuery(gymsQueryOptions)
-  const favoriteGyms = gyms.filter((gym) => gym.favorite)
 
   return (
     <Page>
@@ -48,10 +48,14 @@ function GymsPage() {
           </PageDescription>
         </div>
 
-        <div className="flex gap-2">
-          <SummaryPill label="Total" value={gyms.length} />
-          <SummaryPill label="Favoritas" value={favoriteGyms.length} />
-        </div>
+        <Button
+          render={
+            <Link to="/gyms/create">
+              <Plus aria-hidden="true" />
+              Nova academia
+            </Link>
+          }
+        />
       </PageHeader>
 
       <section>
@@ -107,15 +111,6 @@ function GymsPage() {
         )}
       </section>
     </Page>
-  )
-}
-
-function SummaryPill({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="bg-muted/50 min-w-24 rounded-md border px-3 py-2">
-      <p className="text-muted-foreground text-xs">{label}</p>
-      <p className="text-xl font-semibold">{value}</p>
-    </div>
   )
 }
 
