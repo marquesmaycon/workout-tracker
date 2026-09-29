@@ -5,6 +5,15 @@
 - After making changes, only run linting and typechecking to verify your work: `npm run lint` and `npx tsc --noEmit` (there is no dedicated typecheck/test script in package.json).
 - If you believe running the dev server or tests is truly necessary, ask the user first instead of running it yourself.
 
+## File encoding (UTF-8 only)
+
+All source files are UTF-8 (no BOM) and contain Portuguese text with accents (e.g. `Séries`, `anotação`). Corrupting them into mojibake (`SÃ©ries`, `anotaÃ§Ã£o`) is a bug.
+
+- Edit files only with the Edit/Write tools. Never rewrite files through the shell (PowerShell `Get-Content`/`Set-Content`/`Out-File`, `>` redirection, `sed -i`, etc.) — Windows PowerShell 5.1 defaults to the ANSI codepage and mangles accented characters.
+- If a shell write is truly unavoidable, force UTF-8 explicitly (e.g. `[IO.File]::WriteAllText(path, text, [Text.UTF8Encoding]::new($false))`).
+- Type accented characters literally (`é`, `ç`, `ã`); never copy text that already shows mojibake.
+- Before finishing, check your edited files for mojibake: search for `Ã`, `Â` or `â€` in `src/`. If any appear, fix them back to the correct accented characters.
+
 <!-- intent-skills:start -->
 # TanStack Intent - before editing files, run the matching guidance command.
 tanstackIntent:
