@@ -1,8 +1,8 @@
 import { useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
+import { Card, CardContent } from '@/components/ui/card'
+import { Field, FieldGroup } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 
 import { useWorkoutMutations } from '../hooks/use-workout-mutations'
@@ -40,11 +40,6 @@ export function WorkoutForm({ workout }: WorkoutFormProps) {
 
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-xl">
-          {isEditing ? 'Editar treino' : 'Novo treino'}
-        </CardTitle>
-      </CardHeader>
       <CardContent>
         <form
           onSubmit={(ev) => {
@@ -56,10 +51,6 @@ export function WorkoutForm({ workout }: WorkoutFormProps) {
             {(isSubmitting) => (
               <fieldset disabled={isSubmitting} className="min-w-0">
                 <FieldGroup>
-                  <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-                    {isEditing ? 'Atualize os dados' : 'Cadastre um treino'}
-                  </FieldSeparator>
-
                   <form.AppField name="name">
                     {({ InputField }) => <InputField label="Nome" />}
                   </form.AppField>

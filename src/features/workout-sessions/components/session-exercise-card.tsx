@@ -56,7 +56,11 @@ function SessionExerciseCardComponent({
   return (
     <form.Subscribe selector={(state) => state.values.completed}>
       {(completed) => (
-        <AccordionItem value={exercise.id} data-completed={completed || undefined} className="data-completed:bg-muted">
+        <AccordionItem
+          value={exercise.id}
+          data-completed={completed || undefined}
+          className="data-completed:bg-muted border-b px-4 last:border-b-0"
+        >
           <AccordionTrigger className="items-center gap-2 **:data-[slot=accordion-trigger-icon]:ml-0">
             <span className="mr-auto flex items-center gap-2">
               <span className="wrap-break-word">{exercise.exercise.name}</span>

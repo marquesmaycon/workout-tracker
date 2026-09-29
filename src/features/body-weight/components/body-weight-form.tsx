@@ -1,12 +1,12 @@
 import { useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
+import { Card, CardContent } from '@/components/ui/card'
+import { Field, FieldGroup } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 
-import type { BodyWeight } from '../validation/body-weight.entity'
 import { useBodyWeightMutations } from '../hooks/use-body-weight-mutations'
+import type { BodyWeight } from '../validation/body-weight.entity'
 import { bodyWeightFormOptions } from '../validation/body-weight.form'
 
 type BodyWeightFormProps = {
@@ -39,11 +39,6 @@ export function BodyWeightForm({ bodyWeight }: BodyWeightFormProps) {
 
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-xl">
-          {isEditing ? 'Editar peso' : 'Novo peso'}
-        </CardTitle>
-      </CardHeader>
       <CardContent>
         <form
           onSubmit={(ev) => {
@@ -52,10 +47,6 @@ export function BodyWeightForm({ bodyWeight }: BodyWeightFormProps) {
           }}
         >
           <FieldGroup>
-            <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-              {isEditing ? 'Atualize os dados' : 'Registre seu peso corporal'}
-            </FieldSeparator>
-
             <form.AppField name="measuredAt">
               {({ InputField }) => (
                 <InputField label="Data da medicao" type="datetime-local" />

@@ -1,14 +1,13 @@
 import { useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  FieldSeparator,
 } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 
@@ -53,11 +52,6 @@ export function ExerciseForm({ exercise, muscleGroups }: ExerciseFormProps) {
 
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-xl">
-          {isEditing ? 'Editar exercicio' : 'Novo exercicio'}
-        </CardTitle>
-      </CardHeader>
       <CardContent>
         <form
           onSubmit={(ev) => {
@@ -66,10 +60,6 @@ export function ExerciseForm({ exercise, muscleGroups }: ExerciseFormProps) {
           }}
         >
           <FieldGroup>
-            <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-              {isEditing ? 'Atualize os dados' : 'Cadastre um exercicio'}
-            </FieldSeparator>
-
             <form.AppField name="name">
               {({ InputField }) => <InputField label="Nome" />}
             </form.AppField>
