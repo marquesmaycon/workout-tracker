@@ -24,10 +24,13 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Workout Tracker',
       },
     ],
     links: [
+      { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
+      { rel: 'icon', href: '/logoipsum-365.svg', type: 'image/svg+xml' },
+      { rel: 'apple-touch-icon', href: '/logoipsum-365.png' },
       {
         rel: 'stylesheet',
         href: appCss,

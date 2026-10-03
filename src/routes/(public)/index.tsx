@@ -1,25 +1,14 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import {
-  BicepsFlexed,
-  ClipboardList,
-  Dumbbell,
-  LineChart,
-  MapPin,
-  Scale,
-} from 'lucide-react'
+import 'blobatar/motion.css'
 
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { BicepsFlexed, ClipboardList, Dumbbell, LineChart, MapPin, Scale } from 'lucide-react'
+
+import { Logo } from '@/components/layout/logo'
 import { ThemeToggler } from '@/components/layout/theme/theme-toggler'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Blobatar } from '@/components/ui/blobatar'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { getSession } from '@/features/auth/server/session'
-import { getInitials } from '@/lib/utils'
 
 export const Route = createFileRoute('/(public)/')({
   beforeLoad: async () => {
@@ -32,26 +21,22 @@ export const Route = createFileRoute('/(public)/')({
 const features = [
   {
     title: 'Treinos organizados',
-    description:
-      'Monte sua rotina, acompanhe treinos ativos e mantenha o historico sempre por perto.',
+    description: 'Monte sua rotina, acompanhe treinos ativos e mantenha o historico sempre por perto.',
     icon: ClipboardList,
   },
   {
     title: 'Exercicios e grupos',
-    description:
-      'Cadastre exercicios por grupo muscular para encontrar tudo rapido na hora de treinar.',
+    description: 'Cadastre exercicios por grupo muscular para encontrar tudo rapido na hora de treinar.',
     icon: BicepsFlexed,
   },
   {
     title: 'Academias',
-    description:
-      'Registre os locais onde voce treina e conecte sua rotina ao ambiente certo.',
+    description: 'Registre os locais onde voce treina e conecte sua rotina ao ambiente certo.',
     icon: MapPin,
   },
   {
     title: 'Peso corporal',
-    description:
-      'Acompanhe sua evolucao com registros simples e consistentes ao longo do tempo.',
+    description: 'Acompanhe sua evolucao com registros simples e consistentes ao longo do tempo.',
     icon: Scale,
   },
 ] as const
@@ -65,8 +50,9 @@ function Home() {
         <div className="container flex items-center justify-between gap-3">
           <Link
             to="/"
-            className="text-foreground text-lg font-bold tracking-normal no-underline"
+            className="text-foreground flex items-center gap-2 text-lg font-bold tracking-normal no-underline"
           >
+            <Logo className="size-7" />
             Workout Tracker
           </Link>
 
@@ -75,26 +61,17 @@ function Home() {
             {user ? (
               <>
                 <div className="flex items-center gap-2 px-1">
-                  <Avatar>
-                    <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-                  </Avatar>
+                  <Blobatar name={user.name} blobatar={{ animate: 'hover' }} />
                   <div className="hidden text-left text-sm leading-tight sm:grid">
-                    <span className="max-w-40 truncate font-medium">
-                      {user.name}
-                    </span>
-                    <span className="text-muted-foreground max-w-40 truncate text-xs">
-                      {user.email}
-                    </span>
+                    <span className="max-w-40 truncate font-medium">{user.name}</span>
+                    <span className="text-muted-foreground max-w-40 truncate text-xs">{user.email}</span>
                   </div>
                 </div>
                 <Button render={<Link to="/dashboard">Ir para o app</Link>} />
               </>
             ) : (
               <>
-                <Button
-                  variant="ghost"
-                  render={<Link to="/signin">Entrar</Link>}
-                />
+                <Button variant="ghost" render={<Link to="/signin">Entrar</Link>} />
                 <Button render={<Link to="/signup">Criar conta</Link>} />
               </>
             )}
@@ -112,17 +89,12 @@ function Home() {
               Organize seus treinos sem perder o ritmo.
             </h1>
             <p className="text-muted-foreground mt-5 max-w-xl text-base leading-7">
-              O Workout Tracker ajuda voce a registrar academias, exercicios,
-              grupos musculares, treinos e peso corporal com uma experiencia
-              simples para o dia a dia.
+              O Workout Tracker ajuda voce a registrar academias, exercicios, grupos musculares, treinos e peso corporal
+              com uma experiencia simples para o dia a dia.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button
-                size="lg"
-                className="h-10 px-4 text-sm"
-                render={<Link to="/signup">Comecar agora</Link>}
-              />
+              <Button size="lg" className="h-10 px-4 text-sm" render={<Link to="/signup">Comecar agora</Link>} />
               <Button
                 variant="outline"
                 size="lg"
@@ -135,9 +107,7 @@ function Home() {
           <div className="rise-in bg-card rounded-lg border p-4 shadow-sm">
             <div className="flex items-center justify-between border-b pb-4">
               <div>
-                <p className="text-muted-foreground text-xs font-medium">
-                  Resumo semanal
-                </p>
+                <p className="text-muted-foreground text-xs font-medium">Resumo semanal</p>
                 <h2 className="mt-1 text-xl font-semibold">Treino atual</h2>
               </div>
               <Dumbbell aria-hidden="true" className="text-primary size-6" />
@@ -149,36 +119,23 @@ function Home() {
                 ['Costas e biceps', '6 exercicios'],
                 ['Pernas', '7 exercicios'],
               ].map(([name, detail]) => (
-                <div
-                  key={name}
-                  className="bg-muted/60 flex items-center justify-between rounded-md px-3 py-3"
-                >
+                <div key={name} className="bg-muted/60 flex items-center justify-between rounded-md px-3 py-3">
                   <span className="text-sm font-medium">{name}</span>
-                  <span className="text-muted-foreground text-xs">
-                    {detail}
-                  </span>
+                  <span className="text-muted-foreground text-xs">{detail}</span>
                 </div>
               ))}
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-md border p-3">
-                <LineChart
-                  aria-hidden="true"
-                  className="text-primary mb-3 size-4"
-                />
+                <LineChart aria-hidden="true" className="text-primary mb-3 size-4" />
                 <p className="text-2xl font-semibold">8</p>
                 <p className="text-muted-foreground text-xs">treinos no mes</p>
               </div>
               <div className="rounded-md border p-3">
-                <Scale
-                  aria-hidden="true"
-                  className="text-primary mb-3 size-4"
-                />
+                <Scale aria-hidden="true" className="text-primary mb-3 size-4" />
                 <p className="text-2xl font-semibold">+4</p>
-                <p className="text-muted-foreground text-xs">
-                  registros de peso
-                </p>
+                <p className="text-muted-foreground text-xs">registros de peso</p>
               </div>
             </div>
           </div>
@@ -204,12 +161,10 @@ function Home() {
           <Card>
             <CardContent className="flex flex-col gap-5 py-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-2xl font-semibold">
-                  Pronto para registrar sua evolucao?
-                </h2>
+                <h2 className="text-2xl font-semibold">Pronto para registrar sua evolucao?</h2>
                 <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-6">
-                  Crie sua conta e comece a transformar seus treinos em um
-                  historico claro, facil de consultar e bom de manter.
+                  Crie sua conta e comece a transformar seus treinos em um historico claro, facil de consultar e bom de
+                  manter.
                 </p>
               </div>
               <Button

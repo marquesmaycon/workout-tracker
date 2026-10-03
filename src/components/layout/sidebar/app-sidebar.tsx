@@ -1,9 +1,9 @@
 'use client'
 
 import { Link } from '@tanstack/react-router'
-import { GalleryVerticalEnd } from 'lucide-react'
 import * as React from 'react'
 
+import { Logo } from '@/components/layout/logo'
 import { NavAdmin } from '@/components/layout/sidebar/nav-admin'
 import { NavMain } from '@/components/layout/sidebar/nav-main'
 import { NavSession } from '@/components/layout/sidebar/nav-session'
@@ -29,8 +29,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               size="lg"
               render={
                 <Link to="/">
-                  <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                    <GalleryVerticalEnd className="size-4" />
+                  <div className="flex aspect-square size-8 items-center justify-center">
+                    <Logo className="size-7" />
                   </div>
                   <div className="flex flex-col gap-0.5 leading-none">
                     <span className="font-medium">Workout Tracker</span>
