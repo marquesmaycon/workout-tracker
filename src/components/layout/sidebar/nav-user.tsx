@@ -21,8 +21,13 @@ export function NavUser() {
   const router = useRouter()
   const { isMobile } = useSidebar()
   const { user } = dashboardRoute.useRouteContext()
+
   function handleLogout() {
-    authClient.signOut({ fetchOptions: { onSuccess: () => router.navigate({ to: '/signin' }) } })
+    authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => router.navigate({ to: '/signin' }),
+      },
+    })
   }
   return (
     <SidebarMenu>

@@ -266,7 +266,6 @@ model Session {
 
 model Account {
   id                    String    @id
-  issuer                String
   accountId             String    @map("account_id")
   providerId            String    @map("provider_id")
   userId                String    @map("user_id")
@@ -282,7 +281,6 @@ model Account {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([issuer, accountId], map: "account_issuer_account_id_uidx")
   @@index([userId])
   @@map("account")
 }

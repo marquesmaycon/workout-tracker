@@ -19,14 +19,12 @@ export function SignupForm() {
   const form = useAppForm({
     ...signupFormOptions,
     onSubmit: async ({ value }) => {
-      const { error } = await authClient.signUp.email(value)
-
-      if (error) {
-        toast.error(error.message)
-        return
-      }
-
-      router.navigate({ to: '/' })
+      await authClient.signUp.email(value, {
+        onSuccess: () => router.navigate({ to: '/' }),
+        onError: ({ error }) => {
+          toast.error(error.message)
+        },
+      })
     },
   })
 

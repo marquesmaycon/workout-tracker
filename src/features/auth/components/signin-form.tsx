@@ -1,12 +1,8 @@
 import { Link, useRouter } from '@tanstack/react-router'
+import { toast } from 'sonner'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldSeparator,
-} from '@/components/ui/field'
+import { Field, FieldDescription, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useAppForm } from '@/hooks/form'
 import { authClient } from '@/lib/auth-client'
 
@@ -18,14 +14,12 @@ export function SigninForm() {
   const form = useAppForm({
     ...signinFormOptions,
     onSubmit: async ({ value }) => {
-      const { error } = await authClient.signIn.email(value)
-
-      if (error) {
-        // mostrar erro no form/toast
-        return
-      }
-
-      await router.navigate({ to: '/dashboard' })
+      await authClient.signIn.email(value, {
+        onSuccess: () => router.navigate({ to: '/dashboard' }),
+        onError: ({ error }) => {
+          toast.error(error.message)
+        },
+      })
     },
   })
 
@@ -46,18 +40,13 @@ export function SigninForm() {
               Entre na sua conta
             </FieldSeparator>
 
-            <form.AppField name="email">
-              {({ InputField }) => <InputField label="E-mail" type="email" />}
-            </form.AppField>
+            <form.AppField name="email">{({ InputField }) => <InputField label="E-mail" type="email" />}</form.AppField>
 
             <form.AppField name="password">
               {({ InputField }) => <InputField label="Senha" type="password" />}
             </form.AppField>
 
-            <Link
-              to="."
-              className="text-muted-foreground ml-auto text-xs underline-offset-4 hover:underline"
-            >
+            <Link to="." className="text-muted-foreground ml-auto text-xs underline-offset-4 hover:underline">
               Esqueceu sua senha?
             </Link>
 

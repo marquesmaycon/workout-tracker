@@ -9,9 +9,5 @@
     "**/routeTree.gen.ts": true
   },
   "js/ts.tsdk.path": "node_modules/typescript/lib",
-  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
-  "emmet.showSuggestionsAsSnippets": false,
-  "[typescriptreact]": {
-    "editor.snippetSuggestions": "bottom"
-  }
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true
 }
