@@ -1,4 +1,4 @@
-import { Link, useRouter } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -6,27 +6,31 @@ import { Field, FieldDescription, FieldGroup, FieldSeparator } from '@/component
 import { useAppForm } from '@/hooks/form'
 import { authClient } from '@/lib/auth-client'
 
-import { signinFormOptions } from '../validation/signin.form'
+import { forgotPasswordFormOptions } from '../validation/forgot-password.form'
 
-export function SigninForm() {
-  const router = useRouter()
-
+export function ForgotPasswordForm() {
   const form = useAppForm({
-    ...signinFormOptions,
-    onSubmit: async ({ value }) => {
-      await authClient.signIn.email(value, {
-        onSuccess: () => router.navigate({ to: '/dashboard' }),
-        onError: ({ error }) => {
-          toast.error(error.message)
+    ...forgotPasswordFormOptions,
+    onSubmit: async ({ value, formApi }) => {
+      await authClient.requestPasswordReset(
+        { email: value.email, redirectTo: '/reset-password' },
+        {
+          onSuccess: () => {
+            toast.success('Se o e-mail estiver cadastrado, você receberá um link para redefinir sua senha.')
+            formApi.reset()
+          },
+          onError: ({ error }) => {
+            toast.error(error.message)
+          },
         },
-      })
+      )
     },
   })
 
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-xl">Bem-vindo de volta</CardTitle>
+        <CardTitle className="text-xl">Esqueceu sua senha?</CardTitle>
       </CardHeader>
       <CardContent>
         <form
@@ -37,25 +41,17 @@ export function SigninForm() {
         >
           <FieldGroup>
             <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-              Entre na sua conta
+              Informe seu e-mail para redefinir a senha
             </FieldSeparator>
 
             <form.AppField name="email">{({ InputField }) => <InputField label="E-mail" type="email" />}</form.AppField>
 
-            <form.AppField name="password">
-              {({ InputField }) => <InputField label="Senha" type="password" />}
-            </form.AppField>
-
-            <Link to="/forgot-password" className="text-muted-foreground ml-auto text-xs underline-offset-4 hover:underline">
-              Esqueceu sua senha?
-            </Link>
-
             <Field>
               <form.AppForm>
-                <form.SubmitButton label="Entrar" />
+                <form.SubmitButton label="Enviar link" />
               </form.AppForm>
               <FieldDescription className="text-center">
-                Não tem uma conta? <Link to="/signup">Cadastre-se</Link>
+                Lembrou a senha? <Link to="/signin">Entrar</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>

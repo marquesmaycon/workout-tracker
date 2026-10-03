@@ -15,6 +15,8 @@ import { Route as publicAuthRouteRouteImport } from './routes/(public)/_auth/rou
 import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as privateDashboardAdminRouteRouteImport } from './routes/(private)/_dashboard/_admin/route'
 import { Route as privateDashboardDashboardRouteImport } from './routes/(private)/_dashboard/dashboard'
+import { Route as publicAuthForgotPasswordRouteImport } from './routes/(public)/_auth/forgot-password'
+import { Route as publicAuthResetPasswordRouteImport } from './routes/(public)/_auth/reset-password'
 import { Route as publicAuthSigninRouteImport } from './routes/(public)/_auth/signin'
 import { Route as publicAuthSignupRouteImport } from './routes/(public)/_auth/signup'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -69,6 +71,17 @@ const privateDashboardDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => privateDashboardRouteRoute,
   } as any)
+const publicAuthForgotPasswordRoute =
+  publicAuthForgotPasswordRouteImport.update({
+    id: '/forgot-password',
+    path: '/forgot-password',
+    getParentRoute: () => publicAuthRouteRoute,
+  } as any)
+const publicAuthResetPasswordRoute = publicAuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => publicAuthRouteRoute,
+} as any)
 const publicAuthSigninRoute = publicAuthSigninRouteImport.update({
   id: '/signin',
   path: '/signin',
@@ -214,6 +227,8 @@ export interface FileRoutesByFullPath {
   '/api/$': typeof ApiSplatRoute
   '/': typeof publicIndexRoute
   '/dashboard': typeof privateDashboardDashboardRoute
+  '/forgot-password': typeof publicAuthForgotPasswordRoute
+  '/reset-password': typeof publicAuthResetPasswordRoute
   '/signin': typeof publicAuthSigninRoute
   '/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -243,6 +258,8 @@ export interface FileRoutesByTo {
   '/api/$': typeof ApiSplatRoute
   '/': typeof publicIndexRoute
   '/dashboard': typeof privateDashboardDashboardRoute
+  '/forgot-password': typeof publicAuthForgotPasswordRoute
+  '/reset-password': typeof publicAuthResetPasswordRoute
   '/signin': typeof publicAuthSigninRoute
   '/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -276,6 +293,8 @@ export interface FileRoutesById {
   '/(public)/': typeof publicIndexRoute
   '/(private)/_dashboard/_admin': typeof privateDashboardAdminRouteRouteWithChildren
   '/(private)/_dashboard/dashboard': typeof privateDashboardDashboardRoute
+  '/(public)/_auth/forgot-password': typeof publicAuthForgotPasswordRoute
+  '/(public)/_auth/reset-password': typeof publicAuthResetPasswordRoute
   '/(public)/_auth/signin': typeof publicAuthSigninRoute
   '/(public)/_auth/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -307,6 +326,8 @@ export interface FileRouteTypes {
     | '/api/$'
     | '/'
     | '/dashboard'
+    | '/forgot-password'
+    | '/reset-password'
     | '/signin'
     | '/signup'
     | '/api/auth/$'
@@ -336,6 +357,8 @@ export interface FileRouteTypes {
     | '/api/$'
     | '/'
     | '/dashboard'
+    | '/forgot-password'
+    | '/reset-password'
     | '/signin'
     | '/signup'
     | '/api/auth/$'
@@ -368,6 +391,8 @@ export interface FileRouteTypes {
     | '/(public)/'
     | '/(private)/_dashboard/_admin'
     | '/(private)/_dashboard/dashboard'
+    | '/(public)/_auth/forgot-password'
+    | '/(public)/_auth/reset-password'
     | '/(public)/_auth/signin'
     | '/(public)/_auth/signup'
     | '/api/auth/$'
@@ -446,6 +471,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard'
       preLoaderRoute: typeof privateDashboardDashboardRouteImport
       parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(public)/_auth/forgot-password': {
+      id: '/(public)/_auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof publicAuthForgotPasswordRouteImport
+      parentRoute: typeof publicAuthRouteRoute
+    }
+    '/(public)/_auth/reset-password': {
+      id: '/(public)/_auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof publicAuthResetPasswordRouteImport
+      parentRoute: typeof publicAuthRouteRoute
     }
     '/(public)/_auth/signin': {
       id: '/(public)/_auth/signin'
@@ -695,11 +734,15 @@ const privateDashboardRouteRouteWithChildren =
   )
 
 interface publicAuthRouteRouteChildren {
+  publicAuthForgotPasswordRoute: typeof publicAuthForgotPasswordRoute
+  publicAuthResetPasswordRoute: typeof publicAuthResetPasswordRoute
   publicAuthSigninRoute: typeof publicAuthSigninRoute
   publicAuthSignupRoute: typeof publicAuthSignupRoute
 }
 
 const publicAuthRouteRouteChildren: publicAuthRouteRouteChildren = {
+  publicAuthForgotPasswordRoute: publicAuthForgotPasswordRoute,
+  publicAuthResetPasswordRoute: publicAuthResetPasswordRoute,
   publicAuthSigninRoute: publicAuthSigninRoute,
   publicAuthSignupRoute: publicAuthSignupRoute,
 }
