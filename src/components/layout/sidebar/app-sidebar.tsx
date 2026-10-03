@@ -4,6 +4,7 @@ import { Link } from '@tanstack/react-router'
 import { GalleryVerticalEnd } from 'lucide-react'
 import * as React from 'react'
 
+import { NavAdmin } from '@/components/layout/sidebar/nav-admin'
 import { NavMain } from '@/components/layout/sidebar/nav-main'
 import { NavSession } from '@/components/layout/sidebar/nav-session'
 import { NavUser } from '@/components/layout/sidebar/nav-user'
@@ -46,6 +47,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavSession />
         <NavMain />
+        <NavAdmin />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

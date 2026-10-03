@@ -1,8 +1,10 @@
 import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
+import { admin } from 'better-auth/plugins'
 
 import { tanstackStartCookies } from '@/lib/auth-cookies'
 import { prisma } from '@/lib/db'
+import { ac, roles } from '@/lib/permissions'
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -11,7 +13,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  plugins: [tanstackStartCookies()],
+  plugins: [admin({ ac, roles }), tanstackStartCookies()],
   advanced: {
     database: {
       joins: true,

@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
+import { getRouteApi, Link } from '@tanstack/react-router'
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/field'
 import { withForm } from '@/hooks/form'
 import { decimalOnly, digitsOnly } from '@/lib/input-masks'
+import { isAdmin } from '@/lib/permissions'
 import { orpc } from '@/orpc/client'
 
 import { workoutFormOptions } from '../validation/workout.form'
@@ -19,10 +20,14 @@ import { workoutExerciseDefaultValues } from '../validation/workout-exercise.for
 
 const exercisesQuery = orpc.exercises.list.queryOptions()
 
+const dashboardRoute = getRouteApi('/(private)/_dashboard')
+
 export const WorkoutExerciseChildForm = withForm({
   ...workoutFormOptions(),
   render: function Render({ form }) {
     const { data: exercises } = useSuspenseQuery(exercisesQuery)
+    const { user } = dashboardRoute.useRouteContext()
+    const canManageExercises = isAdmin(user)
     const exerciseOptions = exercises.map((exercise) => ({
       value: exercise.id,
       label: exercise.name,
@@ -189,10 +194,16 @@ export const WorkoutExerciseChildForm = withForm({
                 ) : (
                   <p className="text-muted-foreground text-sm">
                     Nenhum exercício cadastrado.{' '}
-                    <Link to="/exercises/create" className="underline">
-                      Cadastre um exercício
-                    </Link>{' '}
-                    para adicioná-lo ao treino.
+                    {canManageExercises ? (
+                      <>
+                        <Link to="/exercises/create" className="underline">
+                          Cadastre um exercício
+                        </Link>{' '}
+                        para adicioná-lo ao treino.
+                      </>
+                    ) : (
+                      'Peça a um administrador para cadastrar exercícios.'
+                    )}
                   </p>
                 )}
               </FieldSet>

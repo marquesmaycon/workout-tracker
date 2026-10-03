@@ -8,7 +8,7 @@ import {
   updateExerciseSchema,
 } from '@/features/exercises/validation/exercise.entity'
 import { prisma } from '@/lib/db'
-import { authProcedure } from '@/orpc/procedures'
+import { authProcedure, permissionProcedure } from '@/orpc/procedures'
 
 const id = exerciseSchema.pick({ id: true })
 
@@ -60,7 +60,7 @@ const getExercise = authProcedure
     return exercise
   })
 
-const createExercise = authProcedure
+const createExercise = permissionProcedure({ exercise: ['create'] })
   .route({
     method: 'POST',
     path: '/exercises',
@@ -95,7 +95,7 @@ const createExercise = authProcedure
     })
   })
 
-const updateExercise = authProcedure
+const updateExercise = permissionProcedure({ exercise: ['update'] })
   .route({
     method: 'PATCH',
     path: '/exercises/{id}',
@@ -145,7 +145,7 @@ const updateExercise = authProcedure
     })
   })
 
-const deleteExercise = authProcedure
+const deleteExercise = permissionProcedure({ exercise: ['delete'] })
   .route({
     method: 'DELETE',
     path: '/exercises/{id}',

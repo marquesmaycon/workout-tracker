@@ -9,21 +9,32 @@ import {
   PageTitle,
 } from '@/components/ui/page'
 import { MuscleGroupForm } from '@/features/muscle-groups/components/muscle-group-form'
+import { orpc } from '@/orpc/client'
+
+const muscleGroupQueryOptions = (muscleGroupId: string) =>
+  orpc.muscleGroups.get.queryOptions({ input: { id: muscleGroupId } })
 
 export const Route = createFileRoute(
-  '/(private)/_dashboard/muscle-groups/create',
+  '/(private)/_dashboard/_admin/muscle-groups/$muscleGroupId',
 )({
-  component: RouteComponent,
+  loader: ({ context, params }) =>
+    context.queryClient.query({
+      ...muscleGroupQueryOptions(params.muscleGroupId),
+      staleTime: 'static',
+    }),
+  component: MuscleGroupEditPage,
 })
 
-function RouteComponent() {
+function MuscleGroupEditPage() {
+  const muscleGroup = Route.useLoaderData()
+
   return (
     <Page>
       <PageHeader className="gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
         <div className="grid gap-1">
-          <PageTitle>Novo grupo muscular</PageTitle>
+          <PageTitle>Editar grupo muscular</PageTitle>
           <PageDescription>
-            Adicione as informacoes principais do grupo muscular.
+            Atualize as informacoes principais do grupo muscular.
           </PageDescription>
         </div>
 
@@ -39,7 +50,7 @@ function RouteComponent() {
       </PageHeader>
 
       <section className="grid w-full gap-6">
-        <MuscleGroupForm />
+        <MuscleGroupForm muscleGroup={muscleGroup} />
       </section>
     </Page>
   )

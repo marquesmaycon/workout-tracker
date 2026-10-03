@@ -7,7 +7,7 @@ import {
   updateMuscleGroupSchema,
 } from '@/features/muscle-groups/validation/muscle-group.entity'
 import { prisma } from '@/lib/db'
-import { authProcedure } from '@/orpc/procedures'
+import { authProcedure, permissionProcedure } from '@/orpc/procedures'
 
 const id = muscleGroupSchema.pick({ id: true })
 
@@ -47,7 +47,7 @@ const getMuscleGroup = authProcedure
     return muscleGroup
   })
 
-const createMuscleGroup = authProcedure
+const createMuscleGroup = permissionProcedure({ muscleGroup: ['create'] })
   .route({
     method: 'POST',
     path: '/muscle-groups',
@@ -63,7 +63,7 @@ const createMuscleGroup = authProcedure
     })
   })
 
-const updateMuscleGroup = authProcedure
+const updateMuscleGroup = permissionProcedure({ muscleGroup: ['update'] })
   .route({
     method: 'PATCH',
     path: '/muscle-groups/{id}',
@@ -88,7 +88,7 @@ const updateMuscleGroup = authProcedure
     })
   })
 
-const deleteMuscleGroup = authProcedure
+const deleteMuscleGroup = permissionProcedure({ muscleGroup: ['delete'] })
   .route({
     method: 'DELETE',
     path: '/muscle-groups/{id}',

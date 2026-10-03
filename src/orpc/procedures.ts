@@ -1,6 +1,8 @@
 import { ORPCError, os } from '@orpc/server'
 
 import { auth } from '@/lib/auth'
+import type { Permissions } from '@/lib/permissions'
+import { hasPermission } from '@/lib/permissions'
 
 type ORPCContext = {
   headers: Headers
@@ -21,3 +23,12 @@ export const authProcedure = publicProcedure.use(
     })
   },
 )
+
+export const permissionProcedure = (permissions: Permissions) =>
+  authProcedure.use(({ context: { user }, next }) => {
+    if (!hasPermission(user.role, permissions)) {
+      throw new ORPCError('FORBIDDEN')
+    }
+
+    return next()
+  })

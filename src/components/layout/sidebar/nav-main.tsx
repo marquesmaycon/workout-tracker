@@ -1,4 +1,3 @@
-import { Link, useRouterState } from '@tanstack/react-router'
 import {
   BicepsFlexedIcon,
   Building2Icon,
@@ -6,27 +5,11 @@ import {
   DumbbellIcon,
   HistoryIcon,
   LayoutDashboardIcon,
-  Plus,
   ScaleIcon,
 } from 'lucide-react'
 
-import type { FileRouteTypes } from '@/routeTree.gen'
-import {
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from '#/components/ui/sidebar.tsx'
-
-type NavItem = {
-  title: string
-  to: FileRouteTypes['to']
-  icon?: React.ReactNode
-  actionLink?: FileRouteTypes['to']
-}
+import type { NavItem } from '@/components/layout/sidebar/nav-group'
+import { NavGroup } from '@/components/layout/sidebar/nav-group'
 
 const items: NavItem[] = [
   {
@@ -44,7 +27,6 @@ const items: NavItem[] = [
     title: 'Exercícios',
     to: '/exercises',
     icon: <BicepsFlexedIcon />,
-    actionLink: '/exercises/create',
   },
   {
     title: 'Treinos',
@@ -72,52 +54,5 @@ const items: NavItem[] = [
 ]
 
 export function NavMain() {
-  const pathname = useRouterState({
-    select: (state) => state.location.pathname,
-  })
-  const { setOpenMobile } = useSidebar()
-  const closeMobileMenu = () => setOpenMobile(false)
-
-  return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Navegação</SidebarGroupLabel>
-      <SidebarMenu>
-        {items.map((item) => {
-          return (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton
-                isActive={isActivePath(pathname, item.to)}
-                render={
-                  <Link
-                    to={item.to}
-                    activeOptions={{ exact: true }}
-                    onClick={closeMobileMenu}
-                  />
-                }
-              >
-                {item.icon}
-                <span>{item.title}</span>
-              </SidebarMenuButton>
-              {item.actionLink && (
-                <SidebarMenuAction
-                  showOnHover
-                  className="aria-expanded:bg-muted"
-                  render={
-                    <Link to={item.actionLink} onClick={closeMobileMenu} />
-                  }
-                >
-                  <Plus />
-                  <span className="sr-only">Novo</span>
-                </SidebarMenuAction>
-              )}
-            </SidebarMenuItem>
-          )
-        })}
-      </SidebarMenu>
-    </SidebarGroup>
-  )
-}
-
-function isActivePath(pathname: string, to: FileRouteTypes['to']) {
-  return pathname === to || pathname.startsWith(`${to}/`)
+  return <NavGroup label="Navegação" items={items} />
 }

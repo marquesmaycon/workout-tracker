@@ -24,6 +24,7 @@ import {
   PageHeader,
   PageTitle,
 } from '@/components/ui/page'
+import { isAdmin } from '@/lib/permissions'
 import { orpc } from '@/orpc/client'
 
 const exercisesQueryOptions = orpc.exercises.list.queryOptions()
@@ -39,6 +40,8 @@ export const Route = createFileRoute('/(private)/_dashboard/exercises/')({
 
 function ExercisesPage() {
   const { data: exercises } = useSuspenseQuery(exercisesQueryOptions)
+  const { user } = Route.useRouteContext()
+  const canManage = isAdmin(user)
 
   return (
     <Page>
@@ -50,41 +53,55 @@ function ExercisesPage() {
           </PageDescription>
         </div>
 
-        <Button
-          render={
-            <Link to="/exercises/create">
-              <Plus aria-hidden="true" />
-              Novo exercicio
-            </Link>
-          }
-        />
+        {canManage && (
+          <Button
+            render={
+              <Link to="/exercises/create">
+                <Plus aria-hidden="true" />
+                Novo exercicio
+              </Link>
+            }
+          />
+        )}
       </PageHeader>
 
       <section>
         {exercises.length > 0 ? (
           <ItemGroup>
-            {exercises.map((exercise) => (
-              <Item
-                key={exercise.id}
-                variant="outline"
-                render={
-                  <Link
-                    to="/exercises/$exerciseId"
-                    params={{ exerciseId: exercise.id }}
-                  >
-                    <ItemMedia variant="icon">
-                      <Dumbbell aria-hidden="true" />
-                    </ItemMedia>
-                    <ItemContent>
-                      <ItemTitle>{exercise.name}</ItemTitle>
-                      <ItemDescription>
-                        {formatMuscleGroups(exercise.muscleGroups)}
-                      </ItemDescription>
-                    </ItemContent>
-                  </Link>
-                }
-              />
-            ))}
+            {exercises.map((exercise) => {
+              const content = (
+                <>
+                  <ItemMedia variant="icon">
+                    <Dumbbell aria-hidden="true" />
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemTitle>{exercise.name}</ItemTitle>
+                    <ItemDescription>
+                      {formatMuscleGroups(exercise.muscleGroups)}
+                    </ItemDescription>
+                  </ItemContent>
+                </>
+              )
+
+              return canManage ? (
+                <Item
+                  key={exercise.id}
+                  variant="outline"
+                  render={
+                    <Link
+                      to="/exercises/$exerciseId"
+                      params={{ exerciseId: exercise.id }}
+                    >
+                      {content}
+                    </Link>
+                  }
+                />
+              ) : (
+                <Item key={exercise.id} variant="outline">
+                  {content}
+                </Item>
+              )
+            })}
           </ItemGroup>
         ) : (
           <Empty className="border">

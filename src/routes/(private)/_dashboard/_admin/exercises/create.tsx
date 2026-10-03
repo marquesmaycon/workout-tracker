@@ -13,7 +13,7 @@ import { orpc } from '@/orpc/client'
 
 const muscleGroupsQueryOptions = orpc.muscleGroups.list.queryOptions()
 
-export const Route = createFileRoute('/(private)/_dashboard/exercises/create')({
+export const Route = createFileRoute('/(private)/_dashboard/_admin/exercises/create')({
   loader: ({ context }) =>
     context.queryClient.query({
       ...muscleGroupsQueryOptions,

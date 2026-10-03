@@ -17,7 +17,7 @@ const exerciseQueryOptions = (exerciseId: string) =>
 const muscleGroupsQueryOptions = orpc.muscleGroups.list.queryOptions()
 
 export const Route = createFileRoute(
-  '/(private)/_dashboard/exercises/$exerciseId',
+  '/(private)/_dashboard/_admin/exercises/$exerciseId',
 )({
   loader: async ({ context, params }) => {
     const [exercise, muscleGroups] = await Promise.all([
