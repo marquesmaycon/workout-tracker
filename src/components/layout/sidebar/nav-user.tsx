@@ -1,13 +1,7 @@
-import { getRouteApi } from '@tanstack/react-router'
-import {
-  BadgeCheckIcon,
-  BellIcon,
-  ChevronsUpDownIcon,
-  CreditCardIcon,
-  LogOutIcon,
-  SparklesIcon,
-} from 'lucide-react'
+import { getRouteApi, useRouter } from '@tanstack/react-router'
+import { BadgeCheckIcon, BellIcon, ChevronsUpDownIcon, CreditCardIcon, LogOutIcon, SparklesIcon } from 'lucide-react'
 
+import { authClient } from '@/lib/auth-client'
 import { getInitials } from '@/lib/utils'
 import { Avatar, AvatarFallback } from '#/components/ui/avatar.tsx'
 import {
@@ -19,27 +13,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu.tsx'
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from '#/components/ui/sidebar.tsx'
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '#/components/ui/sidebar.tsx'
 
 const dashboardRoute = getRouteApi('/(private)/_dashboard')
 
 export function NavUser() {
+  const router = useRouter()
   const { isMobile } = useSidebar()
   const { user } = dashboardRoute.useRouteContext()
+  function handleLogout() {
+    authClient.signOut({ fetchOptions: { onSuccess: () => router.navigate({ to: '/signin' }) } })
+  }
   return (
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <SidebarMenuButton size="lg" className="aria-expanded:bg-muted" />
-            }
-          >
+          <DropdownMenuTrigger render={<SidebarMenuButton size="lg" className="aria-expanded:bg-muted" />}>
             <Avatar>
               <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
@@ -49,12 +38,7 @@ export function NavUser() {
             </div>
             <ChevronsUpDownIcon className="ml-auto size-4" />
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-fit"
-            side={isMobile ? 'bottom' : 'right'}
-            align="end"
-            sideOffset={4}
-          >
+          <DropdownMenuContent className="w-fit" side={isMobile ? 'bottom' : 'right'} align="end" sideOffset={4}>
             <DropdownMenuGroup>
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
@@ -91,7 +75,7 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOutIcon />
               Log out
             </DropdownMenuItem>
