@@ -36,12 +36,9 @@ export function ExerciseForm({ exercise, muscleGroups }: ExerciseFormProps) {
         return
       }
 
-      const newExercise = await createExercise(value)
+      await createExercise(value)
       toast.success('Exercicio criado')
-      router.navigate({
-        to: '/exercises/$exerciseId',
-        params: { exerciseId: newExercise.id },
-      })
+      router.navigate({ to: '/exercises' })
     },
   })
 

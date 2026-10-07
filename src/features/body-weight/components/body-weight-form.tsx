@@ -28,12 +28,9 @@ export function BodyWeightForm({ bodyWeight }: BodyWeightFormProps) {
         return
       }
 
-      const newBodyWeight = await createBodyWeight(value)
+      await createBodyWeight(value)
       toast.success('Peso registrado')
-      router.navigate({
-        to: '/body-weight/$bodyWeightId',
-        params: { bodyWeightId: newBodyWeight.id },
-      })
+      router.navigate({ to: '/body-weight' })
     },
   })
 

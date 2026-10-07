@@ -46,12 +46,9 @@ export function ScheduleForm({
         await updateSchedule({ id: schedule.id, ...value })
         toast.success('Programação atualizada com sucesso!')
       } else {
-        const newSchedule = await createSchedule(value)
+        await createSchedule(value)
         toast.success('Programação criada com sucesso!')
-        await router.navigate({
-          to: '/schedules/$scheduleId',
-          params: { scheduleId: newSchedule.id },
-        })
+        await router.navigate({ to: '/schedules' })
       }
     },
   })

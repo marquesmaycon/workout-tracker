@@ -27,9 +27,9 @@ export function GymForm({ gym }: GymFormProps) {
         toast.success('Academia atualizada')
         return
       }
-      const newGym = await createGym(value)
+      await createGym(value)
       toast.success('Academia criada')
-      router.navigate({ to: '/gyms/$gymId', params: { gymId: newGym.id } })
+      router.navigate({ to: '/gyms' })
     },
   })
 

@@ -29,12 +29,9 @@ export function WorkoutForm({ workout }: WorkoutFormProps) {
         return
       }
 
-      const newWorkout = await createWorkout(value)
+      await createWorkout(value)
       toast.success('Treino criado')
-      router.navigate({
-        to: '/workouts/$workoutId',
-        params: { workoutId: newWorkout.id },
-      })
+      router.navigate({ to: '/workouts' })
     },
   })
 

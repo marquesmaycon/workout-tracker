@@ -28,12 +28,9 @@ export function MuscleGroupForm({ muscleGroup }: MuscleGroupFormProps) {
         return
       }
 
-      const newMuscleGroup = await createMuscleGroup(value)
+      await createMuscleGroup(value)
       toast.success('Grupo muscular criado')
-      router.navigate({
-        to: '/muscle-groups/$muscleGroupId',
-        params: { muscleGroupId: newMuscleGroup.id },
-      })
+      router.navigate({ to: '/muscle-groups' })
     },
   })
 
