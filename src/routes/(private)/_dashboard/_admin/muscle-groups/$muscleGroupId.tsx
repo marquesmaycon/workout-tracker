@@ -17,6 +17,7 @@ const muscleGroupQueryOptions = (muscleGroupId: string) =>
 export const Route = createFileRoute(
   '/(private)/_dashboard/_admin/muscle-groups/$muscleGroupId',
 )({
+  staticData: { breadcrumb: MuscleGroupBreadcrumb },
   loader: ({ context, params }) =>
     context.queryClient.query({
       ...muscleGroupQueryOptions(params.muscleGroupId),
@@ -24,6 +25,12 @@ export const Route = createFileRoute(
     }),
   component: MuscleGroupEditPage,
 })
+
+function MuscleGroupBreadcrumb(): string {
+  const muscleGroup = Route.useLoaderData()
+
+  return muscleGroup.name
+}
 
 function MuscleGroupEditPage() {
   const muscleGroup = Route.useLoaderData()

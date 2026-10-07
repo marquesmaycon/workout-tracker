@@ -30,6 +30,7 @@ import { orpc } from '@/orpc/client'
 const exercisesQueryOptions = orpc.exercises.list.queryOptions()
 
 export const Route = createFileRoute('/(private)/_dashboard/exercises/')({
+  staticData: { breadcrumb: 'Exercícios' },
   loader: ({ context }) =>
     context.queryClient.query({
       ...exercisesQueryOptions,

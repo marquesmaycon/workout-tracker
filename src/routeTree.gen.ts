@@ -14,13 +14,19 @@ import { Route as publicIndexRouteImport } from './routes/(public)/index'
 import { Route as publicAuthRouteRouteImport } from './routes/(public)/_auth/route'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as privateDashboardAdminRouteRouteImport } from './routes/(private)/_dashboard/_admin/route'
+import { Route as privateDashboardBodyWeightRouteRouteImport } from './routes/(private)/_dashboard/body-weight/route'
 import { Route as privateDashboardDashboardRouteImport } from './routes/(private)/_dashboard/dashboard'
+import { Route as privateDashboardGymsRouteRouteImport } from './routes/(private)/_dashboard/gyms/route'
+import { Route as privateDashboardSchedulesRouteRouteImport } from './routes/(private)/_dashboard/schedules/route'
+import { Route as privateDashboardWorkoutsRouteRouteImport } from './routes/(private)/_dashboard/workouts/route'
 import { Route as publicAuthForgotPasswordRouteImport } from './routes/(public)/_auth/forgot-password'
 import { Route as publicAuthResetPasswordRouteImport } from './routes/(public)/_auth/reset-password'
 import { Route as publicAuthSigninRouteImport } from './routes/(public)/_auth/signin'
 import { Route as publicAuthSignupRouteImport } from './routes/(public)/_auth/signup'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
+import { Route as privateDashboardAdminExercisesRouteRouteImport } from './routes/(private)/_dashboard/_admin/exercises/route'
+import { Route as privateDashboardAdminMuscleGroupsRouteRouteImport } from './routes/(private)/_dashboard/_admin/muscle-groups/route'
 import { Route as privateDashboardBodyWeightIndexRouteImport } from './routes/(private)/_dashboard/body-weight/index'
 import { Route as privateDashboardBodyWeightBodyWeightIdRouteImport } from './routes/(private)/_dashboard/body-weight/$bodyWeightId'
 import { Route as privateDashboardBodyWeightCreateRouteImport } from './routes/(private)/_dashboard/body-weight/create'
@@ -65,10 +71,34 @@ const privateDashboardAdminRouteRoute =
     id: '/_admin',
     getParentRoute: () => privateDashboardRouteRoute,
   } as any)
+const privateDashboardBodyWeightRouteRoute =
+  privateDashboardBodyWeightRouteRouteImport.update({
+    id: '/body-weight',
+    path: '/body-weight',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
 const privateDashboardDashboardRoute =
   privateDashboardDashboardRouteImport.update({
     id: '/dashboard',
     path: '/dashboard',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardGymsRouteRoute =
+  privateDashboardGymsRouteRouteImport.update({
+    id: '/gyms',
+    path: '/gyms',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardSchedulesRouteRoute =
+  privateDashboardSchedulesRouteRouteImport.update({
+    id: '/schedules',
+    path: '/schedules',
+    getParentRoute: () => privateDashboardRouteRoute,
+  } as any)
+const privateDashboardWorkoutsRouteRoute =
+  privateDashboardWorkoutsRouteRouteImport.update({
+    id: '/workouts',
+    path: '/workouts',
     getParentRoute: () => privateDashboardRouteRoute,
   } as any)
 const publicAuthForgotPasswordRoute =
@@ -102,23 +132,35 @@ const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   path: '/api/rpc/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const privateDashboardAdminExercisesRouteRoute =
+  privateDashboardAdminExercisesRouteRouteImport.update({
+    id: '/exercises',
+    path: '/exercises',
+    getParentRoute: () => privateDashboardAdminRouteRoute,
+  } as any)
+const privateDashboardAdminMuscleGroupsRouteRoute =
+  privateDashboardAdminMuscleGroupsRouteRouteImport.update({
+    id: '/muscle-groups',
+    path: '/muscle-groups',
+    getParentRoute: () => privateDashboardAdminRouteRoute,
+  } as any)
 const privateDashboardBodyWeightIndexRoute =
   privateDashboardBodyWeightIndexRouteImport.update({
-    id: '/body-weight/',
-    path: '/body-weight/',
-    getParentRoute: () => privateDashboardRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => privateDashboardBodyWeightRouteRoute,
   } as any)
 const privateDashboardBodyWeightBodyWeightIdRoute =
   privateDashboardBodyWeightBodyWeightIdRouteImport.update({
-    id: '/body-weight/$bodyWeightId',
-    path: '/body-weight/$bodyWeightId',
-    getParentRoute: () => privateDashboardRouteRoute,
+    id: '/$bodyWeightId',
+    path: '/$bodyWeightId',
+    getParentRoute: () => privateDashboardBodyWeightRouteRoute,
   } as any)
 const privateDashboardBodyWeightCreateRoute =
   privateDashboardBodyWeightCreateRouteImport.update({
-    id: '/body-weight/create',
-    path: '/body-weight/create',
-    getParentRoute: () => privateDashboardRouteRoute,
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => privateDashboardBodyWeightRouteRoute,
   } as any)
 const privateDashboardExerciseLogIndexRoute =
   privateDashboardExerciseLogIndexRouteImport.update({
@@ -134,39 +176,39 @@ const privateDashboardExercisesIndexRoute =
   } as any)
 const privateDashboardGymsIndexRoute =
   privateDashboardGymsIndexRouteImport.update({
-    id: '/gyms/',
-    path: '/gyms/',
-    getParentRoute: () => privateDashboardRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => privateDashboardGymsRouteRoute,
   } as any)
 const privateDashboardGymsGymIdRoute =
   privateDashboardGymsGymIdRouteImport.update({
-    id: '/gyms/$gymId',
-    path: '/gyms/$gymId',
-    getParentRoute: () => privateDashboardRouteRoute,
+    id: '/$gymId',
+    path: '/$gymId',
+    getParentRoute: () => privateDashboardGymsRouteRoute,
   } as any)
 const privateDashboardGymsCreateRoute =
   privateDashboardGymsCreateRouteImport.update({
-    id: '/gyms/create',
-    path: '/gyms/create',
-    getParentRoute: () => privateDashboardRouteRoute,
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => privateDashboardGymsRouteRoute,
   } as any)
 const privateDashboardSchedulesIndexRoute =
   privateDashboardSchedulesIndexRouteImport.update({
-    id: '/schedules/',
-    path: '/schedules/',
-    getParentRoute: () => privateDashboardRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => privateDashboardSchedulesRouteRoute,
   } as any)
 const privateDashboardSchedulesScheduleIdRoute =
   privateDashboardSchedulesScheduleIdRouteImport.update({
-    id: '/schedules/$scheduleId',
-    path: '/schedules/$scheduleId',
-    getParentRoute: () => privateDashboardRouteRoute,
+    id: '/$scheduleId',
+    path: '/$scheduleId',
+    getParentRoute: () => privateDashboardSchedulesRouteRoute,
   } as any)
 const privateDashboardSchedulesCreateRoute =
   privateDashboardSchedulesCreateRouteImport.update({
-    id: '/schedules/create',
-    path: '/schedules/create',
-    getParentRoute: () => privateDashboardRouteRoute,
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => privateDashboardSchedulesRouteRoute,
   } as any)
 const privateDashboardSessionsSessionIdRoute =
   privateDashboardSessionsSessionIdRouteImport.update({
@@ -176,56 +218,60 @@ const privateDashboardSessionsSessionIdRoute =
   } as any)
 const privateDashboardWorkoutsIndexRoute =
   privateDashboardWorkoutsIndexRouteImport.update({
-    id: '/workouts/',
-    path: '/workouts/',
-    getParentRoute: () => privateDashboardRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => privateDashboardWorkoutsRouteRoute,
   } as any)
 const privateDashboardWorkoutsWorkoutIdRoute =
   privateDashboardWorkoutsWorkoutIdRouteImport.update({
-    id: '/workouts/$workoutId',
-    path: '/workouts/$workoutId',
-    getParentRoute: () => privateDashboardRouteRoute,
+    id: '/$workoutId',
+    path: '/$workoutId',
+    getParentRoute: () => privateDashboardWorkoutsRouteRoute,
   } as any)
 const privateDashboardWorkoutsCreateRoute =
   privateDashboardWorkoutsCreateRouteImport.update({
-    id: '/workouts/create',
-    path: '/workouts/create',
-    getParentRoute: () => privateDashboardRouteRoute,
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => privateDashboardWorkoutsRouteRoute,
   } as any)
 const privateDashboardAdminExercisesExerciseIdRoute =
   privateDashboardAdminExercisesExerciseIdRouteImport.update({
-    id: '/exercises/$exerciseId',
-    path: '/exercises/$exerciseId',
-    getParentRoute: () => privateDashboardAdminRouteRoute,
+    id: '/$exerciseId',
+    path: '/$exerciseId',
+    getParentRoute: () => privateDashboardAdminExercisesRouteRoute,
   } as any)
 const privateDashboardAdminExercisesCreateRoute =
   privateDashboardAdminExercisesCreateRouteImport.update({
-    id: '/exercises/create',
-    path: '/exercises/create',
-    getParentRoute: () => privateDashboardAdminRouteRoute,
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => privateDashboardAdminExercisesRouteRoute,
   } as any)
 const privateDashboardAdminMuscleGroupsIndexRoute =
   privateDashboardAdminMuscleGroupsIndexRouteImport.update({
-    id: '/muscle-groups/',
-    path: '/muscle-groups/',
-    getParentRoute: () => privateDashboardAdminRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => privateDashboardAdminMuscleGroupsRouteRoute,
   } as any)
 const privateDashboardAdminMuscleGroupsMuscleGroupIdRoute =
   privateDashboardAdminMuscleGroupsMuscleGroupIdRouteImport.update({
-    id: '/muscle-groups/$muscleGroupId',
-    path: '/muscle-groups/$muscleGroupId',
-    getParentRoute: () => privateDashboardAdminRouteRoute,
+    id: '/$muscleGroupId',
+    path: '/$muscleGroupId',
+    getParentRoute: () => privateDashboardAdminMuscleGroupsRouteRoute,
   } as any)
 const privateDashboardAdminMuscleGroupsCreateRoute =
   privateDashboardAdminMuscleGroupsCreateRouteImport.update({
-    id: '/muscle-groups/create',
-    path: '/muscle-groups/create',
-    getParentRoute: () => privateDashboardAdminRouteRoute,
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => privateDashboardAdminMuscleGroupsRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/api/$': typeof ApiSplatRoute
   '/': typeof publicIndexRoute
+  '/body-weight': typeof privateDashboardBodyWeightRouteRouteWithChildren
+  '/gyms': typeof privateDashboardGymsRouteRouteWithChildren
+  '/schedules': typeof privateDashboardSchedulesRouteRouteWithChildren
+  '/workouts': typeof privateDashboardWorkoutsRouteRouteWithChildren
   '/dashboard': typeof privateDashboardDashboardRoute
   '/forgot-password': typeof publicAuthForgotPasswordRoute
   '/reset-password': typeof publicAuthResetPasswordRoute
@@ -233,6 +279,8 @@ export interface FileRoutesByFullPath {
   '/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/exercises': typeof privateDashboardAdminExercisesRouteRouteWithChildren
+  '/muscle-groups': typeof privateDashboardAdminMuscleGroupsRouteRouteWithChildren
   '/body-weight/$bodyWeightId': typeof privateDashboardBodyWeightBodyWeightIdRoute
   '/body-weight/create': typeof privateDashboardBodyWeightCreateRoute
   '/gyms/$gymId': typeof privateDashboardGymsGymIdRoute
@@ -264,6 +312,7 @@ export interface FileRoutesByTo {
   '/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/exercises': typeof privateDashboardExercisesIndexRoute
   '/body-weight/$bodyWeightId': typeof privateDashboardBodyWeightBodyWeightIdRoute
   '/body-weight/create': typeof privateDashboardBodyWeightCreateRoute
   '/gyms/$gymId': typeof privateDashboardGymsGymIdRoute
@@ -275,7 +324,6 @@ export interface FileRoutesByTo {
   '/workouts/create': typeof privateDashboardWorkoutsCreateRoute
   '/body-weight': typeof privateDashboardBodyWeightIndexRoute
   '/exercise-log': typeof privateDashboardExerciseLogIndexRoute
-  '/exercises': typeof privateDashboardExercisesIndexRoute
   '/gyms': typeof privateDashboardGymsIndexRoute
   '/schedules': typeof privateDashboardSchedulesIndexRoute
   '/workouts': typeof privateDashboardWorkoutsIndexRoute
@@ -292,6 +340,10 @@ export interface FileRoutesById {
   '/api/$': typeof ApiSplatRoute
   '/(public)/': typeof publicIndexRoute
   '/(private)/_dashboard/_admin': typeof privateDashboardAdminRouteRouteWithChildren
+  '/(private)/_dashboard/body-weight': typeof privateDashboardBodyWeightRouteRouteWithChildren
+  '/(private)/_dashboard/gyms': typeof privateDashboardGymsRouteRouteWithChildren
+  '/(private)/_dashboard/schedules': typeof privateDashboardSchedulesRouteRouteWithChildren
+  '/(private)/_dashboard/workouts': typeof privateDashboardWorkoutsRouteRouteWithChildren
   '/(private)/_dashboard/dashboard': typeof privateDashboardDashboardRoute
   '/(public)/_auth/forgot-password': typeof publicAuthForgotPasswordRoute
   '/(public)/_auth/reset-password': typeof publicAuthResetPasswordRoute
@@ -299,6 +351,8 @@ export interface FileRoutesById {
   '/(public)/_auth/signup': typeof publicAuthSignupRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/(private)/_dashboard/_admin/exercises': typeof privateDashboardAdminExercisesRouteRouteWithChildren
+  '/(private)/_dashboard/_admin/muscle-groups': typeof privateDashboardAdminMuscleGroupsRouteRouteWithChildren
   '/(private)/_dashboard/body-weight/$bodyWeightId': typeof privateDashboardBodyWeightBodyWeightIdRoute
   '/(private)/_dashboard/body-weight/create': typeof privateDashboardBodyWeightCreateRoute
   '/(private)/_dashboard/gyms/$gymId': typeof privateDashboardGymsGymIdRoute
@@ -325,6 +379,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/api/$'
     | '/'
+    | '/body-weight'
+    | '/gyms'
+    | '/schedules'
+    | '/workouts'
     | '/dashboard'
     | '/forgot-password'
     | '/reset-password'
@@ -332,6 +390,8 @@ export interface FileRouteTypes {
     | '/signup'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/exercises'
+    | '/muscle-groups'
     | '/body-weight/$bodyWeightId'
     | '/body-weight/create'
     | '/gyms/$gymId'
@@ -363,6 +423,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/exercises'
     | '/body-weight/$bodyWeightId'
     | '/body-weight/create'
     | '/gyms/$gymId'
@@ -374,7 +435,6 @@ export interface FileRouteTypes {
     | '/workouts/create'
     | '/body-weight'
     | '/exercise-log'
-    | '/exercises'
     | '/gyms'
     | '/schedules'
     | '/workouts'
@@ -390,6 +450,10 @@ export interface FileRouteTypes {
     | '/api/$'
     | '/(public)/'
     | '/(private)/_dashboard/_admin'
+    | '/(private)/_dashboard/body-weight'
+    | '/(private)/_dashboard/gyms'
+    | '/(private)/_dashboard/schedules'
+    | '/(private)/_dashboard/workouts'
     | '/(private)/_dashboard/dashboard'
     | '/(public)/_auth/forgot-password'
     | '/(public)/_auth/reset-password'
@@ -397,6 +461,8 @@ export interface FileRouteTypes {
     | '/(public)/_auth/signup'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/(private)/_dashboard/_admin/exercises'
+    | '/(private)/_dashboard/_admin/muscle-groups'
     | '/(private)/_dashboard/body-weight/$bodyWeightId'
     | '/(private)/_dashboard/body-weight/create'
     | '/(private)/_dashboard/gyms/$gymId'
@@ -465,11 +531,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof privateDashboardAdminRouteRouteImport
       parentRoute: typeof privateDashboardRouteRoute
     }
+    '/(private)/_dashboard/body-weight': {
+      id: '/(private)/_dashboard/body-weight'
+      path: '/body-weight'
+      fullPath: '/body-weight'
+      preLoaderRoute: typeof privateDashboardBodyWeightRouteRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
     '/(private)/_dashboard/dashboard': {
       id: '/(private)/_dashboard/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof privateDashboardDashboardRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/gyms': {
+      id: '/(private)/_dashboard/gyms'
+      path: '/gyms'
+      fullPath: '/gyms'
+      preLoaderRoute: typeof privateDashboardGymsRouteRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/schedules': {
+      id: '/(private)/_dashboard/schedules'
+      path: '/schedules'
+      fullPath: '/schedules'
+      preLoaderRoute: typeof privateDashboardSchedulesRouteRouteImport
+      parentRoute: typeof privateDashboardRouteRoute
+    }
+    '/(private)/_dashboard/workouts': {
+      id: '/(private)/_dashboard/workouts'
+      path: '/workouts'
+      fullPath: '/workouts'
+      preLoaderRoute: typeof privateDashboardWorkoutsRouteRouteImport
       parentRoute: typeof privateDashboardRouteRoute
     }
     '/(public)/_auth/forgot-password': {
@@ -514,26 +608,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRpcSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(private)/_dashboard/_admin/exercises': {
+      id: '/(private)/_dashboard/_admin/exercises'
+      path: '/exercises'
+      fullPath: '/exercises'
+      preLoaderRoute: typeof privateDashboardAdminExercisesRouteRouteImport
+      parentRoute: typeof privateDashboardAdminRouteRoute
+    }
+    '/(private)/_dashboard/_admin/muscle-groups': {
+      id: '/(private)/_dashboard/_admin/muscle-groups'
+      path: '/muscle-groups'
+      fullPath: '/muscle-groups'
+      preLoaderRoute: typeof privateDashboardAdminMuscleGroupsRouteRouteImport
+      parentRoute: typeof privateDashboardAdminRouteRoute
+    }
     '/(private)/_dashboard/body-weight/': {
       id: '/(private)/_dashboard/body-weight/'
-      path: '/body-weight'
+      path: '/'
       fullPath: '/body-weight/'
       preLoaderRoute: typeof privateDashboardBodyWeightIndexRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
+      parentRoute: typeof privateDashboardBodyWeightRouteRoute
     }
     '/(private)/_dashboard/body-weight/$bodyWeightId': {
       id: '/(private)/_dashboard/body-weight/$bodyWeightId'
-      path: '/body-weight/$bodyWeightId'
+      path: '/$bodyWeightId'
       fullPath: '/body-weight/$bodyWeightId'
       preLoaderRoute: typeof privateDashboardBodyWeightBodyWeightIdRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
+      parentRoute: typeof privateDashboardBodyWeightRouteRoute
     }
     '/(private)/_dashboard/body-weight/create': {
       id: '/(private)/_dashboard/body-weight/create'
-      path: '/body-weight/create'
+      path: '/create'
       fullPath: '/body-weight/create'
       preLoaderRoute: typeof privateDashboardBodyWeightCreateRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
+      parentRoute: typeof privateDashboardBodyWeightRouteRoute
     }
     '/(private)/_dashboard/exercise-log/': {
       id: '/(private)/_dashboard/exercise-log/'
@@ -551,45 +659,45 @@ declare module '@tanstack/react-router' {
     }
     '/(private)/_dashboard/gyms/': {
       id: '/(private)/_dashboard/gyms/'
-      path: '/gyms'
+      path: '/'
       fullPath: '/gyms/'
       preLoaderRoute: typeof privateDashboardGymsIndexRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
+      parentRoute: typeof privateDashboardGymsRouteRoute
     }
     '/(private)/_dashboard/gyms/$gymId': {
       id: '/(private)/_dashboard/gyms/$gymId'
-      path: '/gyms/$gymId'
+      path: '/$gymId'
       fullPath: '/gyms/$gymId'
       preLoaderRoute: typeof privateDashboardGymsGymIdRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
+      parentRoute: typeof privateDashboardGymsRouteRoute
     }
     '/(private)/_dashboard/gyms/create': {
       id: '/(private)/_dashboard/gyms/create'
-      path: '/gyms/create'
+      path: '/create'
       fullPath: '/gyms/create'
       preLoaderRoute: typeof privateDashboardGymsCreateRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
+      parentRoute: typeof privateDashboardGymsRouteRoute
     }
     '/(private)/_dashboard/schedules/': {
       id: '/(private)/_dashboard/schedules/'
-      path: '/schedules'
+      path: '/'
       fullPath: '/schedules/'
       preLoaderRoute: typeof privateDashboardSchedulesIndexRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
+      parentRoute: typeof privateDashboardSchedulesRouteRoute
     }
     '/(private)/_dashboard/schedules/$scheduleId': {
       id: '/(private)/_dashboard/schedules/$scheduleId'
-      path: '/schedules/$scheduleId'
+      path: '/$scheduleId'
       fullPath: '/schedules/$scheduleId'
       preLoaderRoute: typeof privateDashboardSchedulesScheduleIdRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
+      parentRoute: typeof privateDashboardSchedulesRouteRoute
     }
     '/(private)/_dashboard/schedules/create': {
       id: '/(private)/_dashboard/schedules/create'
-      path: '/schedules/create'
+      path: '/create'
       fullPath: '/schedules/create'
       preLoaderRoute: typeof privateDashboardSchedulesCreateRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
+      parentRoute: typeof privateDashboardSchedulesRouteRoute
     }
     '/(private)/_dashboard/sessions/$sessionId': {
       id: '/(private)/_dashboard/sessions/$sessionId'
@@ -600,77 +708,89 @@ declare module '@tanstack/react-router' {
     }
     '/(private)/_dashboard/workouts/': {
       id: '/(private)/_dashboard/workouts/'
-      path: '/workouts'
+      path: '/'
       fullPath: '/workouts/'
       preLoaderRoute: typeof privateDashboardWorkoutsIndexRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
+      parentRoute: typeof privateDashboardWorkoutsRouteRoute
     }
     '/(private)/_dashboard/workouts/$workoutId': {
       id: '/(private)/_dashboard/workouts/$workoutId'
-      path: '/workouts/$workoutId'
+      path: '/$workoutId'
       fullPath: '/workouts/$workoutId'
       preLoaderRoute: typeof privateDashboardWorkoutsWorkoutIdRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
+      parentRoute: typeof privateDashboardWorkoutsRouteRoute
     }
     '/(private)/_dashboard/workouts/create': {
       id: '/(private)/_dashboard/workouts/create'
-      path: '/workouts/create'
+      path: '/create'
       fullPath: '/workouts/create'
       preLoaderRoute: typeof privateDashboardWorkoutsCreateRouteImport
-      parentRoute: typeof privateDashboardRouteRoute
+      parentRoute: typeof privateDashboardWorkoutsRouteRoute
     }
     '/(private)/_dashboard/_admin/exercises/$exerciseId': {
       id: '/(private)/_dashboard/_admin/exercises/$exerciseId'
-      path: '/exercises/$exerciseId'
+      path: '/$exerciseId'
       fullPath: '/exercises/$exerciseId'
       preLoaderRoute: typeof privateDashboardAdminExercisesExerciseIdRouteImport
-      parentRoute: typeof privateDashboardAdminRouteRoute
+      parentRoute: typeof privateDashboardAdminExercisesRouteRoute
     }
     '/(private)/_dashboard/_admin/exercises/create': {
       id: '/(private)/_dashboard/_admin/exercises/create'
-      path: '/exercises/create'
+      path: '/create'
       fullPath: '/exercises/create'
       preLoaderRoute: typeof privateDashboardAdminExercisesCreateRouteImport
-      parentRoute: typeof privateDashboardAdminRouteRoute
+      parentRoute: typeof privateDashboardAdminExercisesRouteRoute
     }
     '/(private)/_dashboard/_admin/muscle-groups/': {
       id: '/(private)/_dashboard/_admin/muscle-groups/'
-      path: '/muscle-groups'
+      path: '/'
       fullPath: '/muscle-groups/'
       preLoaderRoute: typeof privateDashboardAdminMuscleGroupsIndexRouteImport
-      parentRoute: typeof privateDashboardAdminRouteRoute
+      parentRoute: typeof privateDashboardAdminMuscleGroupsRouteRoute
     }
     '/(private)/_dashboard/_admin/muscle-groups/$muscleGroupId': {
       id: '/(private)/_dashboard/_admin/muscle-groups/$muscleGroupId'
-      path: '/muscle-groups/$muscleGroupId'
+      path: '/$muscleGroupId'
       fullPath: '/muscle-groups/$muscleGroupId'
       preLoaderRoute: typeof privateDashboardAdminMuscleGroupsMuscleGroupIdRouteImport
-      parentRoute: typeof privateDashboardAdminRouteRoute
+      parentRoute: typeof privateDashboardAdminMuscleGroupsRouteRoute
     }
     '/(private)/_dashboard/_admin/muscle-groups/create': {
       id: '/(private)/_dashboard/_admin/muscle-groups/create'
-      path: '/muscle-groups/create'
+      path: '/create'
       fullPath: '/muscle-groups/create'
       preLoaderRoute: typeof privateDashboardAdminMuscleGroupsCreateRouteImport
-      parentRoute: typeof privateDashboardAdminRouteRoute
+      parentRoute: typeof privateDashboardAdminMuscleGroupsRouteRoute
     }
   }
 }
 
-interface privateDashboardAdminRouteRouteChildren {
+interface privateDashboardAdminExercisesRouteRouteChildren {
   privateDashboardAdminExercisesExerciseIdRoute: typeof privateDashboardAdminExercisesExerciseIdRoute
   privateDashboardAdminExercisesCreateRoute: typeof privateDashboardAdminExercisesCreateRoute
-  privateDashboardAdminMuscleGroupsMuscleGroupIdRoute: typeof privateDashboardAdminMuscleGroupsMuscleGroupIdRoute
-  privateDashboardAdminMuscleGroupsCreateRoute: typeof privateDashboardAdminMuscleGroupsCreateRoute
-  privateDashboardAdminMuscleGroupsIndexRoute: typeof privateDashboardAdminMuscleGroupsIndexRoute
 }
 
-const privateDashboardAdminRouteRouteChildren: privateDashboardAdminRouteRouteChildren =
+const privateDashboardAdminExercisesRouteRouteChildren: privateDashboardAdminExercisesRouteRouteChildren =
   {
     privateDashboardAdminExercisesExerciseIdRoute:
       privateDashboardAdminExercisesExerciseIdRoute,
     privateDashboardAdminExercisesCreateRoute:
       privateDashboardAdminExercisesCreateRoute,
+  }
+
+const privateDashboardAdminExercisesRouteRouteWithChildren =
+  privateDashboardAdminExercisesRouteRoute._addFileChildren(
+    privateDashboardAdminExercisesRouteRouteChildren,
+  )
+
+interface privateDashboardAdminMuscleGroupsRouteRouteChildren {
+  privateDashboardAdminMuscleGroupsMuscleGroupIdRoute: typeof privateDashboardAdminMuscleGroupsMuscleGroupIdRoute
+  privateDashboardAdminMuscleGroupsCreateRoute: typeof privateDashboardAdminMuscleGroupsCreateRoute
+  privateDashboardAdminMuscleGroupsIndexRoute: typeof privateDashboardAdminMuscleGroupsIndexRoute
+}
+
+const privateDashboardAdminMuscleGroupsRouteRouteChildren: privateDashboardAdminMuscleGroupsRouteRouteChildren =
+  {
     privateDashboardAdminMuscleGroupsMuscleGroupIdRoute:
       privateDashboardAdminMuscleGroupsMuscleGroupIdRoute,
     privateDashboardAdminMuscleGroupsCreateRoute:
@@ -679,53 +799,131 @@ const privateDashboardAdminRouteRouteChildren: privateDashboardAdminRouteRouteCh
       privateDashboardAdminMuscleGroupsIndexRoute,
   }
 
+const privateDashboardAdminMuscleGroupsRouteRouteWithChildren =
+  privateDashboardAdminMuscleGroupsRouteRoute._addFileChildren(
+    privateDashboardAdminMuscleGroupsRouteRouteChildren,
+  )
+
+interface privateDashboardAdminRouteRouteChildren {
+  privateDashboardAdminExercisesRouteRoute: typeof privateDashboardAdminExercisesRouteRouteWithChildren
+  privateDashboardAdminMuscleGroupsRouteRoute: typeof privateDashboardAdminMuscleGroupsRouteRouteWithChildren
+}
+
+const privateDashboardAdminRouteRouteChildren: privateDashboardAdminRouteRouteChildren =
+  {
+    privateDashboardAdminExercisesRouteRoute:
+      privateDashboardAdminExercisesRouteRouteWithChildren,
+    privateDashboardAdminMuscleGroupsRouteRoute:
+      privateDashboardAdminMuscleGroupsRouteRouteWithChildren,
+  }
+
 const privateDashboardAdminRouteRouteWithChildren =
   privateDashboardAdminRouteRoute._addFileChildren(
     privateDashboardAdminRouteRouteChildren,
   )
 
-interface privateDashboardRouteRouteChildren {
-  privateDashboardAdminRouteRoute: typeof privateDashboardAdminRouteRouteWithChildren
-  privateDashboardDashboardRoute: typeof privateDashboardDashboardRoute
+interface privateDashboardBodyWeightRouteRouteChildren {
   privateDashboardBodyWeightBodyWeightIdRoute: typeof privateDashboardBodyWeightBodyWeightIdRoute
   privateDashboardBodyWeightCreateRoute: typeof privateDashboardBodyWeightCreateRoute
+  privateDashboardBodyWeightIndexRoute: typeof privateDashboardBodyWeightIndexRoute
+}
+
+const privateDashboardBodyWeightRouteRouteChildren: privateDashboardBodyWeightRouteRouteChildren =
+  {
+    privateDashboardBodyWeightBodyWeightIdRoute:
+      privateDashboardBodyWeightBodyWeightIdRoute,
+    privateDashboardBodyWeightCreateRoute:
+      privateDashboardBodyWeightCreateRoute,
+    privateDashboardBodyWeightIndexRoute: privateDashboardBodyWeightIndexRoute,
+  }
+
+const privateDashboardBodyWeightRouteRouteWithChildren =
+  privateDashboardBodyWeightRouteRoute._addFileChildren(
+    privateDashboardBodyWeightRouteRouteChildren,
+  )
+
+interface privateDashboardGymsRouteRouteChildren {
   privateDashboardGymsGymIdRoute: typeof privateDashboardGymsGymIdRoute
   privateDashboardGymsCreateRoute: typeof privateDashboardGymsCreateRoute
+  privateDashboardGymsIndexRoute: typeof privateDashboardGymsIndexRoute
+}
+
+const privateDashboardGymsRouteRouteChildren: privateDashboardGymsRouteRouteChildren =
+  {
+    privateDashboardGymsGymIdRoute: privateDashboardGymsGymIdRoute,
+    privateDashboardGymsCreateRoute: privateDashboardGymsCreateRoute,
+    privateDashboardGymsIndexRoute: privateDashboardGymsIndexRoute,
+  }
+
+const privateDashboardGymsRouteRouteWithChildren =
+  privateDashboardGymsRouteRoute._addFileChildren(
+    privateDashboardGymsRouteRouteChildren,
+  )
+
+interface privateDashboardSchedulesRouteRouteChildren {
   privateDashboardSchedulesScheduleIdRoute: typeof privateDashboardSchedulesScheduleIdRoute
   privateDashboardSchedulesCreateRoute: typeof privateDashboardSchedulesCreateRoute
-  privateDashboardSessionsSessionIdRoute: typeof privateDashboardSessionsSessionIdRoute
+  privateDashboardSchedulesIndexRoute: typeof privateDashboardSchedulesIndexRoute
+}
+
+const privateDashboardSchedulesRouteRouteChildren: privateDashboardSchedulesRouteRouteChildren =
+  {
+    privateDashboardSchedulesScheduleIdRoute:
+      privateDashboardSchedulesScheduleIdRoute,
+    privateDashboardSchedulesCreateRoute: privateDashboardSchedulesCreateRoute,
+    privateDashboardSchedulesIndexRoute: privateDashboardSchedulesIndexRoute,
+  }
+
+const privateDashboardSchedulesRouteRouteWithChildren =
+  privateDashboardSchedulesRouteRoute._addFileChildren(
+    privateDashboardSchedulesRouteRouteChildren,
+  )
+
+interface privateDashboardWorkoutsRouteRouteChildren {
   privateDashboardWorkoutsWorkoutIdRoute: typeof privateDashboardWorkoutsWorkoutIdRoute
   privateDashboardWorkoutsCreateRoute: typeof privateDashboardWorkoutsCreateRoute
-  privateDashboardBodyWeightIndexRoute: typeof privateDashboardBodyWeightIndexRoute
+  privateDashboardWorkoutsIndexRoute: typeof privateDashboardWorkoutsIndexRoute
+}
+
+const privateDashboardWorkoutsRouteRouteChildren: privateDashboardWorkoutsRouteRouteChildren =
+  {
+    privateDashboardWorkoutsWorkoutIdRoute:
+      privateDashboardWorkoutsWorkoutIdRoute,
+    privateDashboardWorkoutsCreateRoute: privateDashboardWorkoutsCreateRoute,
+    privateDashboardWorkoutsIndexRoute: privateDashboardWorkoutsIndexRoute,
+  }
+
+const privateDashboardWorkoutsRouteRouteWithChildren =
+  privateDashboardWorkoutsRouteRoute._addFileChildren(
+    privateDashboardWorkoutsRouteRouteChildren,
+  )
+
+interface privateDashboardRouteRouteChildren {
+  privateDashboardAdminRouteRoute: typeof privateDashboardAdminRouteRouteWithChildren
+  privateDashboardBodyWeightRouteRoute: typeof privateDashboardBodyWeightRouteRouteWithChildren
+  privateDashboardGymsRouteRoute: typeof privateDashboardGymsRouteRouteWithChildren
+  privateDashboardSchedulesRouteRoute: typeof privateDashboardSchedulesRouteRouteWithChildren
+  privateDashboardWorkoutsRouteRoute: typeof privateDashboardWorkoutsRouteRouteWithChildren
+  privateDashboardDashboardRoute: typeof privateDashboardDashboardRoute
+  privateDashboardSessionsSessionIdRoute: typeof privateDashboardSessionsSessionIdRoute
   privateDashboardExerciseLogIndexRoute: typeof privateDashboardExerciseLogIndexRoute
   privateDashboardExercisesIndexRoute: typeof privateDashboardExercisesIndexRoute
-  privateDashboardGymsIndexRoute: typeof privateDashboardGymsIndexRoute
-  privateDashboardSchedulesIndexRoute: typeof privateDashboardSchedulesIndexRoute
-  privateDashboardWorkoutsIndexRoute: typeof privateDashboardWorkoutsIndexRoute
 }
 
 const privateDashboardRouteRouteChildren: privateDashboardRouteRouteChildren = {
   privateDashboardAdminRouteRoute: privateDashboardAdminRouteRouteWithChildren,
+  privateDashboardBodyWeightRouteRoute:
+    privateDashboardBodyWeightRouteRouteWithChildren,
+  privateDashboardGymsRouteRoute: privateDashboardGymsRouteRouteWithChildren,
+  privateDashboardSchedulesRouteRoute:
+    privateDashboardSchedulesRouteRouteWithChildren,
+  privateDashboardWorkoutsRouteRoute:
+    privateDashboardWorkoutsRouteRouteWithChildren,
   privateDashboardDashboardRoute: privateDashboardDashboardRoute,
-  privateDashboardBodyWeightBodyWeightIdRoute:
-    privateDashboardBodyWeightBodyWeightIdRoute,
-  privateDashboardBodyWeightCreateRoute: privateDashboardBodyWeightCreateRoute,
-  privateDashboardGymsGymIdRoute: privateDashboardGymsGymIdRoute,
-  privateDashboardGymsCreateRoute: privateDashboardGymsCreateRoute,
-  privateDashboardSchedulesScheduleIdRoute:
-    privateDashboardSchedulesScheduleIdRoute,
-  privateDashboardSchedulesCreateRoute: privateDashboardSchedulesCreateRoute,
   privateDashboardSessionsSessionIdRoute:
     privateDashboardSessionsSessionIdRoute,
-  privateDashboardWorkoutsWorkoutIdRoute:
-    privateDashboardWorkoutsWorkoutIdRoute,
-  privateDashboardWorkoutsCreateRoute: privateDashboardWorkoutsCreateRoute,
-  privateDashboardBodyWeightIndexRoute: privateDashboardBodyWeightIndexRoute,
   privateDashboardExerciseLogIndexRoute: privateDashboardExerciseLogIndexRoute,
   privateDashboardExercisesIndexRoute: privateDashboardExercisesIndexRoute,
-  privateDashboardGymsIndexRoute: privateDashboardGymsIndexRoute,
-  privateDashboardSchedulesIndexRoute: privateDashboardSchedulesIndexRoute,
-  privateDashboardWorkoutsIndexRoute: privateDashboardWorkoutsIndexRoute,
 }
 
 const privateDashboardRouteRouteWithChildren =

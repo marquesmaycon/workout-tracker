@@ -7,6 +7,7 @@ const gymQueryOptions = (gymId: string) =>
   orpc.gyms.get.queryOptions({ input: { id: gymId } })
 
 export const Route = createFileRoute('/(private)/_dashboard/gyms/$gymId')({
+  staticData: { breadcrumb: GymBreadcrumb },
   loader: ({ context, params }) =>
     context.queryClient.query({
       ...gymQueryOptions(params.gymId),
@@ -14,6 +15,12 @@ export const Route = createFileRoute('/(private)/_dashboard/gyms/$gymId')({
     }),
   component: GymEditPage,
 })
+
+function GymBreadcrumb(): string {
+  const gym = Route.useLoaderData()
+
+  return gym.name
+}
 
 function GymEditPage() {
   const gym = Route.useLoaderData()

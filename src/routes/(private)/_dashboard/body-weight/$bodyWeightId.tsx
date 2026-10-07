@@ -17,6 +17,7 @@ const bodyWeightQueryOptions = (bodyWeightId: string) =>
 export const Route = createFileRoute(
   '/(private)/_dashboard/body-weight/$bodyWeightId',
 )({
+  staticData: { breadcrumb: 'Editar' },
   loader: ({ context, params }) =>
     context.queryClient.query({
       ...bodyWeightQueryOptions(params.bodyWeightId),

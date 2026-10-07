@@ -7,6 +7,7 @@ import { exerciseLogSearchSchema } from '@/features/exercise-log/validation/exer
 import { orpc } from '@/orpc/client'
 
 export const Route = createFileRoute('/(private)/_dashboard/exercise-log/')({
+  staticData: { breadcrumb: 'Histórico' },
   validateSearch: exerciseLogSearchSchema,
   loaderDeps: ({ search }) => search,
   loader: ({ context, deps }) =>

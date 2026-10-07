@@ -19,6 +19,7 @@ const muscleGroupsQueryOptions = orpc.muscleGroups.list.queryOptions()
 export const Route = createFileRoute(
   '/(private)/_dashboard/_admin/exercises/$exerciseId',
 )({
+  staticData: { breadcrumb: ExerciseBreadcrumb },
   loader: async ({ context, params }) => {
     const [exercise, muscleGroups] = await Promise.all([
       context.queryClient.query({
@@ -35,6 +36,12 @@ export const Route = createFileRoute(
   },
   component: ExerciseEditPage,
 })
+
+function ExerciseBreadcrumb(): string {
+  const { exercise } = Route.useLoaderData()
+
+  return exercise.name
+}
 
 function ExerciseEditPage() {
   const { exercise, muscleGroups } = Route.useLoaderData()

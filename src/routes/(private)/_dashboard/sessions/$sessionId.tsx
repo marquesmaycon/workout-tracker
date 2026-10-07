@@ -15,9 +15,17 @@ import { orpc } from '@/orpc/client'
 const sessionQueryOptions = (id: string) => orpc.workoutSessions.get.queryOptions({ input: { id } })
 
 export const Route = createFileRoute('/(private)/_dashboard/sessions/$sessionId')({
+  staticData: { breadcrumb: SessionBreadcrumb },
   loader: ({ context, params }) => context.queryClient.query(sessionQueryOptions(params.sessionId)),
   component: SessionPage,
 })
+
+function SessionBreadcrumb(): string {
+  const { sessionId } = Route.useParams()
+  const { data: session } = useSuspenseQuery(sessionQueryOptions(sessionId))
+
+  return session.workout.name
+}
 
 function SessionPage() {
   const { sessionId } = Route.useParams()

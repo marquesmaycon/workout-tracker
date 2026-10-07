@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { GymForm } from '@/features/gyms/components/gym-form'
 
 export const Route = createFileRoute('/(private)/_dashboard/gyms/create')({
+  staticData: { breadcrumb: 'Nova' },
   component: RouteComponent,
 })
 

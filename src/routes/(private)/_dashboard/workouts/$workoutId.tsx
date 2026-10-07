@@ -20,6 +20,7 @@ const workoutQueryOptions = (workoutId: string) =>
 export const Route = createFileRoute(
   '/(private)/_dashboard/workouts/$workoutId',
 )({
+  staticData: { breadcrumb: WorkoutBreadcrumb },
   loader: ({ context, params }) =>
     Promise.all([
       context.queryClient.query({
@@ -30,6 +31,13 @@ export const Route = createFileRoute(
     ]),
   component: WorkoutEditPage,
 })
+
+function WorkoutBreadcrumb(): string {
+  const { workoutId } = Route.useParams()
+  const { data: workout } = useSuspenseQuery(workoutQueryOptions(workoutId))
+
+  return workout.name
+}
 
 function WorkoutEditPage() {
   const { workoutId } = Route.useParams()

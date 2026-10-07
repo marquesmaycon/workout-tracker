@@ -14,6 +14,7 @@ import { orpc } from '@/orpc/client'
 const exercisesQuery = orpc.exercises.list.queryOptions()
 
 export const Route = createFileRoute('/(private)/_dashboard/workouts/create')({
+  staticData: { breadcrumb: 'Novo' },
   loader: ({ context }) =>
     context.queryClient.query({ ...exercisesQuery, staleTime: 'static' }),
   component: RouteComponent,

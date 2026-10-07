@@ -13,6 +13,7 @@ import { MuscleGroupForm } from '@/features/muscle-groups/components/muscle-grou
 export const Route = createFileRoute(
   '/(private)/_dashboard/_admin/muscle-groups/create',
 )({
+  staticData: { breadcrumb: 'Novo' },
   component: RouteComponent,
 })
 

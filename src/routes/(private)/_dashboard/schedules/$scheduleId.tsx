@@ -19,6 +19,7 @@ const workoutsQuery = orpc.workouts.list.queryOptions({})
 export const Route = createFileRoute(
   '/(private)/_dashboard/schedules/$scheduleId',
 )({
+  staticData: { breadcrumb: ScheduleBreadcrumb },
   loader: async ({ context, params }) => {
     await Promise.all([
       context.queryClient.query({
@@ -30,6 +31,13 @@ export const Route = createFileRoute(
   },
   component: EditSchedulePage,
 })
+
+function ScheduleBreadcrumb(): string {
+  const { scheduleId } = Route.useParams()
+  const { data: schedule } = useSuspenseQuery(scheduleQuery(scheduleId))
+
+  return schedule.name
+}
 
 function EditSchedulePage() {
   const { scheduleId } = Route.useParams()

@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
+import { AppBreadcrumb } from '@/components/layout/app-breadcrumb'
 import { AppSidebar } from '@/components/layout/sidebar/app-sidebar'
 import { Separator } from '@/components/ui/separator'
 import {
@@ -41,15 +42,7 @@ function RouteComponent() {
               orientation="vertical"
               className="mr-2 data-vertical:h-4 data-vertical:self-auto"
             />
-            {/* <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">Dashboard</BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{roleMeta[activeRole].title}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb> */}
+            <AppBreadcrumb />
           </div>
         </header>
         <div className="flex flex-1 flex-col p-4 pt-0 md:p-6 md:pt-0">

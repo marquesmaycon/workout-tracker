@@ -1,8 +1,9 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router'
-import { routeTree } from './routeTree.gen'
-
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
+import type { ComponentType } from 'react'
+
 import { getContext } from './lib/tanstack-query'
+import { routeTree } from './routeTree.gen'
 
 
 export function getRouter() {
@@ -24,5 +25,9 @@ export function getRouter() {
 declare module '@tanstack/react-router' {
   interface Register {
     router: ReturnType<typeof getRouter>
+  }
+
+  interface StaticDataRouteOption {
+    breadcrumb?: string | ComponentType
   }
 }

@@ -13,6 +13,7 @@ import { BodyWeightForm } from '@/features/body-weight/components/body-weight-fo
 export const Route = createFileRoute(
   '/(private)/_dashboard/body-weight/create',
 )({
+  staticData: { breadcrumb: 'Novo' },
   component: RouteComponent,
 })
 

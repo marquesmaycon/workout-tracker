@@ -14,6 +14,7 @@ import { orpc } from '@/orpc/client'
 const muscleGroupsQueryOptions = orpc.muscleGroups.list.queryOptions()
 
 export const Route = createFileRoute('/(private)/_dashboard/_admin/exercises/create')({
+  staticData: { breadcrumb: 'Novo' },
   loader: ({ context }) =>
     context.queryClient.query({
       ...muscleGroupsQueryOptions,
