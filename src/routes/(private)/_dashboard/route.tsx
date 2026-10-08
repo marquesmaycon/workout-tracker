@@ -46,7 +46,7 @@ function RouteComponent() {
             <ThemeToggler />
           </div>
         </header>
-        <div className="bg-card/24 flex flex-1 flex-col p-4 pt-0 md:p-6 md:pt-0">
+        <div className="flex flex-1 flex-col p-4 pt-0 md:p-6 md:pt-0">
           <main className="container flex w-full flex-1 flex-col gap-6 pt-8">
             <Outlet />
           </main>
