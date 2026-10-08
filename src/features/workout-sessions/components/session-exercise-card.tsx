@@ -71,7 +71,9 @@ function SessionExerciseCardComponent({
         >
           <AccordionTrigger className="items-center gap-2 **:data-[slot=accordion-trigger-icon]:ml-0">
             <span className="mr-auto flex items-center gap-2">
-              <span className="wrap-break-word">{exercise.exercise.name}</span>
+              <span className="font-semibold wrap-break-word md:text-base">
+                {exercise.orderIndex + 1} | {exercise.exercise.name}
+              </span>
               {isSaving && <Loader2 className="text-muted-foreground size-4 animate-spin" aria-label="Salvando" />}
             </span>
             {completed && (

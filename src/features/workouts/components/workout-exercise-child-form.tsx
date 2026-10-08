@@ -1,8 +1,9 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { getRouteApi, Link } from '@tanstack/react-router'
-import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react'
+import { ArrowDown, ArrowUp, ChevronDownIcon, Plus, Trash2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
   Field,
   FieldDescription,
@@ -54,24 +55,18 @@ export const WorkoutExerciseChildForm = withForm({
               <FieldSet>
                 <FieldLegend variant="label">Exercícios</FieldLegend>
                 <FieldDescription>
-                  Adicione os exercícios deste treino e defina séries,
-                  repetições, peso e descanso.
+                  Adicione os exercícios deste treino e defina séries, repetições, peso e descanso.
                 </FieldDescription>
 
                 <ol className="flex flex-col gap-3">
-                  {items.map((_, index) => (
-                    <li
-                      key={index}
-                      className="grid gap-3 rounded-lg border p-3"
-                    >
+                  {items.map((item, index) => (
+                    <li key={index} className="grid gap-3 border p-3">
                       <div className="flex items-end gap-2">
                         <div className="flex-1">
-                          <form.AppField
-                            name={`exercises[${index}].exerciseId`}
-                          >
+                          <form.AppField name={`exercises[${index}].exerciseId`}>
                             {({ SelectField }) => (
                               <SelectField
-                                label="Exercício"
+                                label={`Exercício ${index + 1}`}
                                 options={exerciseOptions}
                                 placeholder="Selecione um exercício"
                               />
@@ -110,78 +105,43 @@ export const WorkoutExerciseChildForm = withForm({
                       </div>
 
                       <div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-6">
-                        <form.AppField
-                          name={`exercises[${index}].targetSetsMin`}
-                        >
+                        <form.AppField name={`exercises[${index}].targetSetsMin`}>
                           {({ InputField }) => (
-                            <InputField
-                              label="Séries (min)"
-                              inputMode="numeric"
-                              mask={digitsOnly}
-                            />
+                            <InputField label="Séries (min)" inputMode="numeric" mask={digitsOnly} />
                           )}
                         </form.AppField>
-                        <form.AppField
-                          name={`exercises[${index}].targetSetsMax`}
-                        >
+                        <form.AppField name={`exercises[${index}].targetSetsMax`}>
                           {({ InputField }) => (
-                            <InputField
-                              label="Séries (max)"
-                              inputMode="numeric"
-                              mask={digitsOnly}
-                            />
+                            <InputField label="Séries (max)" inputMode="numeric" mask={digitsOnly} />
                           )}
                         </form.AppField>
-                        <form.AppField
-                          name={`exercises[${index}].targetRepsMin`}
-                        >
-                          {({ InputField }) => (
-                            <InputField
-                              label="Reps (min)"
-                              inputMode="numeric"
-                              mask={digitsOnly}
-                            />
-                          )}
+                        <form.AppField name={`exercises[${index}].targetRepsMin`}>
+                          {({ InputField }) => <InputField label="Reps (min)" inputMode="numeric" mask={digitsOnly} />}
                         </form.AppField>
-                        <form.AppField
-                          name={`exercises[${index}].targetRepsMax`}
-                        >
-                          {({ InputField }) => (
-                            <InputField
-                              label="Reps (max)"
-                              inputMode="numeric"
-                              mask={digitsOnly}
-                            />
-                          )}
+                        <form.AppField name={`exercises[${index}].targetRepsMax`}>
+                          {({ InputField }) => <InputField label="Reps (max)" inputMode="numeric" mask={digitsOnly} />}
                         </form.AppField>
-                        <form.AppField
-                          name={`exercises[${index}].targetWeight`}
-                        >
-                          {({ InputField }) => (
-                            <InputField
-                              label="Peso alvo"
-                              inputMode="decimal"
-                              mask={decimalOnly}
-                            />
-                          )}
+                        <form.AppField name={`exercises[${index}].targetWeight`}>
+                          {({ InputField }) => <InputField label="Peso alvo" inputMode="decimal" mask={decimalOnly} />}
                         </form.AppField>
                         <form.AppField name={`exercises[${index}].restSeconds`}>
                           {({ InputField }) => (
-                            <InputField
-                              label="Descanso (s)"
-                              inputMode="numeric"
-                              mask={digitsOnly}
-                            />
+                            <InputField label="Descanso (s)" inputMode="numeric" mask={digitsOnly} />
                           )}
                         </form.AppField>
-                        <div className="col-span-2">
-                          <form.AppField name={`exercises[${index}].notes`}>
-                            {({ TextareaField }) => (
-                              <TextareaField label="Notas" />
-                            )}
-                          </form.AppField>
-                        </div>
                       </div>
+
+                      <Collapsible defaultOpen={!!item.notes}>
+                        <CollapsibleTrigger className="text-muted-foreground flex items-center gap-1 text-sm font-medium">
+                          Adicionar anotação
+                          <ChevronDownIcon className="size-4" />
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="mt-2">
+                          <form.AppField name={`exercises[${index}].notes`}>
+                            {({ TextareaField }) => <TextareaField label="Notas" rows={2} />}
+                          </form.AppField>
+                        </CollapsibleContent>
+                      </Collapsible>
                     </li>
                   ))}
                 </ol>
