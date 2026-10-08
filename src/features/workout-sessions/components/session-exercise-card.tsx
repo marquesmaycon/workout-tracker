@@ -19,6 +19,12 @@ import { requiredToCompleteSchema, sessionExerciseFormOptions } from '../validat
 
 const AUTO_SAVE_DELAY_MS = 1500
 
+function formatMeta(min: number | null, max: number | null) {
+  if (min == null && max == null) return undefined
+  if (min == null || max == null || min === max) return `Meta: ${min ?? max}`
+  return `Meta: ${min} - ${max}`
+}
+
 type SessionExerciseCardProps = {
   exercise: WorkoutSessionExercise
   onSave: (value: SessionExerciseFormSchema) => Promise<void>
@@ -52,6 +58,8 @@ function SessionExerciseCardComponent({
   const lastReps = last?.actualReps != null ? `Última: ${last.actualReps}` : undefined
   const lastWeight = last?.actualWeight ? `Última: ${last.actualWeight} kg` : undefined
   const lastRpe = last?.rpe ? `Última: ${last.rpe}` : undefined
+  const metaSets = formatMeta(exercise.plannedSetsMin, exercise.plannedSetsMax)
+  const metaReps = formatMeta(exercise.plannedRepsMin, exercise.plannedRepsMax)
 
   return (
     <form.Subscribe selector={(state) => state.values.completed}>
@@ -87,7 +95,7 @@ function SessionExerciseCardComponent({
               }}
             >
               <FieldGroup>
-                <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+                <div className="grid grid-cols-2 gap-2 px-1 md:grid-cols-4">
                   <form.AppField name="actualSets" validators={{ onSubmit: requiredToCompleteSchema }}>
                     {({ StepperField }) => (
                       <StepperField
@@ -96,12 +104,12 @@ function SessionExerciseCardComponent({
                         mask={digitsOnly}
                         baseValue={last?.actualSets}
                         footer={
-                          <div className="flex items-center gap-1 *:flex-1">
-                            <Badge variant="outline">{lastSets}</Badge>
-                            <Badge>
-                              Meta: {exercise.plannedSetsMin} - {exercise.plannedSetsMax}
-                            </Badge>
-                          </div>
+                          (lastSets || metaSets) && (
+                            <div className="flex items-center gap-1 *:flex-1">
+                              {lastSets && <Badge variant="outline">{lastSets}</Badge>}
+                              {metaSets && <Badge>{metaSets}</Badge>}
+                            </div>
+                          )
                         }
                       />
                     )}
@@ -114,12 +122,12 @@ function SessionExerciseCardComponent({
                         mask={digitsOnly}
                         baseValue={last?.actualReps}
                         footer={
-                          <div className="flex items-center gap-1 *:flex-1">
-                            <Badge variant="outline">{lastReps}</Badge>
-                            <Badge>
-                              Meta: {exercise.plannedRepsMin} - {exercise.plannedRepsMax}
-                            </Badge>
-                          </div>
+                          (lastReps || metaReps) && (
+                            <div className="flex items-center gap-1 *:flex-1">
+                              {lastReps && <Badge variant="outline">{lastReps}</Badge>}
+                              {metaReps && <Badge>{metaReps}</Badge>}
+                            </div>
+                          )
                         }
                       />
                     )}
@@ -132,7 +140,7 @@ function SessionExerciseCardComponent({
                         mask={decimalOnly}
                         step={2.5}
                         baseValue={last?.actualWeight}
-                        footer={<Badge variant="outline">{lastWeight}</Badge>}
+                        footer={lastWeight && <Badge variant="outline">{lastWeight}</Badge>}
                       />
                     )}
                   </form.AppField>
@@ -143,7 +151,7 @@ function SessionExerciseCardComponent({
                         inputMode="decimal"
                         mask={decimalOnly}
                         baseValue={last?.rpe}
-                        footer={<Badge variant="outline">{lastRpe}</Badge>}
+                        footer={lastRpe && <Badge variant="outline">{lastRpe}</Badge>}
                       />
                     )}
                   </form.AppField>
