@@ -9,6 +9,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar'
+import { EmailVerificationBanner } from '@/features/auth/components/email-verification-banner'
 import { getSession } from '@/features/auth/server/session'
 import { orpc } from '@/orpc/client'
 
@@ -48,6 +49,7 @@ function RouteComponent() {
         </header>
         <div className="flex flex-1 flex-col p-4 pt-0 md:p-6 md:pt-0">
           <main className="container flex w-full flex-1 flex-col gap-6 pt-8">
+            <EmailVerificationBanner />
             <Outlet />
           </main>
         </div>

@@ -43,3 +43,40 @@ export async function sendResetPasswordEmail({ to, name, url }: SendResetPasswor
     console.error('Falha ao enviar e-mail de redefinição de senha:', error)
   }
 }
+
+type SendVerificationEmailParams = {
+  to: string
+  name: string
+  url: string
+}
+
+export async function sendVerificationEmail({ to, name, url }: SendVerificationEmailParams) {
+  const { error } = await resend.emails.send({
+    from,
+    to,
+    subject: 'Confirme seu e-mail',
+    text: [
+      `Olá, ${name}!`,
+      'Obrigado por criar sua conta no Workout Tracker.',
+      'Acesse o link abaixo para confirmar seu e-mail (válido por 1 hora):',
+      url,
+      'Se você não criou essa conta, ignore este e-mail.',
+    ].join('\n\n'),
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #111;">
+        <p>Olá, ${escapeHtml(name)}!</p>
+        <p>Obrigado por criar sua conta no Workout Tracker. Confirme seu e-mail clicando no botão abaixo.</p>
+        <p>
+          <a href="${url}" style="display: inline-block; padding: 10px 20px; background: #111; color: #fff; text-decoration: none; border-radius: 6px;">
+            Confirmar e-mail
+          </a>
+        </p>
+        <p style="font-size: 14px; color: #555;">O link é válido por 1 hora. Se você não criou essa conta, ignore este e-mail.</p>
+      </div>
+    `,
+  })
+
+  if (error) {
+    console.error('Falha ao enviar e-mail de confirmação:', error)
+  }
+}

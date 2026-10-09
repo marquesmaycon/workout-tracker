@@ -19,12 +19,18 @@ export function SignupForm() {
   const form = useAppForm({
     ...signupFormOptions,
     onSubmit: async ({ value }) => {
-      await authClient.signUp.email(value, {
-        onSuccess: () => router.navigate({ to: '/' }),
-        onError: ({ error }) => {
-          toast.error(error.message)
+      await authClient.signUp.email(
+        { ...value, callbackURL: '/verify-email' },
+        {
+          onSuccess: () => {
+            toast.success('Conta criada! Enviamos um link de confirmação para o seu e-mail.')
+            router.navigate({ to: '/dashboard' })
+          },
+          onError: ({ error }) => {
+            toast.error(error.message)
+          },
         },
-      })
+      )
     },
   })
 

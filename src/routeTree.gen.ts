@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as privateDashboardRouteRouteImport } from './routes/(private)/_dashboard/route'
 import { Route as publicIndexRouteImport } from './routes/(public)/index'
 import { Route as publicAuthRouteRouteImport } from './routes/(public)/_auth/route'
+import { Route as publicVerifyEmailRouteImport } from './routes/(public)/verify-email'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as privateDashboardAdminRouteRouteImport } from './routes/(private)/_dashboard/_admin/route'
 import { Route as privateDashboardBodyWeightRouteRouteImport } from './routes/(private)/_dashboard/body-weight/route'
@@ -59,6 +60,11 @@ const publicIndexRoute = publicIndexRouteImport.update({
 } as any)
 const publicAuthRouteRoute = publicAuthRouteRouteImport.update({
   id: '/(public)/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const publicVerifyEmailRoute = publicVerifyEmailRouteImport.update({
+  id: '/(public)/verify-email',
+  path: '/verify-email',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
@@ -266,6 +272,7 @@ const privateDashboardAdminMuscleGroupsCreateRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/verify-email': typeof publicVerifyEmailRoute
   '/api/$': typeof ApiSplatRoute
   '/': typeof publicIndexRoute
   '/body-weight': typeof privateDashboardBodyWeightRouteRouteWithChildren
@@ -303,6 +310,7 @@ export interface FileRoutesByFullPath {
   '/muscle-groups/': typeof privateDashboardAdminMuscleGroupsIndexRoute
 }
 export interface FileRoutesByTo {
+  '/verify-email': typeof publicVerifyEmailRoute
   '/api/$': typeof ApiSplatRoute
   '/': typeof publicIndexRoute
   '/dashboard': typeof privateDashboardDashboardRoute
@@ -337,6 +345,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(private)/_dashboard': typeof privateDashboardRouteRouteWithChildren
   '/(public)/_auth': typeof publicAuthRouteRouteWithChildren
+  '/(public)/verify-email': typeof publicVerifyEmailRoute
   '/api/$': typeof ApiSplatRoute
   '/(public)/': typeof publicIndexRoute
   '/(private)/_dashboard/_admin': typeof privateDashboardAdminRouteRouteWithChildren
@@ -377,6 +386,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/verify-email'
     | '/api/$'
     | '/'
     | '/body-weight'
@@ -414,6 +424,7 @@ export interface FileRouteTypes {
     | '/muscle-groups/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/verify-email'
     | '/api/$'
     | '/'
     | '/dashboard'
@@ -447,6 +458,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/(private)/_dashboard'
     | '/(public)/_auth'
+    | '/(public)/verify-email'
     | '/api/$'
     | '/(public)/'
     | '/(private)/_dashboard/_admin'
@@ -488,6 +500,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   privateDashboardRouteRoute: typeof privateDashboardRouteRouteWithChildren
   publicAuthRouteRoute: typeof publicAuthRouteRouteWithChildren
+  publicVerifyEmailRoute: typeof publicVerifyEmailRoute
   ApiSplatRoute: typeof ApiSplatRoute
   publicIndexRoute: typeof publicIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -515,6 +528,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof publicAuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(public)/verify-email': {
+      id: '/(public)/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof publicVerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/$': {
@@ -952,6 +972,7 @@ const publicAuthRouteRouteWithChildren = publicAuthRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   privateDashboardRouteRoute: privateDashboardRouteRouteWithChildren,
   publicAuthRouteRoute: publicAuthRouteRouteWithChildren,
+  publicVerifyEmailRoute: publicVerifyEmailRoute,
   ApiSplatRoute: ApiSplatRoute,
   publicIndexRoute: publicIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
